@@ -25,7 +25,7 @@ int main() {
 		printf(">> %d\n", tmp);
 	}
 
-	// cc_stack_free(p_stack);
+	// cc_stack_delete(p_stack);
 
 	return 0;
 }

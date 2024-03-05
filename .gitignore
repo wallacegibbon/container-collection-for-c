@@ -1,0 +1,7 @@
+build/
+*.d
+*.lss
+*.o
+a.out
+*.swp
+*~

@@ -1,24 +1,31 @@
-#include "../src/cc_stack.h"
+#include "cc_array.h"
+#include "cc_stack.h"
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
-	struct cc_stack *s;
+	struct cc_array array;
+	struct cc_stack stack;
+	uint8_t *buffer;
 	char i;
 	char tmp;
 
-	s = cc_stack_new(10, sizeof(char));
-	if (s == NULL)
-		return 1;
+	// p_stack = cc_stack_new(10, sizeof(char));
+
+	buffer = alloca(10);
+	cc_array_init(&array, buffer, 10, sizeof(char));
+	cc_stack_init(&stack, &array);
 
 	for (i = 0; i < 10; i++)
-		assert(cc_stack_push(s, &i));
+		assert(cc_stack_push(&stack, &i));
 
 	for (i = 0; i < 10; i++) {
-		assert(cc_stack_pop(s, &tmp));
+		assert(cc_stack_pop(&stack, &tmp));
 		printf(">> %d\n", tmp);
 	}
 
-	cc_stack_free(s);
+	// cc_stack_free(p_stack);
+
 	return 0;
 }

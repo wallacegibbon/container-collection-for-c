@@ -1,6 +1,7 @@
 #include "cc_array.h"
 #include "cc_stack.h"
 #include <assert.h>
+#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,8 +14,7 @@ int main() {
 
 	// p_stack = cc_stack_new(10, sizeof(char));
 
-	buffer = alloca(10);
-	cc_array_init(&array, buffer, 10, sizeof(char));
+	cc_array_init(&array, alloca(10), 10, 1);
 	cc_stack_init(&stack, &array);
 
 	for (i = 0; i < 10; i++)

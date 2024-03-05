@@ -26,7 +26,7 @@ $(BUILD_DIR)/%.c.o: %.c | build_dir
 
 vpath %.c ./test
 
-$(BUILD_DIR)/%.elf: %.c $(OBJECTS)
+$(BUILD_DIR)/%: %.c $(OBJECTS)
 	@echo -e "\tcompiling $< ..."
 	@$(CC) -o $@ $^ $(TEST_C_FLAGS)
 	@echo -e "\trunning test $@ ..."

@@ -5,38 +5,36 @@ C_INCLUDES += ./src
 
 OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCE_FILES:.c=.c.o)))
 
-C_FLAGS += -W -g -MMD -MP -MF"$(@:%.o=%.d)" $(addprefix -I, $(C_INCLUDES))
+COMMON_C_FLAGS += -W -g $(addprefix -I, $(C_INCLUDES))
+COMMON_C_FLAGS += -DUSE_MALLOC
+
+C_FLAGS += $(COMMON_C_FLAGS) -MMD -MP -MF"$(@:%.o=%.d)"
+
+TEST_C_FLAGS += $(COMMON_C_FLAGS)
 
 CC = gcc
 
-.PHONY: all build_dir clean test_char test_float test_char_sort test_struct_sort
+.PHONY: all build_dir clean
 
 vpath %.c $(sort $(dir $(C_SOURCE_FILES)))
 
 all: $(OBJECTS)
 
 $(BUILD_DIR)/%.c.o: %.c | build_dir
-	$(CC) -c -o $@ $< $(C_FLAGS)
+	@echo -e "\tcompiling $< ..."
+	@$(CC) -c -o $@ $< $(C_FLAGS)
 
-test_char: test/test_char.c $(OBJECTS)
-	$(CC) -o $(BUILD_DIR)/$@.elf $^
-	$(BUILD_DIR)/$@.elf
+vpath %.c ./test
 
-test_float: test/test_float.c $(OBJECTS)
-	$(CC) -o $(BUILD_DIR)/$@.elf $^
-	$(BUILD_DIR)/$@.elf
-
-test_char_sort: test/test_char_sort.c $(OBJECTS)
-	$(CC) -o $(BUILD_DIR)/$@.elf $^
-	$(BUILD_DIR)/$@.elf
-
-test_struct_sort: test/test_struct_sort.c $(OBJECTS)
-	$(CC) -o $(BUILD_DIR)/$@.elf $^
-	$(BUILD_DIR)/$@.elf
+$(BUILD_DIR)/%.elf: %.c $(OBJECTS)
+	@echo -e "\tcompiling $< ..."
+	@$(CC) -o $@ $^ $(TEST_C_FLAGS)
+	@echo -e "\trunning test $@ ..."
+	@$@
 
 build_dir:
-	mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)
 
 clean:
-	rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR)
 

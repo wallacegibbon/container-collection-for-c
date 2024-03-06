@@ -13,8 +13,12 @@ struct cc_array {
 
 void cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size);
 
+#ifndef NO_MALLOC
+
 struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size);
 void cc_array_delete(struct cc_array *self);
+
+#endif
 
 int cc_array_get(struct cc_array *self, size_t index, void *result);
 int cc_array_set(struct cc_array *self, size_t index, void *value);

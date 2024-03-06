@@ -3,13 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char *sample = "A quick brown fox jumps over the lazy dog.";
+static const char *sample = "A quick brown fox jumps over the lazy dog.";
 
 static int cmp_char(char *left, char *right) {
 	return *left - *right;
 }
 
-void char_array_display(struct cc_array *chars, const char *prefix) {
+static void char_array_display(struct cc_array *chars, const char *prefix) {
 	struct cc_array_iter iter;
 	char tmp;
 

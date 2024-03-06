@@ -10,7 +10,7 @@ struct blah {
 };
 
 /// define a global array to simplify the initializing of the testing generic_sequence.
-static struct blah people[] = {{"Harry", 10}, {"Albus", 109}, {"Severus", 50}};
+static const struct blah people[] = {{"Harry", 10}, {"Albus", 109}, {"Severus", 50}};
 
 static void blah_display(struct blah *self) {
 	printf("name %s, age: %d\n", self->name, self->age);
@@ -43,7 +43,7 @@ int main() {
 
 	/// Pushing values to generic sequence
 	for (i = 0; i < 3; i++)
-		assert(cc_array_set(&array, i, &people[i]));
+		assert(cc_array_set(&array, i, (void *)&people[i]));
 
 	blah_array_display(&array, "\nbefore sort:\n");
 

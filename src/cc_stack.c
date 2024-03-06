@@ -23,7 +23,7 @@ void cc_stack_init(struct cc_stack *self, struct cc_array *data) {
 	self->top = 0;
 }
 
-#ifdef USE_MALLOC
+#ifndef NO_MALLOC
 
 struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size) {
 	struct cc_stack *self;
@@ -47,4 +47,4 @@ void cc_stack_delete(struct cc_stack *self) {
 	free(self);
 }
 
-#endif /* USE_MALLOC */
+#endif

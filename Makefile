@@ -6,7 +6,7 @@ C_INCLUDES += ./src
 OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCE_FILES:.c=.c.o)))
 
 COMMON_C_FLAGS += -W -g $(addprefix -I, $(C_INCLUDES))
-COMMON_C_FLAGS += -DUSE_MALLOC
+#COMMON_C_FLAGS += -DNO_MALLOC
 
 C_FLAGS += $(COMMON_C_FLAGS) -MMD -MP -MF"$(@:%.o=%.d)"
 

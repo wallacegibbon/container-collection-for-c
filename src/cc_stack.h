@@ -11,8 +11,12 @@ struct cc_stack {
 
 void cc_stack_init(struct cc_stack *self, struct cc_array *data);
 
+#ifndef NO_MALLOC
+
 struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size);
 void cc_stack_delete(struct cc_stack *self);
+
+#endif
 
 int cc_stack_push(struct cc_stack *self, void *item);
 int cc_stack_pop(struct cc_stack *self, void *item);

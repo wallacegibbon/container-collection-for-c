@@ -60,7 +60,7 @@ void cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, siz
 	self->buffer = buffer;
 }
 
-#ifdef USE_MALLOC
+#ifndef NO_MALLOC
 
 struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size) {
 	struct cc_array *self;
@@ -88,7 +88,7 @@ void cc_array_delete(struct cc_array *self) {
 	free(self);
 }
 
-#endif /* USE_MALLOC */
+#endif
 
 void cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data) {
 	self->data = data;

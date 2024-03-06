@@ -9,10 +9,19 @@ static int cmp_char(char *left, char *right) {
 	return *left - *right;
 }
 
-int main() {
-	struct cc_array array;
+void char_array_display(struct cc_array *chars, const char *prefix) {
 	struct cc_array_iter iter;
 	char tmp;
+
+	printf("%s", prefix);
+	cc_array_iter_init(&iter, chars);
+
+	while (cc_array_iter_next(&iter, &tmp))
+		putchar(tmp);
+}
+
+int main() {
+	struct cc_array array;
 	int i;
 
 	cc_array_init(&array, alloca(10), 10, 1);
@@ -21,18 +30,12 @@ int main() {
 	for (i = 0; i < 10; i++)
 		assert(cc_array_set(&array, i, (void *)&sample[i]));
 
-	printf("\n=== before sort:\n");
-	cc_array_iter_init(&iter, &array);
-	while (cc_array_iter_next(&iter, &tmp))
-		putchar(tmp);
+	char_array_display(&array, "\nbefore sort:\n");
 
 	/// sort the sequence
 	assert(cc_array_sort(&array, (cc_cmp_fn)cmp_char));
 
-	printf("\n=== after sort:\n");
-	cc_array_iter_init(&iter, &array);
-	while (cc_array_iter_next(&iter, &tmp))
-		putchar(tmp);
+	char_array_display(&array, "\nafter sort:\n");
 
 	putchar('\n');
 	return 0;

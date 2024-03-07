@@ -66,7 +66,7 @@ struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size) {
 	struct cc_array *self;
 	uint8_t *buffer;
 
-	self = malloc(sizeof(struct cc_array));
+	self = malloc(sizeof(*self));
 	if (self == NULL)
 		goto fail1;
 

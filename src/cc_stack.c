@@ -29,7 +29,7 @@ struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size) {
 	struct cc_stack *self;
 	struct cc_array *data;
 
-	self = malloc(sizeof(struct cc_stack));
+	self = malloc(sizeof(*self));
 	if (self == NULL)
 		return NULL;
 

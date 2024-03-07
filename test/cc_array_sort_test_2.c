@@ -1,7 +1,7 @@
-#include "../src/cc_array.h"
+#include "cc_array.h"
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 struct blah {
@@ -37,9 +37,10 @@ static int cmp_age(struct blah *left, struct blah *right) {
 
 int main() {
 	struct cc_array array;
+	uint8_t buffer[3 * sizeof(struct blah)];
 	int i;
 
-	cc_array_init(&array, alloca(3 * sizeof(struct blah)), 3, sizeof(struct blah));
+	cc_array_init(&array, buffer, 3, sizeof(struct blah));
 
 	/// Pushing values to generic sequence
 	for (i = 0; i < 3; i++)

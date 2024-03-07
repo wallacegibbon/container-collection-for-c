@@ -1,7 +1,7 @@
 BUILD_DIR ?= build
 
 C_SOURCE_FILES += $(wildcard ./src/*.c)
-C_INCLUDES += ./src
+C_INCLUDES += ./src ./include
 
 OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCE_FILES:.c=.c.o)))
 

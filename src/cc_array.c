@@ -13,11 +13,10 @@ static inline int _cc_array_set(struct cc_array *self, size_t index, void *value
 	return 1;
 }
 
-/// Please ensure this function is not inlined since it uses `alloca`.
+/// Please ensure this function is not inlined since it uses VLA.
 /// Or memory consumption could be huge when you call this function in a long loop.
 static void _cc_array_swap(struct cc_array *self, size_t i, size_t j) {
-	uint8_t *tmp;
-	tmp = alloca(self->elem_size);
+	uint8_t tmp[self->elem_size];
 	_cc_array_get(self, i, tmp);
 	memcpy(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size, self->elem_size);
 	_cc_array_set(self, j, tmp);

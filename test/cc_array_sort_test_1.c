@@ -1,7 +1,7 @@
-#include "../src/cc_array.h"
+#include "cc_array.h"
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 static const char *sample = "A quick brown fox jumps over the lazy dog.";
 
@@ -22,9 +22,10 @@ static void char_array_display(struct cc_array *chars, const char *prefix) {
 
 int main() {
 	struct cc_array array;
+	uint8_t buffer[10];
 	int i;
 
-	cc_array_init(&array, alloca(10), 10, 1);
+	cc_array_init(&array, buffer, 10, 1);
 
 	/// install the comparing function
 	for (i = 0; i < 10; i++)

@@ -26,11 +26,23 @@ static inline int _cc_array_cmp(struct cc_array *self, size_t i, size_t j, cc_cm
 	return cmp(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size);
 }
 
+int cc_array_check(struct cc_array *self, size_t index) {
+	return index < self->elem_nums;
+}
+
+void cc_array_get_unsafe(struct cc_array *self, size_t index, void *result) {
+	_cc_array_get(self, index, result);
+}
+
 int cc_array_get(struct cc_array *self, size_t index, void *result) {
 	if (index >= self->elem_nums)
 		return 0;
 	else
 		return _cc_array_get(self, index, result);
+}
+
+void cc_array_set_unsafe(struct cc_array *self, size_t index, void *value) {
+	_cc_array_set(self, index, value);
 }
 
 int cc_array_set(struct cc_array *self, size_t index, void *value) {

@@ -20,7 +20,12 @@ void cc_array_delete(struct cc_array *self);
 
 #endif
 
+int cc_array_check(struct cc_array *self, size_t index);
+
+void cc_array_get_unsafe(struct cc_array *self, size_t index, void *result);
 int cc_array_get(struct cc_array *self, size_t index, void *result);
+
+void cc_array_set_unsafe(struct cc_array *self, size_t index, void *value);
 int cc_array_set(struct cc_array *self, size_t index, void *value);
 
 int cc_array_sort(struct cc_array *self, cc_cmp_fn);

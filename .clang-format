@@ -1,0 +1,7 @@
+BasedOnStyle: LLVM
+ContinuationIndentWidth: 8
+IndentWidth: 8
+UseTab: Always
+IndentCaseLabels: false
+IndentGotoLabels: false
+ColumnLimit: 0

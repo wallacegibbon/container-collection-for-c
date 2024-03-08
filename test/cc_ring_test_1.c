@@ -8,9 +8,13 @@ int main() {
 
 	ring = cc_ring_new(8, sizeof(char));
 
-	for (i = 'a'; i < 'i'; i++)
+	printf("ring space: %zu\n", cc_ring_space(ring));
+
+	for (i = 'a'; i < 'i'; i++) {
 		// printf(">> put returning: %d\n", cc_ring_put(ring, &i));
 		assert(cc_ring_put(ring, &i));
+		printf("ring space: %zu\n", cc_ring_space(ring));
+	}
 
 	fflush(stdout);
 
@@ -20,6 +24,7 @@ int main() {
 	for (i = 0; i < 8; i++) {
 		assert(cc_ring_get(ring, &tmp));
 		printf(">> %c\n", tmp);
+		printf("ring space: %zu\n", cc_ring_space(ring));
 	}
 
 	fflush(stdout);

@@ -11,8 +11,12 @@ static inline size_t _next_index(struct cc_ring *self, size_t index) {
 		return 0;
 }
 
-static inline void debug_state(struct cc_ring *self) {
-	printf("write_index: %zu, read_index %zu\n", self->write_index, self->read_index);
+size_t cc_ring_space(struct cc_ring *self) {
+	if (self->write_index >= self->read_index)
+		return self->data->elem_nums - (self->write_index - self->read_index) - 1;
+	else
+		// return self->data->elem_nums - (self->data->elem_nums + self->write_index - self->read_index) - 1;
+		return self->read_index - self->write_index - 1;
 }
 
 int cc_ring_put(struct cc_ring *self, void *item) {

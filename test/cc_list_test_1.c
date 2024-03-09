@@ -1,6 +1,5 @@
 #include "cc_common.h"
 #include "cc_list.h"
-#include <corecrt.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,7 +13,7 @@ int main() {
 		return 1;
 
 	for (i = 0; i < 10; i++) {
-		printf("adding value %zu into list. (size: %zu)\n", i, list->size);
+		printf("adding value %zu into list. (size: %zu)\n", i, list->root.size);
 		if (!cc_list_add(list, (void *)i))
 			return 2;
 	}

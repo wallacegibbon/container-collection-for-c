@@ -3,11 +3,17 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+void cc_list_node_init(struct cc_list_node *self, void *value) {
+	self->p_data = value;
+	self->next = NULL;
+	self->prev = NULL;
+}
+
 struct cc_list_node *cc_list_node_new(void *value) {
 	struct cc_list_node *self;
 	self = malloc(sizeof(*self));
 	if (self == NULL)
-		return 0;
+		return NULL;
 
 	cc_list_node_init(self, value);
 	return self;
@@ -15,15 +21,9 @@ struct cc_list_node *cc_list_node_new(void *value) {
 
 void cc_list_node_delete(struct cc_list_node *self, cc_handle_fn cleanup_fn) {
 	if (cleanup_fn != NULL)
-		cleanup_fn(self->value);
+		cleanup_fn(self->p_data);
 
 	free(self);
-}
-
-void cc_list_node_init(struct cc_list_node *self, void *value) {
-	self->value = value;
-	self->next = NULL;
-	self->prev = NULL;
 }
 
 int cc_list_add(struct cc_list *self, void *value) {
@@ -32,17 +32,13 @@ int cc_list_add(struct cc_list *self, void *value) {
 	if (node == NULL)
 		return 0;
 
-	if (self->head == NULL) {
-		self->head = self->tail = node;
-		self->size = 1;
-		return 1;
-	}
+	self->root.prev->next = node;
+	node->prev = self->root.prev;
 
-	self->tail->next = node;
-	node->prev = self->tail;
+	self->root.prev = node;
+	node->next = &self->root;
 
-	self->tail = node;
-	self->size++;
+	self->root.size++;
 	return 1;
 }
 
@@ -52,17 +48,25 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right) {
 	if (right == NULL)
 		return 1;
 
-	left->tail->next = right->head;
-	right->head->prev = left->tail;
-	left->tail = right->tail;
-	left->size += right->size;
+	left->root.prev->next = right->root.next;
+	right->root.next->prev = left->root.prev;
+
+	left->root.prev = right->root.prev;
+	right->root.prev->next = &left->root;
+
+	right->root.next = NULL;
+	right->root.prev = NULL;
+
+	left->root.size += right->root.size;
+	right->root.size = 0;
+
 	return 1;
 }
 
 void cc_list_init(struct cc_list *self) {
-	self->head = NULL;
-	self->tail = NULL;
-	self->size = 0;
+	self->root.prev = &self->root;
+	self->root.next = &self->root;
+	self->root.size = 0;
 }
 
 struct cc_list *cc_list_new() {
@@ -85,8 +89,10 @@ static inline struct cc_list_node *free_and_next(struct cc_list_node *current, c
 void cc_list_delete(struct cc_list *self, cc_handle_fn cleanup_fn) {
 	struct cc_list_node *node;
 
-	for (node = self->head; node; node = free_and_next(node, cleanup_fn))
-		self->size--;
+	node = self->root.next;
+
+	while (node != &self->root)
+		node = free_and_next(node, cleanup_fn);
 
 	free(self);
 }
@@ -106,18 +112,18 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 	self->direction = direction;
 
 	if (direction == 0)
-		self->cursor = list->head;
+		self->cursor = list->root.next;
 	else
-		self->cursor = list->tail;
+		self->cursor = list->root.prev;
 
 	return 1;
 }
 
 static int cc_list_iter_next(struct cc_list_iter *self, uintptr_t *value) {
-	if (self->cursor == NULL)
+	if (self->cursor == &self->data->root)
 		return 0;
 
-	*value = (uintptr_t)self->cursor->value;
+	*value = (uintptr_t)self->cursor->data;
 	if (self->direction == 0)
 		self->cursor = self->cursor->next;
 	else

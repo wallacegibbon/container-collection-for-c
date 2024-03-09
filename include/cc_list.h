@@ -1,6 +1,7 @@
 #ifndef __CC_LIST_H
 #define __CC_LIST_H
 
+#include <corecrt.h>
 #include <stdint.h>
 
 #ifdef NO_MALLOC
@@ -15,7 +16,11 @@
 struct cc_list_node {
 	struct cc_list_node *prev;
 	struct cc_list_node *next;
-	void *value;
+	union {
+		void *p_data;
+		size_t data;
+		size_t size;
+	};
 };
 
 struct cc_list_node *cc_list_node_new(void *value);
@@ -27,9 +32,7 @@ void cc_list_node_init(struct cc_list_node *self, void *value);
 /// Doubly linked list
 ///-----------------------------------------------------------------------------
 struct cc_list {
-	struct cc_list_node *head;
-	struct cc_list_node *tail;
-	size_t size;
+	struct cc_list_node root;
 };
 
 struct cc_list *cc_list_new();

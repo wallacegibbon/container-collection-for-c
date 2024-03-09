@@ -1,4 +1,5 @@
 #include "cc_array.h"
+#include "cc_array_sort.h"
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -6,7 +7,8 @@
 static const char *sample = "A quick brown fox jumps over the lazy dog.";
 
 static int cmp_char(char *left, char *right) {
-	return *left - *right;
+	// return *left - *right;
+	return -(*left - *right);
 }
 
 static void char_array_display(struct cc_array *chars, const char *prefix) {
@@ -34,7 +36,8 @@ int main() {
 	char_array_display(&array, "\nbefore sort:\n");
 
 	/// sort the sequence
-	assert(cc_array_sort(&array, (cc_cmp_fn)cmp_char));
+	// assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
+	assert(cc_array_sort_quick(&array, (cc_cmp_fn)cmp_char));
 
 	char_array_display(&array, "\nafter sort:\n");
 

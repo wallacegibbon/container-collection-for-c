@@ -1,4 +1,5 @@
 #include "cc_array.h"
+#include "cc_common.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,18 +16,18 @@ static inline int _cc_array_set(struct cc_array *self, size_t index, void *value
 
 /// Please ensure this function is not inlined since it uses VLA.
 /// Or memory consumption could be huge when you call this function in a long loop.
-static void _cc_array_swap(struct cc_array *self, size_t i, size_t j) {
+void cc_array_swap(struct cc_array *self, size_t i, size_t j) {
 	uint8_t tmp[self->elem_size];
 	_cc_array_get(self, i, tmp);
 	memcpy(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size, self->elem_size);
 	_cc_array_set(self, j, tmp);
 }
 
-static inline int _cc_array_cmp(struct cc_array *self, size_t i, size_t j, cc_cmp_fn cmp) {
+int cc_array_cmp(struct cc_array *self, cc_cmp_fn cmp, size_t i, size_t j) {
 	return cmp(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size);
 }
 
-int cc_array_check(struct cc_array *self, size_t index) {
+int cc_array_check_index(struct cc_array *self, size_t index) {
 	return index < self->elem_nums;
 }
 
@@ -50,19 +51,6 @@ int cc_array_set(struct cc_array *self, size_t index, void *value) {
 		return 0;
 	else
 		return _cc_array_set(self, index, value);
-}
-
-int cc_array_sort(struct cc_array *self, cc_cmp_fn cmp) {
-	size_t i, j, k;
-
-	if (cmp == NULL)
-		return 0;
-
-	for (i = 0; i < self->elem_nums - 1; i++)
-		for (j = 0, k = 1; j < self->elem_nums - 1 - i; j++, k++)
-			if (_cc_array_cmp(self, j, k, cmp) > 0)
-				_cc_array_swap(self, j, k);
-	return 1;
 }
 
 void cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size) {

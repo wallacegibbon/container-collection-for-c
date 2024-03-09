@@ -1,4 +1,5 @@
 #include "cc_array.h"
+#include "cc_array_sort.h"
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -28,11 +29,13 @@ static void blah_array_display(struct cc_array *blahs, const char *prefix) {
 }
 
 static int cmp_name(struct blah *left, struct blah *right) {
-	return strcmp(left->name, right->name);
+	// return strcmp(left->name, right->name);
+	return -strcmp(left->name, right->name);
 }
 
 static int cmp_age(struct blah *left, struct blah *right) {
-	return left->age - right->age;
+	// return left->age - right->age;
+	return -(left->age - right->age);
 }
 
 int main() {
@@ -48,10 +51,10 @@ int main() {
 
 	blah_array_display(&array, "\nbefore sort:\n");
 
-	assert(cc_array_sort(&array, (cc_cmp_fn)cmp_name));
+	assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_name));
 	blah_array_display(&array, "\nafter sort by name:\n");
 
-	assert(cc_array_sort(&array, (cc_cmp_fn)cmp_age));
+	assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_age));
 	blah_array_display(&array, "\nafter sort by age:\n");
 
 	putchar('\n');

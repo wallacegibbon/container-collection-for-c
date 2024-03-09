@@ -5,7 +5,7 @@
 
 static inline size_t _next_index(struct cc_ring *self, size_t index) {
 	size_t next_index = index + 1;
-	if (cc_array_check(self->data, next_index))
+	if (cc_array_check_index(self->data, next_index))
 		return next_index;
 	else
 		return 0;

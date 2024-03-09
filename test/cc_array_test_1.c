@@ -22,7 +22,8 @@ int main() {
 	}
 
 	cc_array_iter_init(&iter, &array);
-	while (cc_array_iter_next(&iter, &tmp))
+
+	while (cc_iter_next(&iter, &tmp))
 		printf(">>2 %.2f\n", tmp);
 
 	return 0;

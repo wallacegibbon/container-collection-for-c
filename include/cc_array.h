@@ -5,6 +5,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
+///-----------------------------------------------------------------------------
+/// Generic array for data of different length
+///-----------------------------------------------------------------------------
 struct cc_array {
 	uint8_t *buffer;
 	size_t elem_nums;
@@ -28,12 +31,15 @@ int cc_array_check_index(struct cc_array *self, size_t index);
 int cc_array_cmp(struct cc_array *self, cc_cmp_fn cmp, size_t i, size_t j);
 void cc_array_swap(struct cc_array *self, size_t i, size_t j);
 
+///-----------------------------------------------------------------------------
+/// The iterator for the generic array
+///-----------------------------------------------------------------------------
 struct cc_array_iter {
+	struct cc_iter_i **iterator;
 	struct cc_array *data;
 	size_t cursor;
 };
 
 void cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data);
-int cc_array_iter_next(struct cc_array_iter *self, void *item);
 
 #endif

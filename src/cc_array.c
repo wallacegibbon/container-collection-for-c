@@ -89,12 +89,19 @@ void cc_array_delete(struct cc_array *self) {
 
 #endif
 
+static int cc_array_iter_next(struct cc_array_iter *self, void *item);
+
+static const struct cc_iter_i iterator_interface = {
+	.next = (cc_iter_next_fn)cc_array_iter_next,
+};
+
 void cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data) {
+	self->iterator = (struct cc_iter_i **)&iterator_interface;
 	self->data = data;
 	self->cursor = 0;
 }
 
-int cc_array_iter_next(struct cc_array_iter *self, void *item) {
+static int cc_array_iter_next(struct cc_array_iter *self, void *item) {
 	if (!cc_array_get(self->data, self->cursor, item))
 		return 0;
 

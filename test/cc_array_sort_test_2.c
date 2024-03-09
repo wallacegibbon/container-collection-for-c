@@ -24,7 +24,7 @@ static void blah_array_display(struct cc_array *blahs, const char *prefix) {
 	printf("%s", prefix);
 	cc_array_iter_init(&iter, blahs);
 
-	while (cc_array_iter_next(&iter, &tmp))
+	while (cc_iter_next(&iter, &tmp))
 		blah_display(&tmp);
 }
 

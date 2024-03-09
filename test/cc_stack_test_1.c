@@ -11,6 +11,8 @@ int main() {
 	char tmp;
 
 	p_stack = cc_stack_new(10, sizeof(char));
+	if (p_stack == NULL)
+		return 1;
 
 	// cc_array_init(&array, buffer, 10, 1);
 	// cc_stack_init(&stack, &array);

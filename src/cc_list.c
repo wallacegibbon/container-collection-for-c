@@ -54,8 +54,8 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right) {
 	left->root.prev = right->root.prev;
 	right->root.prev->next = &left->root;
 
-	right->root.next = NULL;
-	right->root.prev = NULL;
+	right->root.next = &right->root;
+	right->root.prev = &right->root;
 
 	left->root.size += right->root.size;
 	right->root.size = 0;

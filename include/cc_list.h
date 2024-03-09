@@ -26,8 +26,6 @@ struct cc_list_node {
 struct cc_list_node *cc_list_node_new(void *value);
 void cc_list_node_delete(struct cc_list_node *self, cc_handle_fn cleanup_fn);
 
-void cc_list_node_init(struct cc_list_node *self, void *value);
-
 ///-----------------------------------------------------------------------------
 /// Doubly linked list
 ///-----------------------------------------------------------------------------
@@ -48,7 +46,7 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right);
 ///-----------------------------------------------------------------------------
 struct cc_list_iter {
 	struct cc_iter_i *iterator;
-	struct cc_list *data;
+	struct cc_list *list;
 	struct cc_list_node *cursor;
 	uint8_t direction;
 };

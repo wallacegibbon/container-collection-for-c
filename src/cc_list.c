@@ -3,19 +3,15 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void cc_list_node_init(struct cc_list_node *self, void *value) {
-	self->p_data = value;
-	self->next = NULL;
-	self->prev = NULL;
-}
-
 struct cc_list_node *cc_list_node_new(void *value) {
 	struct cc_list_node *self;
 	self = malloc(sizeof(*self));
 	if (self == NULL)
 		return NULL;
 
-	cc_list_node_init(self, value);
+	self->p_data = value;
+	self->next = NULL;
+	self->prev = NULL;
 	return self;
 }
 
@@ -42,6 +38,7 @@ int cc_list_add(struct cc_list *self, void *value) {
 	return 1;
 }
 
+/// Caution: You may need to delete `right` list after this concatenation.
 int cc_list_concat(struct cc_list *left, struct cc_list *right) {
 	if (left == NULL)
 		return 0;
@@ -54,11 +51,9 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right) {
 	left->root.prev = right->root.prev;
 	right->root.prev->next = &left->root;
 
-	right->root.next = &right->root;
-	right->root.prev = &right->root;
-
 	left->root.size += right->root.size;
-	right->root.size = 0;
+
+	cc_list_init(right);
 
 	return 1;
 }
@@ -115,16 +110,16 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 		return 0;
 
 	self->iterator = (struct cc_iter_i *)&iterator_interface;
-	self->data = list;
+	self->list = list;
 	self->direction = direction;
-	self->cursor = &self->data->root;
+	self->cursor = &self->list->root;
 	cc_list_iter_step(self);
 
 	return 1;
 }
 
 static int cc_list_iter_next(struct cc_list_iter *self, uintptr_t *value) {
-	if (self->cursor == &self->data->root)
+	if (self->cursor == &self->list->root)
 		return 0;
 
 	*value = (uintptr_t)self->cursor->data;

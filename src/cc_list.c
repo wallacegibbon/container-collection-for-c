@@ -103,6 +103,13 @@ static const struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_list_iter_next,
 };
 
+static void cc_list_iter_step(struct cc_list_iter *self) {
+	if (self->direction == 0)
+		self->cursor = self->cursor->next;
+	else
+		self->cursor = self->cursor->prev;
+}
+
 int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t direction) {
 	if (list == NULL)
 		return 0;
@@ -110,11 +117,8 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 	self->iterator = (struct cc_iter_i *)&iterator_interface;
 	self->data = list;
 	self->direction = direction;
-
-	if (direction == 0)
-		self->cursor = list->root.next;
-	else
-		self->cursor = list->root.prev;
+	self->cursor = &self->data->root;
+	cc_list_iter_step(self);
 
 	return 1;
 }
@@ -124,10 +128,7 @@ static int cc_list_iter_next(struct cc_list_iter *self, uintptr_t *value) {
 		return 0;
 
 	*value = (uintptr_t)self->cursor->data;
-	if (self->direction == 0)
-		self->cursor = self->cursor->next;
-	else
-		self->cursor = self->cursor->prev;
+	cc_list_iter_step(self);
 
 	return 1;
 }

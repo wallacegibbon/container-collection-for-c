@@ -23,7 +23,6 @@ struct cc_list_node {
 	};
 };
 
-struct cc_list_node *cc_list_node_new(void *value);
 void cc_list_node_delete(struct cc_list_node *self, cc_handle_fn cleanup_fn);
 
 ///-----------------------------------------------------------------------------
@@ -40,6 +39,9 @@ void cc_list_init(struct cc_list *self);
 
 int cc_list_add(struct cc_list *self, void *value);
 int cc_list_concat(struct cc_list *left, struct cc_list *right);
+
+int cc_list_insert(struct cc_list *self, void *value, size_t index);
+int cc_list_remove(struct cc_list *self, size_t index, cc_handle_fn cleanup_fn);
 
 ///-----------------------------------------------------------------------------
 /// The iterator for the doubly linked list

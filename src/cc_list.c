@@ -3,18 +3,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-struct cc_list_node *cc_list_node_new(void *value) {
-	struct cc_list_node *self;
-	self = malloc(sizeof(*self));
-	if (self == NULL)
-		return NULL;
-
-	self->p_data = value;
-	self->next = NULL;
-	self->prev = NULL;
-	return self;
-}
-
 void cc_list_node_delete(struct cc_list_node *self, cc_handle_fn cleanup_fn) {
 	if (cleanup_fn != NULL)
 		cleanup_fn(self->p_data);
@@ -24,9 +12,11 @@ void cc_list_node_delete(struct cc_list_node *self, cc_handle_fn cleanup_fn) {
 
 int cc_list_add(struct cc_list *self, void *value) {
 	struct cc_list_node *node;
-	node = cc_list_node_new(value);
+	node = malloc(sizeof(*node));
 	if (node == NULL)
 		return 0;
+
+	node->p_data = value;
 
 	self->root.prev->next = node;
 	node->prev = self->root.prev;
@@ -54,7 +44,53 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right) {
 	left->root.size += right->root.size;
 
 	cc_list_init(right);
+	return 1;
+}
 
+static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {
+	struct cc_list_node *node;
+	node = &self->root;
+	while (index--)
+		node = node->next;
+
+	return node;
+}
+
+int cc_list_insert(struct cc_list *self, void *value, size_t index) {
+	struct cc_list_node *entry, *node;
+	if (index > self->root.size)
+		return 0;
+
+	node = malloc(sizeof(*node));
+	if (node == NULL)
+		return 0;
+
+	node->p_data = value;
+
+	entry = prev_node_of(self, index);
+	node->next = entry->next;
+	entry->next->prev = node;
+	entry->next = node;
+	node->prev = entry;
+
+	self->root.size++;
+	return 1;
+}
+
+int cc_list_remove(struct cc_list *self, size_t index, cc_handle_fn cleanup_fn) {
+	struct cc_list_node *node, *node_to_remove;
+	if (index >= self->root.size || self->root.size == 0)
+		return 0;
+
+	node = prev_node_of(self, index);
+
+	node_to_remove = node->next;
+	node->next = node->next->next;
+	node->next->next->prev = node;
+
+	cc_list_node_delete(node_to_remove, cleanup_fn);
+
+	self->root.size--;
 	return 1;
 }
 
@@ -98,7 +134,7 @@ static const struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_list_iter_next,
 };
 
-static void cc_list_iter_step(struct cc_list_iter *self) {
+static inline void cc_list_iter_step(struct cc_list_iter *self) {
 	if (self->direction == 0)
 		self->cursor = self->cursor->next;
 	else

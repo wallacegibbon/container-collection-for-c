@@ -1,7 +1,6 @@
 #ifndef __CC_LIST_H
 #define __CC_LIST_H
 
-#include <corecrt.h>
 #include <stdint.h>
 
 #ifdef NO_MALLOC

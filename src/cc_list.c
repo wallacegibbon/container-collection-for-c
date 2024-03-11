@@ -69,9 +69,9 @@ int cc_list_insert(struct cc_list *self, void *value, size_t index) {
 
 	entry = prev_node_of(self, index);
 	node->next = entry->next;
+	node->prev = entry;
 	entry->next->prev = node;
 	entry->next = node;
-	node->prev = entry;
 
 	self->root.size++;
 	return 1;
@@ -85,8 +85,8 @@ int cc_list_remove(struct cc_list *self, size_t index, cc_handle_fn cleanup_fn) 
 	node = prev_node_of(self, index);
 
 	node_to_remove = node->next;
-	node->next = node->next->next;
 	node->next->next->prev = node;
+	node->next = node->next->next;
 
 	cc_list_node_delete(node_to_remove, cleanup_fn);
 

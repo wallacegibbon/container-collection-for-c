@@ -18,14 +18,14 @@ int main() {
 		printf("adding value %zu into list. (size: %zu)\n", i, list->root.size);
 	}
 
-	assert(!cc_list_insert(list, (void *)'a', 11));
-	assert(cc_list_insert(list, (void *)'b', 10));
-	assert(cc_list_insert(list, (void *)'c', 0));
-	assert(cc_list_insert(list, (void *)'d', 3));
+	assert(!cc_list_insert(list, (void *)55, 11));
+	assert(cc_list_insert(list, (void *)66, 10));
+	assert(cc_list_insert(list, (void *)77, 0));
+	assert(cc_list_insert(list, (void *)88, 3));
 
 	printf(">>> the whole list values:\n\t");
-	cc_list_iter_init(&iter, list, 0);
-	// cc_list_iter_init(&iter, list, 1);
+	// cc_list_iter_init(&iter, list, 0);
+	cc_list_iter_init(&iter, list, 1);
 	while (cc_iter_next(&iter, &i))
 		printf("%zu ", i);
 	printf("\n");
@@ -36,7 +36,7 @@ int main() {
 	assert(cc_list_remove(list, 0, NULL));
 
 	printf(">>> the whole list values:\n\t");
-	cc_list_iter_init(&iter, list, 0);
+	cc_list_iter_init(&iter, list, 1);
 	while (cc_iter_next(&iter, &i))
 		printf("%zu ", i);
 	printf("\n");

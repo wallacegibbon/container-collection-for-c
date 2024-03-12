@@ -39,8 +39,8 @@ void cc_list_init(struct cc_list *self);
 int cc_list_append(struct cc_list *self, void *value);
 int cc_list_concat(struct cc_list *left, struct cc_list *right);
 
-int cc_list_insert(struct cc_list *self, void *value, size_t index);
-int cc_list_remove(struct cc_list *self, size_t index, cc_handle_fn cleanup_fn);
+int cc_list_insert(struct cc_list *self, size_t index, void *value);
+int cc_list_remove(struct cc_list *self, size_t index, void **value);
 
 ///-----------------------------------------------------------------------------
 /// The iterator for the doubly linked list

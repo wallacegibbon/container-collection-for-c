@@ -56,7 +56,7 @@ static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {
 	return node;
 }
 
-int cc_list_insert(struct cc_list *self, void *value, size_t index) {
+int cc_list_insert(struct cc_list *self, size_t index, void *value) {
 	struct cc_list_node *entry, *node;
 	if (index > self->root.size)
 		return 0;
@@ -68,6 +68,7 @@ int cc_list_insert(struct cc_list *self, void *value, size_t index) {
 	node->p_data = value;
 
 	entry = prev_node_of(self, index);
+
 	node->next = entry->next;
 	node->prev = entry;
 	entry->next->prev = node;
@@ -77,7 +78,8 @@ int cc_list_insert(struct cc_list *self, void *value, size_t index) {
 	return 1;
 }
 
-int cc_list_remove(struct cc_list *self, size_t index, cc_handle_fn cleanup_fn) {
+/// Caution: If `result` is NULL, the `p_data` of the node to move may leak.
+int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 	struct cc_list_node *node, *node_to_remove;
 	if (index >= self->root.size)
 		return 0;
@@ -88,7 +90,10 @@ int cc_list_remove(struct cc_list *self, size_t index, cc_handle_fn cleanup_fn) 
 	node->next->next->prev = node;
 	node->next = node->next->next;
 
-	cc_list_node_delete(node_to_remove, cleanup_fn);
+	if (result != NULL)
+		*result = node_to_remove->p_data;
+
+	cc_list_node_delete(node_to_remove, NULL);
 
 	self->root.size--;
 	return 1;
@@ -149,6 +154,7 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 	self->list = list;
 	self->direction = direction;
 	self->cursor = &self->list->root;
+
 	cc_list_iter_step(self);
 
 	return 1;
@@ -159,6 +165,7 @@ static int cc_list_iter_next(struct cc_list_iter *self, uintptr_t *value) {
 		return 0;
 
 	*value = (uintptr_t)self->cursor->data;
+
 	cc_list_iter_step(self);
 
 	return 1;

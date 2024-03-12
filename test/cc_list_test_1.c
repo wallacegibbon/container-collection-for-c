@@ -18,10 +18,10 @@ int main() {
 		printf("adding value %zu into list. (size: %zu)\n", i, list->root.size);
 	}
 
-	assert(!cc_list_insert(list, (void *)55, 11));
-	assert(cc_list_insert(list, (void *)66, 10));
-	assert(cc_list_insert(list, (void *)77, 0));
-	assert(cc_list_insert(list, (void *)88, 3));
+	assert(!cc_list_insert(list, 11, (void *)55));
+	assert(cc_list_insert(list, 10, (void *)66));
+	assert(cc_list_insert(list, 0, (void *)77));
+	assert(cc_list_insert(list, 3, (void *)88));
 
 	printf(">>> the whole list values:\n\t");
 	// cc_list_iter_init(&iter, list, 0);
@@ -30,10 +30,13 @@ int main() {
 		printf("%zu ", i);
 	printf("\n");
 
-	assert(!cc_list_remove(list, 13, NULL));
-	assert(cc_list_remove(list, 12, NULL));
-	assert(cc_list_remove(list, 3, NULL));
-	assert(cc_list_remove(list, 0, NULL));
+	assert(!cc_list_remove(list, 13, (void **)&i));
+	assert(cc_list_remove(list, 12, (void **)&i));
+	assert(i == 66);
+	assert(cc_list_remove(list, 3, (void **)&i));
+	assert(i == 88);
+	assert(cc_list_remove(list, 0, (void **)&i));
+	assert(i == 77);
 
 	printf(">>> the whole list values:\n\t");
 	cc_list_iter_init(&iter, list, 1);

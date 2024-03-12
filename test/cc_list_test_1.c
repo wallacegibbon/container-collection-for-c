@@ -14,7 +14,7 @@ int main() {
 		return 1;
 
 	for (i = 0; i < 10; i++) {
-		assert(cc_list_add(list, (void *)i));
+		assert(cc_list_append(list, (void *)i));
 		printf("adding value %zu into list. (size: %zu)\n", i, list->root.size);
 	}
 

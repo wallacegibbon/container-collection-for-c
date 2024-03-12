@@ -10,7 +10,7 @@ void cc_list_node_delete(struct cc_list_node *self, cc_handle_fn cleanup_fn) {
 	free(self);
 }
 
-int cc_list_add(struct cc_list *self, void *value) {
+int cc_list_append(struct cc_list *self, void *value) {
 	struct cc_list_node *node;
 	node = malloc(sizeof(*node));
 	if (node == NULL)

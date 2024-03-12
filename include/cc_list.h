@@ -36,7 +36,7 @@ void cc_list_delete(struct cc_list *self, cc_handle_fn cleanup_fn);
 
 void cc_list_init(struct cc_list *self);
 
-int cc_list_add(struct cc_list *self, void *value);
+int cc_list_append(struct cc_list *self, void *value);
 int cc_list_concat(struct cc_list *left, struct cc_list *right);
 
 int cc_list_insert(struct cc_list *self, void *value, size_t index);

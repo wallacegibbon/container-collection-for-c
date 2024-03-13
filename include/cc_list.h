@@ -8,6 +8,7 @@
 #endif
 
 #include "cc_common.h"
+#include "cc_iter.h"
 
 ///-----------------------------------------------------------------------------
 /// List node for the doubly linked list

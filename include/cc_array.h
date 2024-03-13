@@ -2,6 +2,7 @@
 #define __CC_ARRAY_H
 
 #include "cc_common.h"
+#include "cc_iter.h"
 #include <stddef.h>
 #include <stdint.h>
 

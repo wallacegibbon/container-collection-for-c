@@ -1,14 +1,13 @@
 #ifndef __CC_LIST_H
 #define __CC_LIST_H
 
-#include <stdint.h>
-
 #ifdef NO_MALLOC
-#error "You can NOT use linked list without support for malloc."
+#error "You can NOT use linked list without support for the `malloc` function."
 #endif
 
 #include "cc_common.h"
 #include "cc_iter.h"
+#include <stdint.h>
 
 ///-----------------------------------------------------------------------------
 /// List node for the doubly linked list

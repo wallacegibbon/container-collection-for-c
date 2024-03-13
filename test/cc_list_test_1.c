@@ -4,9 +4,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void show_number_list(struct cc_list *list, int direction) {
+	struct cc_list_iter iter;
+	size_t i;
+
+	printf(">>> the whole list values:\n\t");
+
+	cc_list_iter_init(&iter, list, direction);
+
+	while (cc_iter_next(&iter, &i))
+		printf("%zu ", i);
+
+	printf("\n");
+}
+
 int main() {
 	struct cc_list *list;
-	struct cc_list_iter iter;
 	size_t i;
 
 	list = cc_list_new();
@@ -15,7 +28,7 @@ int main() {
 
 	for (i = 0; i < 10; i++) {
 		assert(cc_list_append(list, (void *)i));
-		printf("adding value %zu into list. (size: %zu)\n", i, list->root.size);
+		assert(list->root.size == i + 1);
 	}
 
 	assert(!cc_list_insert(list, 11, (void *)55));
@@ -23,12 +36,7 @@ int main() {
 	assert(cc_list_insert(list, 0, (void *)77));
 	assert(cc_list_insert(list, 3, (void *)88));
 
-	printf(">>> the whole list values:\n\t");
-	// cc_list_iter_init(&iter, list, 0);
-	cc_list_iter_init(&iter, list, 1);
-	while (cc_iter_next(&iter, &i))
-		printf("%zu ", i);
-	printf("\n");
+	show_number_list(list, 1);
 
 	assert(!cc_list_remove(list, 13, (void **)&i));
 	assert(cc_list_remove(list, 12, (void **)&i));
@@ -38,11 +46,7 @@ int main() {
 	assert(cc_list_remove(list, 0, (void **)&i));
 	assert(i == 77);
 
-	printf(">>> the whole list values:\n\t");
-	cc_list_iter_init(&iter, list, 1);
-	while (cc_iter_next(&iter, &i))
-		printf("%zu ", i);
-	printf("\n");
+	show_number_list(list, 1);
 
 	cc_list_delete(list, NULL);
 	return 0;

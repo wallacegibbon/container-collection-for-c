@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
 static const char *sample = "A quick brown fox jumps over the lazy dog.";
 
@@ -20,6 +21,8 @@ static void char_array_display(struct cc_array *chars, const char *prefix) {
 
 	while (cc_iter_next(&iter, &tmp))
 		putchar(tmp);
+
+	fflush(stdout);
 }
 
 int main() {
@@ -29,17 +32,19 @@ int main() {
 
 	cc_array_init(&array, buffer, 10, 1);
 
-	/// install the comparing function
 	for (i = 0; i < 10; i++)
 		assert(cc_array_set(&array, i, (void *)&sample[i]));
 
-	char_array_display(&array, "\nbefore sort:\n");
+	// char_array_display(&array, "\nbefore sort: ");
 
 	/// sort the sequence
 	// assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
 	assert(cc_array_sort_quick(&array, (cc_cmp_fn)cmp_char));
 
-	char_array_display(&array, "\nafter sort:\n");
+	// assert(!strncmp((const char *)array.buffer, "  Abcikqru", 10));
+	assert(!strncmp((const char *)array.buffer, "urqkicbA  ", 10));
+
+	// char_array_display(&array, "\nafter sort: ");
 
 	putchar('\n');
 	return 0;

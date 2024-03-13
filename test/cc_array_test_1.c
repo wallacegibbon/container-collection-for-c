@@ -18,13 +18,13 @@ int main() {
 
 	for (i = 0; i < 10; i++) {
 		assert(cc_array_get(&array, i, &tmp));
-		printf(">>1 %.2f\n", tmp);
+		assert(tmp == i);
 	}
 
 	cc_array_iter_init(&iter, &array);
-
 	while (cc_iter_next(&iter, &tmp))
-		printf(">>2 %.2f\n", tmp);
+		printf("%.2f ", tmp);
+	printf("\n");
 
 	return 0;
 }

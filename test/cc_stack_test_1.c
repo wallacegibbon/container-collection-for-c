@@ -21,9 +21,9 @@ int main() {
 	for (i = 0; i < 10; i++)
 		assert(cc_stack_push(p_stack, &i));
 
-	for (i = 0; i < 10; i++) {
+	for (i = 9; i >= 0; i--) {
 		assert(cc_stack_pop(p_stack, &tmp));
-		printf(">> %d\n", tmp);
+		assert(tmp == i);
 	}
 
 	cc_stack_delete(p_stack);

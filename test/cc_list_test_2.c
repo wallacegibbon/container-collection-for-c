@@ -32,8 +32,6 @@ int main() {
 
 	assert(!cc_list_remove(list, 0, (void **)&tmp));
 
-	printf("ok.\n");
-
 	cc_list_delete(list, NULL);
 	return 0;
 }

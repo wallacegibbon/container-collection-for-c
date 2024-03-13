@@ -1,34 +1,27 @@
 #include "cc_ring.h"
 #include <assert.h>
-#include <stdio.h>
 
 int main() {
 	struct cc_ring *ring;
 	char i, tmp;
 
 	ring = cc_ring_new(8, sizeof(char));
+	assert(cc_ring_space(ring) == 8);
 
-	printf("ring space: %zu\n", cc_ring_space(ring));
-
-	for (i = 'a'; i < 'i'; i++) {
-		// printf(">> put returning: %d\n", cc_ring_put(ring, &i));
+	for (i = 0; i < 8; i++) {
 		assert(cc_ring_put(ring, &i));
-		printf("ring space: %zu\n", cc_ring_space(ring));
+		assert(cc_ring_space(ring) == (size_t)(8 - i - 1));
 	}
 
-	fflush(stdout);
-
-	assert(!cc_ring_put(ring, &i));
+	assert(cc_ring_space(ring) == 0);
 	assert(!cc_ring_put(ring, &i));
 
 	for (i = 0; i < 8; i++) {
 		assert(cc_ring_get(ring, &tmp));
-		printf(">> %c\n", tmp);
-		printf("ring space: %zu\n", cc_ring_space(ring));
+		assert(cc_ring_space(ring) == (size_t)i + 1);
 	}
 
-	fflush(stdout);
-
+	assert(cc_ring_space(ring) == 8);
 	assert(!cc_ring_get(ring, &tmp));
 
 	cc_ring_delete(ring);

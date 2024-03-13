@@ -16,8 +16,7 @@ struct cc_list_node {
 	struct cc_list_node *prev;
 	struct cc_list_node *next;
 	union {
-		void *p_data;
-		size_t data;
+		void *data;
 		size_t size;
 	};
 };

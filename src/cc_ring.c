@@ -19,7 +19,7 @@ size_t cc_ring_space(struct cc_ring *self) {
 		return self->read_index - self->write_index - 1;
 }
 
-int cc_ring_put(struct cc_ring *self, void *item) {
+int cc_ring_append(struct cc_ring *self, void *item) {
 	size_t write_index_next;
 
 	write_index_next = _next_index(self, self->write_index);
@@ -32,7 +32,7 @@ int cc_ring_put(struct cc_ring *self, void *item) {
 	return 1;
 }
 
-int cc_ring_get(struct cc_ring *self, void *item) {
+int cc_ring_shift(struct cc_ring *self, void *item) {
 	if (self->read_index == self->write_index)
 		return 0;
 

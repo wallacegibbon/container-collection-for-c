@@ -69,7 +69,7 @@ struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size) {
 	if (self == NULL)
 		goto fail1;
 
-	buffer = malloc(sizeof(elem_nums * elem_size));
+	buffer = malloc(elem_nums * elem_size);
 	if (buffer == NULL)
 		goto fail2;
 

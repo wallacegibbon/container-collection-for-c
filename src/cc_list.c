@@ -78,7 +78,7 @@ int cc_list_insert(struct cc_list *self, size_t index, void *value) {
 	return 1;
 }
 
-/// Caution: If `result` is NULL, the `p_data` of the node to move may leak.
+/// Caution: If `result` is NULL, the `data` of the node to remove may leak if it's a pointer.
 int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 	struct cc_list_node *node, *node_to_remove;
 	if (index >= self->root.size)

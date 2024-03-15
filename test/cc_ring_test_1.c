@@ -24,7 +24,7 @@ int main() {
 	assert(cc_ring_space(ring) == 8);
 	assert(!cc_ring_shift(ring, &tmp));
 
-	cc_ring_delete(ring);
+	cc_ring_delete(ring, NULL);
 
 	return 0;
 }

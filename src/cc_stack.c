@@ -1,5 +1,4 @@
 #include "cc_stack.h"
-#include "cc_array.h"
 #include <stdlib.h>
 
 int cc_stack_push(struct cc_stack *self, void *item) {
@@ -42,8 +41,8 @@ struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size) {
 	return self;
 }
 
-void cc_stack_delete(struct cc_stack *self) {
-	cc_array_delete(self->data);
+void cc_stack_delete(struct cc_stack *self, cc_cleanup_fn fn) {
+	cc_array_delete(self->data, fn);
 	free(self);
 }
 

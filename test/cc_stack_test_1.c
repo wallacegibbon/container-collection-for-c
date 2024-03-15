@@ -26,7 +26,7 @@ int main() {
 		assert(tmp == i);
 	}
 
-	cc_stack_delete(p_stack);
+	cc_stack_delete(p_stack, NULL);
 
 	return 0;
 }

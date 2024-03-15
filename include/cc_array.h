@@ -17,7 +17,7 @@ struct cc_array {
 
 #ifndef NO_MALLOC
 struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size);
-void cc_array_delete(struct cc_array *self);
+void cc_array_delete(struct cc_array *self, cc_cleanup_fn fn);
 #endif
 
 void cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size);

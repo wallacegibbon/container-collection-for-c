@@ -3,7 +3,7 @@
 
 typedef int (*cc_cmp_fn)(void *left, void *right);
 
-typedef void (*cc_handle_fn)(void *value);
+typedef void (*cc_cleanup_fn)(void *value);
 
 void exit_info(int code, const char *format, ...);
 

@@ -81,7 +81,16 @@ fail1:
 	return NULL;
 }
 
-void cc_array_delete(struct cc_array *self) {
+void cc_array_delete(struct cc_array *self, cc_cleanup_fn fn) {
+	struct cc_array_iter iter;
+	uint8_t tmp[self->elem_size];
+
+	if (fn != NULL) {
+		cc_array_iter_init(&iter, self);
+		while (cc_iter_next(&iter, tmp))
+			fn(tmp);
+	}
+
 	free(self->buffer);
 	free(self);
 }

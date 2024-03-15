@@ -1,6 +1,4 @@
 #include "cc_ring.h"
-#include "cc_array.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 static inline size_t _next_index(struct cc_ring *self, size_t index) {
@@ -68,8 +66,8 @@ struct cc_ring *cc_ring_new(size_t elem_nums, size_t elem_size) {
 	return self;
 }
 
-void cc_ring_delete(struct cc_ring *self) {
-	cc_array_delete(self->data);
+void cc_ring_delete(struct cc_ring *self, cc_cleanup_fn fn) {
+	cc_array_delete(self->data, fn);
 	free(self);
 }
 

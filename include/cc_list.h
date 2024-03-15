@@ -21,7 +21,7 @@ struct cc_list_node {
 	};
 };
 
-void cc_list_node_delete(struct cc_list_node *self, cc_handle_fn cleanup_fn);
+void cc_list_node_delete(struct cc_list_node *self, cc_cleanup_fn fn);
 
 ///-----------------------------------------------------------------------------
 /// Doubly linked list
@@ -31,7 +31,7 @@ struct cc_list {
 };
 
 struct cc_list *cc_list_new();
-void cc_list_delete(struct cc_list *self, cc_handle_fn cleanup_fn);
+void cc_list_delete(struct cc_list *self, cc_cleanup_fn cleanup_fn);
 
 void cc_list_init(struct cc_list *self);
 

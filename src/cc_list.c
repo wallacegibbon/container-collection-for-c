@@ -2,9 +2,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void cc_list_node_delete(struct cc_list_node *self, cc_handle_fn cleanup_fn) {
-	if (cleanup_fn != NULL)
-		cleanup_fn(self->data);
+void cc_list_node_delete(struct cc_list_node *self, cc_cleanup_fn fn) {
+	if (fn != NULL)
+		fn(self->data);
 
 	free(self);
 }
@@ -114,20 +114,20 @@ struct cc_list *cc_list_new() {
 	return self;
 }
 
-static inline struct cc_list_node *free_and_next(struct cc_list_node *current, cc_handle_fn cleanup_fn) {
+static inline struct cc_list_node *free_and_next(struct cc_list_node *current, cc_cleanup_fn fn) {
 	struct cc_list_node *next;
 	next = current->next;
-	cc_list_node_delete(current, cleanup_fn);
+	cc_list_node_delete(current, fn);
 	return next;
 }
 
-void cc_list_delete(struct cc_list *self, cc_handle_fn cleanup_fn) {
+void cc_list_delete(struct cc_list *self, cc_cleanup_fn fn) {
 	struct cc_list_node *node;
 
 	node = self->root.next;
 
 	while (node != &self->root)
-		node = free_and_next(node, cleanup_fn);
+		node = free_and_next(node, fn);
 
 	free(self);
 }

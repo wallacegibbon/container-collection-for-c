@@ -2,50 +2,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void cc_list_node_delete(struct cc_list_node *self, cc_cleanup_fn fn) {
-	if (fn != NULL)
-		fn(self->data);
-
-	free(self);
-}
-
-int cc_list_append(struct cc_list *self, void *value) {
-	struct cc_list_node *node;
-	node = malloc(sizeof(*node));
-	if (node == NULL)
-		return 0;
-
-	node->data = value;
-
-	self->root.prev->next = node;
-	node->prev = self->root.prev;
-
-	self->root.prev = node;
-	node->next = &self->root;
-
-	self->root.size++;
-	return 1;
-}
-
-/// Caution: You may need to delete `right` list after this concatenation.
-int cc_list_concat(struct cc_list *left, struct cc_list *right) {
-	if (left == NULL)
-		return 0;
-	if (right == NULL)
-		return 1;
-
-	left->root.prev->next = right->root.next;
-	right->root.next->prev = left->root.prev;
-
-	left->root.prev = right->root.prev;
-	right->root.prev->next = &left->root;
-
-	left->root.size += right->root.size;
-
-	cc_list_init(right);
-	return 1;
-}
-
 static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {
 	struct cc_list_node *node;
 	node = &self->root;
@@ -95,6 +51,43 @@ int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 	cc_list_node_delete(node_to_remove, NULL);
 
 	self->root.size--;
+	return 1;
+}
+
+int cc_list_append(struct cc_list *self, void *value) {
+	struct cc_list_node *node;
+	node = malloc(sizeof(*node));
+	if (node == NULL)
+		return 0;
+
+	node->data = value;
+
+	self->root.prev->next = node;
+	node->prev = self->root.prev;
+
+	self->root.prev = node;
+	node->next = &self->root;
+
+	self->root.size++;
+	return 1;
+}
+
+/// Caution: You may need to delete `right` list after this concatenation.
+int cc_list_concat(struct cc_list *left, struct cc_list *right) {
+	if (left == NULL)
+		return 0;
+	if (right == NULL)
+		return 1;
+
+	left->root.prev->next = right->root.next;
+	right->root.next->prev = left->root.prev;
+
+	left->root.prev = right->root.prev;
+	right->root.prev->next = &left->root;
+
+	left->root.size += right->root.size;
+
+	cc_list_init(right);
 	return 1;
 }
 
@@ -168,4 +161,11 @@ static int cc_list_iter_next(struct cc_list_iter *self, uintptr_t *value) {
 	cc_list_iter_step(self);
 
 	return 1;
+}
+
+void cc_list_node_delete(struct cc_list_node *self, cc_cleanup_fn fn) {
+	if (fn != NULL)
+		fn(self->data);
+
+	free(self);
 }

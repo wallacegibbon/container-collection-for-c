@@ -1,3 +1,9 @@
+## Introduction
+
+Containers in `container-collection-for-c` are all weak containers if you store pointers in them.
+Which means they do NOT free those pointers when the container got deleted.
+
+
 ## Tools
 
 Use [drmemory](https://github.com/DynamoRIO/drmemory) to check (potential) memory leaks.

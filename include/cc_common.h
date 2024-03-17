@@ -13,5 +13,6 @@ int cc_default_cmp_fn(void *left, void *right);
 size_t cc_default_hash_fn(void *obj);
 
 void cc_exit_info(int code, const char *format, ...);
+void cc_debug_print(const char *format, ...);
 
 #endif

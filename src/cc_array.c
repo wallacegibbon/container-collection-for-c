@@ -8,13 +8,16 @@ static inline int _cc_array_get(struct cc_array *self, size_t index, void *resul
 	return 1;
 }
 
+static inline int _cc_array_get_ref(struct cc_array *self, size_t index, void **ref) {
+	*ref = self->buffer + index * self->elem_size;
+	return 1;
+}
+
 static inline int _cc_array_set(struct cc_array *self, size_t index, void *value) {
 	memcpy(self->buffer + index * self->elem_size, value, self->elem_size);
 	return 1;
 }
 
-/// Please ensure this function is not inlined since it uses VLA.
-/// Or memory consumption could be huge when you call this function in a long loop.
 void cc_array_swap(struct cc_array *self, size_t i, size_t j) {
 	uint8_t tmp[self->elem_size];
 	_cc_array_get(self, i, tmp);
@@ -34,11 +37,22 @@ void cc_array_get_unsafe(struct cc_array *self, size_t index, void *result) {
 	_cc_array_get(self, index, result);
 }
 
+void cc_array_get_ref_unsafe(struct cc_array *self, size_t index, void **ref) {
+	_cc_array_get_ref(self, index, ref);
+}
+
 int cc_array_get(struct cc_array *self, size_t index, void *result) {
-	if (index >= self->elem_nums)
+	if (index >= self->elem_nums || result == NULL)
 		return 0;
 	else
 		return _cc_array_get(self, index, result);
+}
+
+int cc_array_get_ref(struct cc_array *self, size_t index, void **ref) {
+	if (index >= self->elem_nums || ref == NULL)
+		return 0;
+	else
+		return _cc_array_get_ref(self, index, ref);
 }
 
 void cc_array_set_unsafe(struct cc_array *self, size_t index, void *value) {
@@ -81,23 +95,12 @@ fail1:
 	return NULL;
 }
 
-void cc_array_delete(struct cc_array *self, cc_cleanup_fn fn) {
-	struct cc_array_iter iter;
-	uint8_t tmp[self->elem_size];
-
-	if (fn != NULL) {
-		cc_array_iter_init(&iter, self);
-		while (cc_iter_next(&iter, tmp))
-			fn(tmp);
-	}
-
+void cc_array_delete(struct cc_array *self) {
 	free(self->buffer);
 	free(self);
 }
 
 #endif
-
-static int cc_array_iter_next(struct cc_array_iter *self, void *item);
 
 static const struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_array_iter_next,
@@ -109,8 +112,8 @@ void cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data) {
 	self->cursor = 0;
 }
 
-static int cc_array_iter_next(struct cc_array_iter *self, void *item) {
-	if (!cc_array_get(self->data, self->cursor, item))
+int cc_array_iter_next(struct cc_array_iter *self, void **item) {
+	if (!cc_array_get_ref(self->data, self->cursor, item))
 		return 0;
 
 	self->cursor++;

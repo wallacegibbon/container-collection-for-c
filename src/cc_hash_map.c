@@ -5,6 +5,7 @@
 #include "cc_list_map.h"
 #include "cc_map.h"
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 static inline size_t calc_hash(struct cc_hash_map *self, void *key) {
@@ -29,6 +30,9 @@ int cc_hash_map_get_item(struct cc_hash_map *self, void *key, struct cc_map_item
 
 int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result) {
 	struct cc_map_item *tmp;
+
+	*result = NULL;
+
 	if (!cc_hash_map_get_item(self, key, &tmp))
 		return 0;
 
@@ -37,24 +41,46 @@ int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result) {
 }
 
 int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value) {
-	struct cc_list_map *list_map_tmp;
 	struct cc_map_item *tmp;
+	struct cc_list_map **list_map_tmp;
 	size_t hash_tmp;
+
+	/// Try to find existing map item for `key`.
 
 	if (cc_hash_map_get_item(self, key, &tmp)) {
 		tmp->value = value;
 		return 1;
 	}
 
+	/// No existing item for `key`.
+
 	hash_tmp = calc_hash(self, key);
-	assert(cc_array_get(self->data, hash_tmp, &list_map_tmp));
+	assert(cc_array_get_ref(self->data, hash_tmp, (void **)&list_map_tmp));
 
-	if (list_map_tmp == NULL) {
-		list_map_tmp = cc_list_map_new(self->cmp);
-		cc_array_set(self->data, hash_tmp, list_map_tmp);
-	}
+	if (*list_map_tmp == NULL)
+		*list_map_tmp = cc_list_map_new(self->cmp);
 
-	return cc_list_map_set(list_map_tmp, key, value);
+	return cc_list_map_set(*list_map_tmp, key, value);
+}
+
+void cc_hash_map_print_slot(struct cc_list_map *slot, int index) {
+	cc_debug_print("[% 9d] ", index);
+	if (slot != NULL)
+		cc_list_map_print(slot, "\n");
+	else
+		cc_debug_print("\n");
+}
+
+void cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
+	struct cc_array_iter iter;
+	struct cc_list_map **tmp;
+	int i = 0;
+
+	cc_array_iter_init(&iter, self->data);
+	while (cc_iter_next(&iter, &tmp))
+		cc_hash_map_print_slot(*tmp, i++);
+
+	cc_debug_print("%s", end_string);
 }
 
 static const struct cc_map_i map_interface = {
@@ -95,12 +121,14 @@ struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn cmp, cc_hash_f
 
 void cc_hash_map_delete(struct cc_hash_map *self) {
 	struct cc_array_iter iter;
-	struct cc_list_map *tmp;
+	struct cc_list_map **tmp;
 
 	cc_array_iter_init(&iter, self->data);
-	while (cc_iter_next(&iter, &tmp))
-		cc_list_map_delete(tmp);
+	while (cc_iter_next(&iter, &tmp)) {
+		if (*tmp != NULL)
+			cc_list_map_delete(*tmp);
+	}
 
-	cc_array_delete(self->data, NULL);
+	cc_array_delete(self->data);
 	free(self);
 }

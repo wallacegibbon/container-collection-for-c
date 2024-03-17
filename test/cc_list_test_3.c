@@ -28,6 +28,6 @@ int main() {
 
 	assert(!cc_list_remove(list, 0, (void **)&tmp));
 
-	cc_list_delete(list, NULL);
+	cc_list_delete(list);
 	return 0;
 }

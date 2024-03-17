@@ -25,4 +25,6 @@ void cc_hash_map_delete(struct cc_hash_map *self);
 int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result);
 int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value);
 
+void cc_hash_map_print(struct cc_hash_map *self, char *end_string);
+
 #endif

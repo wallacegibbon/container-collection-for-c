@@ -1,7 +1,7 @@
 #include "cc_array.h"
+#include "cc_common.h"
 #include <assert.h>
 #include <stdint.h>
-#include <stdio.h>
 
 int main() {
 	struct cc_array array;
@@ -10,6 +10,7 @@ int main() {
 
 	float i;
 	float tmp;
+	float *iter_tmp;
 
 	cc_array_init(&array, buffer, 10, sizeof(float));
 
@@ -22,9 +23,10 @@ int main() {
 	}
 
 	cc_array_iter_init(&iter, &array);
-	while (cc_iter_next(&iter, &tmp))
-		printf("%.2f ", tmp);
-	printf("\n");
+	while (cc_iter_next(&iter, &iter_tmp))
+		cc_debug_print("%.2f ", *iter_tmp);
+
+	cc_debug_print("\n");
 
 	return 0;
 }

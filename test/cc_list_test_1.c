@@ -6,16 +6,16 @@
 
 void show_number_list(struct cc_list *list, int direction) {
 	struct cc_list_iter iter;
-	size_t i;
+	size_t *tmp;
 
-	printf(">>> the whole list values:\n\t");
+	cc_debug_print(">>> the whole list values:\n\t");
 
 	cc_list_iter_init(&iter, list, direction);
 
-	while (cc_iter_next(&iter, &i))
-		printf("%zu ", i);
+	while (cc_iter_next(&iter, &tmp))
+		cc_debug_print("%zu ", *tmp);
 
-	printf("\n");
+	cc_debug_print("\n");
 }
 
 int main() {
@@ -48,6 +48,6 @@ int main() {
 
 	show_number_list(list, 1);
 
-	cc_list_delete(list, NULL);
+	cc_list_delete(list);
 	return 0;
 }

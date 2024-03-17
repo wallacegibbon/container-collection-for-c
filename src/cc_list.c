@@ -1,4 +1,5 @@
 #include "cc_list.h"
+#include "cc_common.h"
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -48,7 +49,7 @@ int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 	if (result != NULL)
 		*result = node_to_remove->data;
 
-	cc_list_node_delete(node_to_remove, NULL);
+	free(node_to_remove);
 
 	self->root.size--;
 	return 1;
@@ -107,25 +108,22 @@ struct cc_list *cc_list_new() {
 	return self;
 }
 
-static inline struct cc_list_node *free_and_next(struct cc_list_node *current, cc_cleanup_fn fn) {
+static inline struct cc_list_node *free_and_next(struct cc_list_node *current) {
 	struct cc_list_node *next;
 	next = current->next;
-	cc_list_node_delete(current, fn);
+	free(current);
 	return next;
 }
 
-void cc_list_delete(struct cc_list *self, cc_cleanup_fn fn) {
+void cc_list_delete(struct cc_list *self) {
 	struct cc_list_node *node;
 
 	node = self->root.next;
-
 	while (node != &self->root)
-		node = free_and_next(node, fn);
+		node = free_and_next(node);
 
 	free(self);
 }
-
-static int cc_list_iter_next(struct cc_list_iter *self, uintptr_t *value);
 
 static const struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_list_iter_next,
@@ -152,20 +150,12 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 	return 1;
 }
 
-static int cc_list_iter_next(struct cc_list_iter *self, uintptr_t *value) {
+int cc_list_iter_next(struct cc_list_iter *self, void **item) {
 	if (self->cursor == &self->list->root)
 		return 0;
 
-	*value = (uintptr_t)self->cursor->data;
+	*item = &self->cursor->data;
 
 	cc_list_iter_step(self);
-
 	return 1;
-}
-
-void cc_list_node_delete(struct cc_list_node *self, cc_cleanup_fn fn) {
-	if (fn != NULL)
-		fn(self->data);
-
-	free(self);
 }

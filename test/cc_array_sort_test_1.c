@@ -1,5 +1,6 @@
 #include "cc_array.h"
 #include "cc_array_sort.h"
+#include "cc_common.h"
 #include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -14,15 +15,13 @@ static int cmp_char(char *left, char *right) {
 
 static void char_array_display(struct cc_array *chars, const char *prefix) {
 	struct cc_array_iter iter;
-	char tmp;
+	char *tmp;
 
-	printf("%s", prefix);
+	cc_debug_print("%s", prefix);
 	cc_array_iter_init(&iter, chars);
 
 	while (cc_iter_next(&iter, &tmp))
-		putchar(tmp);
-
-	fflush(stdout);
+		cc_debug_print("%c", *tmp);
 }
 
 int main() {
@@ -35,7 +34,7 @@ int main() {
 	for (i = 0; i < 10; i++)
 		assert(cc_array_set(&array, i, (void *)&sample[i]));
 
-	// char_array_display(&array, "\nbefore sort: ");
+	char_array_display(&array, "\nbefore sort: ");
 
 	/// sort the sequence
 	// assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
@@ -44,7 +43,7 @@ int main() {
 	// assert(!strncmp((const char *)array.buffer, "  Abcikqru", 10));
 	assert(!strncmp((const char *)array.buffer, "urqkicbA  ", 10));
 
-	// char_array_display(&array, "\nafter sort: ");
+	char_array_display(&array, "\nafter sort: ");
 
 	putchar('\n');
 	return 0;

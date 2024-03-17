@@ -14,20 +14,18 @@ struct blah {
 static const struct blah people[] = {{"Harry", 10}, {"Albus", 109}, {"Severus", 50}};
 
 static void blah_display(struct blah *self) {
-	printf("<name %s, age: %d> ", self->name, self->age);
+	cc_debug_print("<name %s, age: %d> ", self->name, self->age);
 }
 
 static void blah_array_display(struct cc_array *blahs, const char *prefix) {
 	struct cc_array_iter iter;
-	struct blah tmp;
+	struct blah *tmp;
 
-	printf("%s", prefix);
+	cc_debug_print("%s", prefix);
 	cc_array_iter_init(&iter, blahs);
 
 	while (cc_iter_next(&iter, &tmp))
-		blah_display(&tmp);
-
-	fflush(stdout);
+		blah_display(tmp);
 }
 
 static int cmp_name(struct blah *left, struct blah *right) {
@@ -52,15 +50,19 @@ int main() {
 	for (i = 0; i < 3; i++)
 		assert(cc_array_set(&array, i, (void *)&people[i]));
 
-	// blah_array_display(&array, "\nbefore sort:\n");
+	blah_array_display(&array, "\nbefore sort:\n");
 
 	assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_name));
-	// blah_array_display(&array, "\nafter sort by name:\n");
+
+	blah_array_display(&array, "\nafter sort by name:\n");
+
 	assert(cc_array_get(&array, 0, &tmp));
 	assert(tmp.age == 50);
 
 	assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_age));
-	// blah_array_display(&array, "\nafter sort by age:\n");
+
+	blah_array_display(&array, "\nafter sort by age:\n");
+
 	assert(cc_array_get(&array, 0, &tmp));
 	assert(tmp.age == 109);
 

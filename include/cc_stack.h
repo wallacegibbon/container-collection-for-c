@@ -12,7 +12,7 @@ struct cc_stack {
 
 #ifndef NO_MALLOC
 struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size);
-void cc_stack_delete(struct cc_stack *self, cc_cleanup_fn fn);
+void cc_stack_delete(struct cc_stack *self);
 #endif
 
 void cc_stack_init(struct cc_stack *self, struct cc_array *data);

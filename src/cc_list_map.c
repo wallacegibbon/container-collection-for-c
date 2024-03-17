@@ -3,19 +3,20 @@
 #include "cc_iter.h"
 #include "cc_list.h"
 #include "cc_map.h"
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result) {
 	struct cc_list_iter iter;
-	struct cc_map_item *tmp;
+	struct cc_map_item **tmp;
 
 	*result = NULL;
 
-	cc_list_iter_init(&iter, self->data, 0);
+	assert(cc_list_iter_init(&iter, self->data, 0));
 	while (cc_iter_next(&iter, &tmp)) {
-		if (self->cmp(key, tmp->key) == 0) {
-			*result = tmp;
+		if (self->cmp(key, (*tmp)->key) == 0) {
+			*result = *tmp;
 			return 1;
 		}
 	}
@@ -25,6 +26,9 @@ int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item
 
 int cc_list_map_get(struct cc_list_map *self, void *key, void **result) {
 	struct cc_map_item *tmp;
+
+	*result = NULL;
+
 	if (!cc_list_map_get_item(self, key, &tmp))
 		return 0;
 
@@ -52,13 +56,13 @@ int cc_list_map_set(struct cc_list_map *self, void *key, void *value) {
 
 void cc_list_map_print(struct cc_list_map *self, char *end_string) {
 	struct cc_list_iter iter;
-	struct cc_map_item *tmp;
+	struct cc_map_item **tmp;
 
 	cc_list_iter_init(&iter, self->data, 0);
 	while (cc_iter_next(&iter, &tmp))
-		printf("{%zu -> %zu} ", (size_t)tmp->key, (size_t)tmp->value);
+		cc_debug_print("{%zu -> %zu} ", (*tmp)->key, (*tmp)->value);
 
-	printf("%s", end_string);
+	cc_debug_print("%s", end_string);
 }
 
 static const struct cc_map_i map_interface = {
@@ -68,6 +72,7 @@ static const struct cc_map_i map_interface = {
 
 struct cc_list_map *cc_list_map_new(cc_cmp_fn cmp) {
 	struct cc_list_map *self;
+
 	self = malloc(sizeof(*self));
 	if (self == NULL)
 		return NULL;
@@ -79,11 +84,17 @@ struct cc_list_map *cc_list_map_new(cc_cmp_fn cmp) {
 	self->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
 
 	self->interface = (struct cc_map_i *)&map_interface;
-
 	return self;
 }
 
 void cc_list_map_delete(struct cc_list_map *self) {
-	cc_list_delete(self->data, free);
+	struct cc_list_iter iter;
+	struct cc_map_item **tmp;
+
+	cc_list_iter_init(&iter, self->data, 0);
+	while (cc_iter_next(&iter, &tmp))
+		free(*tmp);
+
+	cc_list_delete(self->data);
 	free(self);
 }

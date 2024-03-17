@@ -34,15 +34,15 @@ vpath %.c $(sort $(dir $(C_SOURCE_FILES)))
 all: $(OBJECTS)
 
 $(BUILD_DIR)/%.c.o: %.c | build_dir
-	@echo -e "\tcompiling $(DEBUG_SIGN) $< ..."
+	@echo -e "\tCC $(DEBUG_SIGN) $<"
 	@$(CC) -c -o $@ $< $(C_FLAGS)
 
 vpath %.c ./test
 
 $(BUILD_DIR)/%: %.c $(OBJECTS)
-	@echo -e "\tcompiling $(DEBUG_SIGN) $< ..."
+	@echo -e "\tCC $(DEBUG_SIGN) $<"
 	@$(CC) -o $@ $^ $(TEST_C_FLAGS)
-	@echo -e "\trunning test $@ ..."
+	@echo -e "\t./$@\n"
 	@$(MEMORY_CHECK_PROG) $@
 
 build_dir:

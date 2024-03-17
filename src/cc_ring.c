@@ -66,8 +66,8 @@ struct cc_ring *cc_ring_new(size_t elem_nums, size_t elem_size) {
 	return self;
 }
 
-void cc_ring_delete(struct cc_ring *self, cc_cleanup_fn fn) {
-	cc_array_delete(self->data, fn);
+void cc_ring_delete(struct cc_ring *self) {
+	cc_array_delete(self->data);
 	free(self);
 }
 

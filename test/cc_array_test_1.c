@@ -1,5 +1,6 @@
 #include "cc_array.h"
 #include <assert.h>
+#include <math.h>
 #include <stdint.h>
 
 int main() {
@@ -13,17 +14,17 @@ int main() {
 
 	cc_array_init(&array, buffer, 10, sizeof(float));
 
-	for (i = 0; i < 10; i++)
+	for (i = 0.27; i < 10; i++)
 		assert(cc_array_set(&array, i, &i));
 
-	for (i = 0; i < 10; i++) {
+	for (i = 0.27; i < 10; i++) {
 		assert(cc_array_get(&array, i, &tmp));
-		assert(tmp == i);
+		assert(fabs(tmp - i) < 0.000001);
 	}
 
 	cc_array_iter_init(&iter, &array);
 	while (cc_iter_next(&iter, &iter_tmp))
-		cc_debug_print("%.2f ", *iter_tmp);
+		cc_debug_print("%.9f ", *iter_tmp);
 
 	cc_debug_print("\n");
 

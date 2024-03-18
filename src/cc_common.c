@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void exit_info(int code, const char *format, ...) {
+void cc_exit_info(int code, const char *format, ...) {
 	va_list args;
 
 	va_start(args, format);

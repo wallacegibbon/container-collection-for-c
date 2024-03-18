@@ -1,4 +1,3 @@
-#include "cc_array.h"
 #include "cc_stack.h"
 #include <assert.h>
 #include <stdio.h>

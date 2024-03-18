@@ -1,8 +1,5 @@
 #include "cc_array.h"
-#include "cc_common.h"
-#include "cc_iter.h"
 #include <assert.h>
-#include <stddef.h>
 #include <stdlib.h>
 
 struct blah {

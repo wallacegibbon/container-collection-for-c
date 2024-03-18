@@ -1,5 +1,4 @@
 #include "cc_array.h"
-#include "cc_common.h"
 #include <assert.h>
 #include <stdint.h>
 

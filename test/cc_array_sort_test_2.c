@@ -1,7 +1,6 @@
 #include "cc_array.h"
 #include "cc_array_sort.h"
 #include <assert.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 

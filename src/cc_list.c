@@ -1,6 +1,4 @@
 #include "cc_list.h"
-#include "cc_common.h"
-#include <stdint.h>
 #include <stdlib.h>
 
 static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {

@@ -8,13 +8,11 @@
 #include "cc_common.h"
 #include "cc_list.h"
 #include "cc_map.h"
-#include <stddef.h>
 
 struct cc_list_map {
 	struct cc_map_i *interface;
 	struct cc_list *data;
 	cc_cmp_fn cmp;
-	size_t item_count;
 };
 
 struct cc_list_map *cc_list_map_new(cc_cmp_fn cmp);

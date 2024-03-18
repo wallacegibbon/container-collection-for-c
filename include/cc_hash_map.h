@@ -16,7 +16,6 @@ struct cc_hash_map {
 	size_t bucket_size;
 	cc_cmp_fn cmp;
 	cc_hash_fn calc_hash;
-	size_t item_count;
 };
 
 struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn cmp, cc_hash_fn calc_hash);

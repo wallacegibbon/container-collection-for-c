@@ -15,17 +15,22 @@ int main() {
 	assert(cc_hash_map_set(map, (void *)11, (void *)101));
 	assert(cc_hash_map_set(map, (void *)12, (void *)102));
 	assert(cc_hash_map_set(map, (void *)19, (void *)109));
-	assert(cc_hash_map_set(map, (void *)22, (void *)202));
-	assert(cc_hash_map_set(map, (void *)32, (void *)302));
-	assert(cc_hash_map_set(map, (void *)41, (void *)401));
+
+	assert(cc_map_set(map, (void *)22, (void *)202));
+	assert(cc_map_set(map, (void *)32, (void *)302));
+	assert(cc_map_set(map, (void *)41, (void *)401));
+	assert(cc_map_set(map, (void *)52, (void *)502));
+	assert(cc_map_set(map, (void *)63, (void *)603));
+	assert(cc_map_set(map, (void *)66, (void *)606));
 
 	cc_hash_map_print(map, "\n");
 
 	assert(cc_hash_map_get(map, (void *)11, (void **)&tmp));
 	assert(tmp == 101);
-	assert(cc_hash_map_get(map, (void *)19, (void **)&tmp));
+
+	assert(cc_map_get(map, (void *)19, (void **)&tmp));
 	assert(tmp == 109);
-	assert(cc_hash_map_get(map, (void *)12, (void **)&tmp));
+	assert(cc_map_get(map, (void *)12, (void **)&tmp));
 	assert(tmp == 102);
 
 	cc_hash_map_delete(map);

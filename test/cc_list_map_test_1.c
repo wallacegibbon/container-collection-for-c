@@ -15,16 +15,16 @@ int main() {
 		return 1;
 
 	assert(cc_list_map_set(map, (void *)1, (void *)'a'));
-	assert(cc_list_map_set(map, (void *)2, (void *)'b'));
-	assert(cc_list_map_set(map, (void *)9, (void *)'c'));
+	assert(cc_map_set(map, (void *)2, (void *)'b'));
+	assert(cc_map_set(map, (void *)9, (void *)'c'));
 
 	cc_list_map_print(map, "\n");
 
 	assert(cc_list_map_get(map, (void *)1, (void **)&tmp));
 	assert(tmp == 'a');
-	assert(cc_list_map_get(map, (void *)9, (void **)&tmp));
+	assert(cc_map_get(map, (void *)9, (void **)&tmp));
 	assert(tmp == 'c');
-	assert(cc_list_map_get(map, (void *)2, (void **)&tmp));
+	assert(cc_map_get(map, (void *)2, (void **)&tmp));
 	assert(tmp == 'b');
 
 	cc_list_map_delete(map);

@@ -27,6 +27,11 @@ int main() {
 	assert(cc_map_get(map, (void *)2, (void **)&tmp));
 	assert(tmp == 'b');
 
+	assert(cc_map_del(map, (void *)2, (void **)&tmp));
+	assert(tmp == 'b');
+
+	cc_list_map_print(map, "\n");
+
 	cc_list_map_delete(map);
 
 	return 0;

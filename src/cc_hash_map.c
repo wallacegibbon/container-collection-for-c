@@ -1,24 +1,25 @@
 #include "cc_hash_map.h"
+#include "cc_common.h"
 #include "cc_list_map.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-static inline size_t calc_hash(struct cc_hash_map *self, void *key) {
-	return self->calc_hash(key) % self->bucket_size;
+static inline size_t get_list_map(struct cc_hash_map *self, void *key, struct cc_list_map ***result) {
+	size_t hash_tmp;
+	hash_tmp = self->calc_hash(key) % self->bucket_size;
+	return cc_array_get_ref(self->data, hash_tmp, (void **)result);
 }
 
 int cc_hash_map_get_item(struct cc_hash_map *self, void *key, struct cc_map_item **result) {
-	struct cc_list_map *list_map_tmp;
-	size_t hash_tmp;
+	struct cc_list_map **list_map_tmp;
 
-	*result = NULL;
+	if (!check_and_reset_double_p(result))
+		return 0;
 
-	hash_tmp = calc_hash(self, key);
-	assert(cc_array_get(self->data, hash_tmp, &list_map_tmp));
-
-	if (list_map_tmp != NULL)
-		return cc_list_map_get_item(list_map_tmp, key, result);
+	assert(get_list_map(self, key, &list_map_tmp));
+	if (*list_map_tmp != NULL)
+		return cc_list_map_get_item(*list_map_tmp, key, result, NULL);
 	else
 		return 0;
 }
@@ -26,7 +27,8 @@ int cc_hash_map_get_item(struct cc_hash_map *self, void *key, struct cc_map_item
 int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result) {
 	struct cc_map_item *tmp;
 
-	*result = NULL;
+	if (!check_and_reset_double_p(result))
+		return 0;
 
 	if (!cc_hash_map_get_item(self, key, &tmp))
 		return 0;
@@ -38,7 +40,6 @@ int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result) {
 int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value) {
 	struct cc_map_item *tmp;
 	struct cc_list_map **list_map_tmp;
-	size_t hash_tmp;
 
 	/// Try to find existing map item for `key`.
 
@@ -49,13 +50,25 @@ int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value) {
 
 	/// No existing item for `key`.
 
-	hash_tmp = calc_hash(self, key);
-	assert(cc_array_get_ref(self->data, hash_tmp, (void **)&list_map_tmp));
-
+	assert(get_list_map(self, key, &list_map_tmp));
 	if (*list_map_tmp == NULL)
 		*list_map_tmp = cc_list_map_new(self->cmp);
 
 	return cc_list_map_set(*list_map_tmp, key, value);
+}
+
+int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result) {
+	struct cc_list_map **list_map_tmp;
+	size_t hash_tmp;
+
+	if (!check_and_reset_double_p(result))
+		return 0;
+
+	assert(get_list_map(self, key, &list_map_tmp));
+	if (*list_map_tmp != NULL)
+		return cc_list_map_del(*list_map_tmp, key, result);
+	else
+		return 0;
 }
 
 void cc_hash_map_print_slot(struct cc_list_map *slot, int index) {
@@ -81,6 +94,7 @@ void cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
 static const struct cc_map_i map_interface = {
 	.get = (cc_map_get_fn)cc_hash_map_get,
 	.set = (cc_map_set_fn)cc_hash_map_set,
+	.del = (cc_map_del_fn)cc_hash_map_del,
 };
 
 struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn cmp, cc_hash_fn calc_hash) {

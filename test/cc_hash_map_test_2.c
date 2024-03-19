@@ -55,6 +55,9 @@ int main() {
 	assert(cc_map_get(map, "strong_bull", (void **)&tmp));
 	assert(tmp == 6);
 
+	assert(cc_map_del(map, s3, (void **)&tmp));
+	cc_hash_map_print(map, "\n");
+
 	cc_hash_map_delete(map);
 
 	return 0;

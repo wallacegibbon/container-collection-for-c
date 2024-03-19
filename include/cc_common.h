@@ -5,6 +5,14 @@
 
 #include <stddef.h>
 
+static inline int check_and_reset_double_p(void *pointer) {
+	if (pointer == NULL)
+		return 0;
+
+	*(void **)pointer = NULL;
+	return 1;
+}
+
 typedef void (*cc_cleanup_fn)(void *value);
 typedef int (*cc_cmp_fn)(void *left, void *right);
 typedef size_t (*cc_hash_fn)(void *obj);

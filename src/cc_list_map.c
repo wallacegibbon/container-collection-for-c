@@ -1,16 +1,19 @@
 #include "cc_list_map.h"
+#include "cc_common.h"
+#include "cc_list.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result) {
+int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result, size_t *index) {
 	struct cc_list_iter iter;
 	struct cc_map_item **tmp;
 
-	*result = NULL;
+	if (!check_and_reset_double_p(result))
+		return 0;
 
 	assert(cc_list_iter_init(&iter, self->data, 0));
-	while (cc_iter_next(&iter, &tmp, NULL)) {
+	while (cc_iter_next(&iter, &tmp, index)) {
 		if (self->cmp(key, (*tmp)->key) == 0) {
 			*result = *tmp;
 			return 1;
@@ -23,9 +26,10 @@ int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item
 int cc_list_map_get(struct cc_list_map *self, void *key, void **result) {
 	struct cc_map_item *tmp;
 
-	*result = NULL;
+	if (!check_and_reset_double_p(result))
+		return 0;
 
-	if (!cc_list_map_get_item(self, key, &tmp))
+	if (!cc_list_map_get_item(self, key, &tmp, NULL))
 		return 0;
 
 	*result = tmp->value;
@@ -35,7 +39,7 @@ int cc_list_map_get(struct cc_list_map *self, void *key, void **result) {
 int cc_list_map_set(struct cc_list_map *self, void *key, void *value) {
 	struct cc_map_item *tmp;
 
-	if (cc_list_map_get_item(self, key, &tmp)) {
+	if (cc_list_map_get_item(self, key, &tmp, NULL)) {
 		tmp->value = value;
 		return 1;
 	}
@@ -48,6 +52,25 @@ int cc_list_map_set(struct cc_list_map *self, void *key, void *value) {
 	tmp->value = value;
 
 	return cc_list_insert(self->data, 0, tmp);
+}
+
+int cc_list_map_del(struct cc_list_map *self, void *key, void **result) {
+	struct cc_map_item *tmp;
+	size_t index;
+
+	if (!check_and_reset_double_p(result))
+		return 0;
+
+	if (!cc_list_map_get_item(self, key, &tmp, &index))
+		return 0;
+
+	if (!cc_list_remove(self->data, index, (void **)&tmp))
+		return 0;
+
+	*result = tmp->value;
+	free(tmp);
+
+	return 1;
 }
 
 void cc_list_map_print(struct cc_list_map *self, char *end_string) {
@@ -64,6 +87,7 @@ void cc_list_map_print(struct cc_list_map *self, char *end_string) {
 static const struct cc_map_i map_interface = {
 	.get = (cc_map_get_fn)cc_list_map_get,
 	.set = (cc_map_set_fn)cc_list_map_set,
+	.del = (cc_map_del_fn)cc_list_map_del,
 };
 
 struct cc_list_map *cc_list_map_new(cc_cmp_fn cmp) {

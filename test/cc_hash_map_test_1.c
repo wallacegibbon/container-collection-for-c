@@ -33,6 +33,11 @@ int main() {
 	assert(cc_map_get(map, (void *)12, (void **)&tmp));
 	assert(tmp == 102);
 
+	assert(cc_map_del(map, (void *)19, (void **)&tmp));
+	assert(tmp == 109);
+
+	cc_hash_map_print(map, "\n");
+
 	cc_hash_map_delete(map);
 
 	return 0;

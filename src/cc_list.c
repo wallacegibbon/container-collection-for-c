@@ -1,4 +1,5 @@
 #include "cc_list.h"
+#include "cc_common.h"
 #include <stdlib.h>
 
 static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {
@@ -32,9 +33,11 @@ int cc_list_insert(struct cc_list *self, size_t index, void *value) {
 	return 1;
 }
 
-/// Caution: If `result` is NULL, the `data` of the node to remove may leak if it's a pointer.
 int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 	struct cc_list_node *node, *node_to_remove;
+	/// You have to provide `result`, or the `node_to_remove->data` may leak.
+	if (result == NULL)
+		return 0;
 	if (index >= self->root.size)
 		return 0;
 
@@ -44,9 +47,7 @@ int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 	node->next->next->prev = node;
 	node->next = node->next->next;
 
-	if (result != NULL)
-		*result = node_to_remove->data;
-
+	*result = node_to_remove->data;
 	free(node_to_remove);
 
 	self->root.size--;

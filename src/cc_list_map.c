@@ -10,7 +10,7 @@ int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item
 	*result = NULL;
 
 	assert(cc_list_iter_init(&iter, self->data, 0));
-	while (cc_iter_next(&iter, &tmp)) {
+	while (cc_iter_next(&iter, &tmp, NULL)) {
 		if (self->cmp(key, (*tmp)->key) == 0) {
 			*result = *tmp;
 			return 1;
@@ -55,7 +55,7 @@ void cc_list_map_print(struct cc_list_map *self, char *end_string) {
 	struct cc_map_item **tmp;
 
 	cc_list_iter_init(&iter, self->data, 0);
-	while (cc_iter_next(&iter, &tmp))
+	while (cc_iter_next(&iter, &tmp, NULL))
 		cc_debug_print("{%zu -> %zu} ", (*tmp)->key, (*tmp)->value);
 
 	cc_debug_print("%s", end_string);
@@ -88,7 +88,7 @@ void cc_list_map_delete(struct cc_list_map *self) {
 	struct cc_map_item **tmp;
 
 	cc_list_iter_init(&iter, self->data, 0);
-	while (cc_iter_next(&iter, &tmp))
+	while (cc_iter_next(&iter, &tmp, NULL))
 		free(*tmp);
 
 	cc_list_delete(self->data);

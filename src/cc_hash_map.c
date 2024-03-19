@@ -72,7 +72,7 @@ void cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
 	int i = 0;
 
 	cc_array_iter_init(&iter, self->data);
-	while (cc_iter_next(&iter, &tmp))
+	while (cc_iter_next(&iter, &tmp, NULL))
 		cc_hash_map_print_slot(*tmp, i++);
 
 	cc_debug_print("%s", end_string);
@@ -103,7 +103,7 @@ struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn cmp, cc_hash_f
 
 	/// The elements of the array should be initialized as NULLs.
 	cc_array_iter_init(&iter, self->data);
-	while (cc_iter_next(&iter, &tmp))
+	while (cc_iter_next(&iter, &tmp, NULL))
 		*tmp = NULL;
 
 	self->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
@@ -119,7 +119,7 @@ void cc_hash_map_delete(struct cc_hash_map *self) {
 	struct cc_list_map **tmp;
 
 	cc_array_iter_init(&iter, self->data);
-	while (cc_iter_next(&iter, &tmp)) {
+	while (cc_iter_next(&iter, &tmp, NULL)) {
 		if (*tmp != NULL)
 			cc_list_map_delete(*tmp);
 	}

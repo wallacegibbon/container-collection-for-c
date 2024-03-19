@@ -46,6 +46,6 @@ struct cc_array_iter {
 };
 
 void cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data);
-int cc_array_iter_next(struct cc_array_iter *self, void **item);
+int cc_array_iter_next(struct cc_array_iter *self, void **item, size_t *index);
 
 #endif

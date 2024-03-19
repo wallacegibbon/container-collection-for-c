@@ -22,7 +22,7 @@ int main() {
 	}
 
 	cc_array_iter_init(&iter, array);
-	while (cc_iter_next(&iter, (void **)&iter_tmp))
+	while (cc_iter_next(&iter, (void **)&iter_tmp, NULL))
 		free(iter_tmp->payload);
 
 	cc_array_delete(array);

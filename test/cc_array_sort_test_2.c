@@ -23,7 +23,7 @@ static void blah_array_display(struct cc_array *blahs, const char *prefix) {
 	cc_debug_print("%s", prefix);
 	cc_array_iter_init(&iter, blahs);
 
-	while (cc_iter_next(&iter, &tmp))
+	while (cc_iter_next(&iter, &tmp, NULL))
 		blah_display(tmp);
 }
 

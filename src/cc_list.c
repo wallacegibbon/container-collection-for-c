@@ -140,6 +140,7 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 
 	self->iterator = (struct cc_iter_i *)&iterator_interface;
 	self->list = list;
+	self->index = 0;
 	self->direction = direction;
 	self->cursor = &self->list->root;
 
@@ -147,11 +148,16 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 	return 1;
 }
 
-int cc_list_iter_next(struct cc_list_iter *self, void **item) {
+int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index) {
 	if (self->cursor == &self->list->root)
 		return 0;
 
 	*item = &self->cursor->data;
+
+	if (index != NULL)
+		*index = self->index;
+
+	self->index++;
 
 	cc_list_iter_step(self);
 	return 1;

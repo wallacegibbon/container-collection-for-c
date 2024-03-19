@@ -7,6 +7,7 @@ int main() {
 	struct cc_array array;
 	struct cc_array_iter iter;
 	uint8_t buffer[10 * sizeof(float)];
+	size_t count;
 
 	float i;
 	float tmp;
@@ -23,8 +24,8 @@ int main() {
 	}
 
 	cc_array_iter_init(&iter, &array);
-	while (cc_iter_next(&iter, &iter_tmp))
-		cc_debug_print("%.9f ", *iter_tmp);
+	while (cc_iter_next(&iter, &iter_tmp, &count))
+		cc_debug_print("(index: %02d) %.9f\n", count, *iter_tmp);
 
 	cc_debug_print("\n");
 

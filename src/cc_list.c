@@ -144,7 +144,6 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 	self->cursor = &self->list->root;
 
 	cc_list_iter_step(self);
-
 	return 1;
 }
 

@@ -9,7 +9,6 @@ static inline size_t calc_hash(struct cc_hash_map *self, void *key) {
 }
 
 int cc_hash_map_get_item(struct cc_hash_map *self, void *key, struct cc_map_item **result) {
-	struct cc_map_item tmp;
 	struct cc_list_map *list_map_tmp;
 	size_t hash_tmp;
 

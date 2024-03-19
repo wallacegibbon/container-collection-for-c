@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static inline size_t get_list_map(struct cc_hash_map *self, void *key, struct cc_list_map ***result) {
+/// Get the slot (whose type is `struct cc_list_map **`) by key.
+static inline int get_list_map(struct cc_hash_map *self, void *key, struct cc_list_map ***result) {
 	size_t hash_tmp;
 	hash_tmp = self->calc_hash(key) % self->bucket_size;
 	return cc_array_get_ref(self->data, hash_tmp, (void **)result);

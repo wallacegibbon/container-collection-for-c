@@ -72,12 +72,12 @@ int cc_list_map_del(struct cc_list_map *self, void *key, void **result) {
 }
 
 void cc_list_map_print(struct cc_list_map *self, char *end_string) {
-	struct cc_list_iter iter;
-	struct cc_map_item **tmp;
+	struct cc_list_map_iter iter;
+	struct cc_map_item *tmp;
 
-	cc_list_iter_init(&iter, self->data, 0);
+	cc_list_map_iter_init(&iter, self);
 	while (cc_iter_next(&iter, &tmp, NULL))
-		cc_debug_print("{%zu -> %zu} ", (*tmp)->key, (*tmp)->value);
+		cc_debug_print("{%zu -> %zu} ", tmp->key, tmp->value);
 
 	cc_debug_print("%s", end_string);
 }
@@ -115,4 +115,25 @@ void cc_list_map_delete(struct cc_list_map *self) {
 
 	cc_list_delete(self->data);
 	free(self);
+}
+
+static const struct cc_iter_i iterator_interface = {
+	.next = (cc_iter_next_fn)cc_list_map_iter_next,
+};
+
+int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map) {
+	if (map == NULL)
+		return 0;
+
+	self->iterator = (struct cc_iter_i *)&iterator_interface;
+	return cc_list_iter_init(&self->inner_iter, map->data, 0);
+}
+
+int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index) {
+	struct cc_map_item **tmp;
+	if (!cc_list_iter_next(&self->inner_iter, (void **)&tmp, index))
+		return 0;
+
+	*item = *tmp;
+	return 1;
 }

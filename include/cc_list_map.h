@@ -6,6 +6,7 @@
 #endif
 
 #include "cc_common.h"
+#include "cc_iter.h"
 #include "cc_list.h"
 #include "cc_map.h"
 
@@ -24,5 +25,13 @@ int cc_list_map_set(struct cc_list_map *self, void *key, void *value);
 int cc_list_map_del(struct cc_list_map *self, void *key, void **result);
 
 void cc_list_map_print(struct cc_list_map *self, char *end_string);
+
+struct cc_list_map_iter {
+	struct cc_iter_i *iterator;
+	struct cc_list_iter inner_iter;
+};
+
+int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map);
+int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index);
 
 #endif

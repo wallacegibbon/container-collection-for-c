@@ -31,3 +31,22 @@ int cc_default_cmp_fn(void *left, void *right) {
 size_t cc_default_hash_fn(void *obj) {
 	return (size_t)obj;
 }
+
+size_t cc_str_hash_fn_simple(void *obj) {
+	const char *s = obj;
+	size_t hash = 0;
+	while (*s)
+		hash += *s++;
+
+	return hash;
+}
+
+size_t cc_str_hash_fn_bkdr(void *obj) {
+	const char *s = obj;
+	size_t hash = 0;
+	while (*s)
+		/// 31, 131, 1313, 13131, ...
+		hash = hash * 131 + *s++;
+
+	return hash;
+}

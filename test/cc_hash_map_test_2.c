@@ -1,4 +1,3 @@
-#include "cc_common.h"
 #include "cc_hash_map.h"
 #include <assert.h>
 #include <stdio.h>
@@ -8,19 +7,15 @@ char s1[] = {"duplicated_key"};
 char s2[] = {"duplicated_key"};
 char s3[] = {"duplicated_key"};
 
-size_t bkdr_hash(const char *s);
-size_t dumb_hash(const char *s);
-
 int main() {
 	struct cc_hash_map *map;
 	size_t tmp;
 
 	/// When using `char *`s as keys, you should use `strcmp` as the `cmp` function.
-	// map = cc_hash_map_new(20, NULL, (cc_hash_fn)bkdr_hash);
-
-	map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, (cc_hash_fn)bkdr_hash);
-	// map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, (cc_hash_fn)dumb_hash);
-	// map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, NULL);
+	// map = cc_hash_map_new(20, NULL, cc_str_hash_fn_bkdr);
+	map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, cc_str_hash_fn_bkdr);
+	//  map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, cc_str_hash_fn_simple);
+	//   map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, NULL);
 	if (map == NULL)
 		return 1;
 
@@ -61,21 +56,4 @@ int main() {
 	cc_hash_map_delete(map);
 
 	return 0;
-}
-
-size_t bkdr_hash(const char *s) {
-	size_t hash = 0;
-	while (*s)
-		/// 31, 131, 1313, 13131, ...
-		hash = hash * 131 + *s++;
-
-	return hash;
-}
-
-size_t dumb_hash(const char *s) {
-	size_t hash = 0;
-	while (*s)
-		hash += *s++;
-
-	return hash;
 }

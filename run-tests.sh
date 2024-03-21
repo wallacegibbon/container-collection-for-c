@@ -6,3 +6,5 @@ for f in test/*; do
 	echo
 	echo
 done
+
+echo All test done.

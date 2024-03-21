@@ -160,6 +160,8 @@ static int cc_hash_map_iter_step(struct cc_hash_map_iter *self) {
 }
 
 int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map) {
+	if (map == NULL)
+		return 0;
 	if (!cc_array_iter_init(&self->inner_array_iter, map->data))
 		return 0;
 	if (!cc_hash_map_iter_step(self))
@@ -171,6 +173,9 @@ int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map
 }
 
 int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index) {
+	if (item == NULL)
+		return 0;
+
 	if (cc_list_map_iter_next(&self->inner_list_map_iter, item, NULL))
 		goto success;
 

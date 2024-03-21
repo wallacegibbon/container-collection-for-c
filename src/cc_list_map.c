@@ -132,6 +132,9 @@ int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map
 
 int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index) {
 	struct cc_map_item **tmp;
+
+	if (item == NULL)
+		return 0;
 	if (!cc_list_iter_next(&self->inner_iter, (void **)&tmp, index))
 		return 0;
 

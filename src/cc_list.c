@@ -150,6 +150,8 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 }
 
 int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index) {
+	if (item == NULL)
+		return 0;
 	if (self->cursor == &self->list->root)
 		return 0;
 

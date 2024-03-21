@@ -93,13 +93,13 @@ struct cc_list_map *cc_list_map_new(cc_cmp_fn cmp) {
 	if (self == NULL)
 		return NULL;
 
+	self->interface = (struct cc_map_i *)&map_interface;
 	self->data = cc_list_new();
 	if (self->data == NULL)
 		return NULL;
 
 	self->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
 
-	self->interface = (struct cc_map_i *)&map_interface;
 	return self;
 }
 

@@ -4,6 +4,7 @@
 
 static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {
 	struct cc_list_node *node;
+
 	node = &self->root;
 	while (index--)
 		node = node->next;
@@ -13,6 +14,7 @@ static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {
 
 int cc_list_insert(struct cc_list *self, size_t index, void *value) {
 	struct cc_list_node *entry, *node;
+
 	if (index > self->root.size)
 		return 0;
 
@@ -35,8 +37,9 @@ int cc_list_insert(struct cc_list *self, size_t index, void *value) {
 
 int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 	struct cc_list_node *node, *node_to_remove;
+
 	/// You have to provide `result`, or the `node_to_remove->data` may leak.
-	if (result == NULL)
+	if (!check_and_reset_double_p(result))
 		return 0;
 	if (index >= self->root.size)
 		return 0;
@@ -56,6 +59,7 @@ int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 
 int cc_list_append(struct cc_list *self, void *value) {
 	struct cc_list_node *node;
+
 	node = malloc(sizeof(*node));
 	if (node == NULL)
 		return 0;
@@ -150,7 +154,7 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 }
 
 int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index) {
-	if (item == NULL)
+	if (!check_and_reset_double_p(item))
 		return 0;
 	if (self->cursor == &self->list->root)
 		return 0;

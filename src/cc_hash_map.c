@@ -173,7 +173,7 @@ int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map
 }
 
 int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index) {
-	if (item == NULL)
+	if (!check_and_reset_double_p(item))
 		return 0;
 
 	if (cc_list_map_iter_next(&self->inner_list_map_iter, item, NULL))

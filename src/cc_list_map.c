@@ -26,7 +26,6 @@ int cc_list_map_get(struct cc_list_map *self, void *key, void **result) {
 
 	if (!check_and_reset_double_p(result))
 		return 0;
-
 	if (!cc_list_map_get_item(self, key, &tmp, NULL))
 		return 0;
 
@@ -58,10 +57,8 @@ int cc_list_map_del(struct cc_list_map *self, void *key, void **result) {
 
 	if (!check_and_reset_double_p(result))
 		return 0;
-
 	if (!cc_list_map_get_item(self, key, &tmp, &index))
 		return 0;
-
 	if (!cc_list_remove(self->data, index, (void **)&tmp))
 		return 0;
 
@@ -133,7 +130,7 @@ int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map
 int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index) {
 	struct cc_map_item **tmp;
 
-	if (item == NULL)
+	if (!check_and_reset_double_p(item))
 		return 0;
 	if (!cc_list_iter_next(&self->inner_iter, (void **)&tmp, index))
 		return 0;

@@ -41,17 +41,21 @@ void cc_array_get_ref_unsafe(struct cc_array *self, size_t index, void **ref) {
 }
 
 int cc_array_get(struct cc_array *self, size_t index, void *result) {
-	if (index >= self->elem_nums || result == NULL)
+	if (result == NULL)
 		return 0;
-	else
-		return _cc_array_get(self, index, result);
+	if (index >= self->elem_nums)
+		return 0;
+
+	return _cc_array_get(self, index, result);
 }
 
 int cc_array_get_ref(struct cc_array *self, size_t index, void **ref) {
-	if (index >= self->elem_nums || ref == NULL)
+	if (!check_and_reset_double_p(ref))
 		return 0;
-	else
-		return _cc_array_get_ref(self, index, ref);
+	if (index >= self->elem_nums)
+		return 0;
+
+	return _cc_array_get_ref(self, index, ref);
 }
 
 void cc_array_set_unsafe(struct cc_array *self, size_t index, void *value) {
@@ -61,8 +65,8 @@ void cc_array_set_unsafe(struct cc_array *self, size_t index, void *value) {
 int cc_array_set(struct cc_array *self, size_t index, void *value) {
 	if (index >= self->elem_nums)
 		return 0;
-	else
-		return _cc_array_set(self, index, value);
+
+	return _cc_array_set(self, index, value);
 }
 
 void cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size) {
@@ -116,7 +120,7 @@ int cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data) {
 }
 
 int cc_array_iter_next(struct cc_array_iter *self, void **item, size_t *index) {
-	if (item == NULL)
+	if (!check_and_reset_double_p(item))
 		return 0;
 	if (!cc_array_get_ref(self->data, self->cursor, item))
 		return 0;

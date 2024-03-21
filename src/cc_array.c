@@ -105,10 +105,14 @@ static const struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_array_iter_next,
 };
 
-void cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data) {
+int cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data) {
+	if (data == NULL)
+		return 0;
+
 	self->iterator = (struct cc_iter_i **)&iterator_interface;
 	self->data = data;
 	self->cursor = 0;
+	return 1;
 }
 
 int cc_array_iter_next(struct cc_array_iter *self, void **item, size_t *index) {

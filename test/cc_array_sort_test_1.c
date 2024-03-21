@@ -16,7 +16,7 @@ static void char_array_display(struct cc_array *chars, const char *prefix) {
 	char *tmp;
 
 	cc_debug_print("%s", prefix);
-	cc_array_iter_init(&iter, chars);
+	assert(cc_array_iter_init(&iter, chars));
 
 	while (cc_iter_next(&iter, &tmp, NULL))
 		cc_debug_print("%c", *tmp);

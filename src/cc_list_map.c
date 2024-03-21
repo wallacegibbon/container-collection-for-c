@@ -74,10 +74,11 @@ int cc_list_map_del(struct cc_list_map *self, void *key, void **result) {
 void cc_list_map_print(struct cc_list_map *self, char *end_string) {
 	struct cc_list_map_iter iter;
 	struct cc_map_item *tmp;
+	size_t index;
 
 	cc_list_map_iter_init(&iter, self);
-	while (cc_iter_next(&iter, &tmp, NULL))
-		cc_debug_print("{%zu -> %zu} ", tmp->key, tmp->value);
+	while (cc_iter_next(&iter, &tmp, &index))
+		cc_debug_print("(%d){%zu -> %zu} ", index, tmp->key, tmp->value);
 
 	cc_debug_print("%s", end_string);
 }

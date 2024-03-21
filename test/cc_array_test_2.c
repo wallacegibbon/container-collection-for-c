@@ -21,7 +21,7 @@ int main() {
 		assert(cc_array_set(array, i, &tmp));
 	}
 
-	cc_array_iter_init(&iter, array);
+	assert(cc_array_iter_init(&iter, array));
 	while (cc_iter_next(&iter, (void **)&iter_tmp, NULL))
 		free(iter_tmp->payload);
 

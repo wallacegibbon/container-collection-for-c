@@ -1,5 +1,4 @@
 #include "cc_hash_map.h"
-#include "cc_list_map.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -84,7 +83,7 @@ void cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
 	struct cc_list_map **tmp;
 	int i = 0;
 
-	cc_array_iter_init(&iter, self->data);
+	assert(cc_array_iter_init(&iter, self->data));
 	while (cc_iter_next(&iter, &tmp, NULL))
 		cc_hash_map_print_slot(*tmp, i++);
 
@@ -116,7 +115,7 @@ struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn cmp, cc_hash_f
 	self->bucket_size = bucket_size;
 
 	/// The elements of the array should be initialized as NULLs.
-	cc_array_iter_init(&iter, self->data);
+	assert(cc_array_iter_init(&iter, self->data));
 	while (cc_iter_next(&iter, &tmp, NULL))
 		*tmp = NULL;
 
@@ -132,7 +131,7 @@ void cc_hash_map_delete(struct cc_hash_map *self) {
 	struct cc_array_iter iter;
 	struct cc_list_map **tmp;
 
-	cc_array_iter_init(&iter, self->data);
+	assert(cc_array_iter_init(&iter, self->data));
 	while (cc_iter_next(&iter, &tmp, NULL)) {
 		if (*tmp != NULL)
 			cc_list_map_delete(*tmp);
@@ -140,4 +139,50 @@ void cc_hash_map_delete(struct cc_hash_map *self) {
 
 	cc_array_delete(self->data);
 	free(self);
+}
+
+static const struct cc_iter_i iterator_interface = {
+	.next = (cc_iter_next_fn)cc_hash_map_iter_next,
+};
+
+/// Initialize the self->inner_list_map_iter
+static int cc_hash_map_iter_step(struct cc_hash_map_iter *self) {
+	struct cc_list_map **cursor;
+
+	while (1) {
+		if (!cc_array_iter_next(&self->inner_array_iter, (void **)&cursor, NULL))
+			return 0;
+		if (*cursor != NULL)
+			break;
+	}
+
+	return cc_list_map_iter_init(&self->inner_list_map_iter, *cursor);
+}
+
+int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map) {
+	if (!cc_array_iter_init(&self->inner_array_iter, map->data))
+		return 0;
+	if (!cc_hash_map_iter_step(self))
+		return 0;
+
+	self->iterator = (struct cc_iter_i *)&iterator_interface;
+	self->count = 0;
+	return 1;
+}
+
+int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index) {
+	if (cc_list_map_iter_next(&self->inner_list_map_iter, item, NULL))
+		goto success;
+
+	if (!cc_hash_map_iter_step(self))
+		return 0;
+	if (!cc_list_map_iter_next(&self->inner_list_map_iter, item, NULL))
+		return 0;
+
+success:
+	if (index != NULL)
+		*index = self->count;
+
+	self->count++;
+	return 1;
 }

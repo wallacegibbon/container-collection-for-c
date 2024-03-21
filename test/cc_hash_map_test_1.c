@@ -4,7 +4,10 @@
 
 int main() {
 	struct cc_hash_map *map;
+	struct cc_hash_map_iter iter;
+	struct cc_map_item *item_tmp;
 	size_t tmp;
+	size_t index;
 
 	map = cc_hash_map_new(10, NULL, NULL);
 	if (map == NULL)
@@ -37,6 +40,10 @@ int main() {
 	assert(tmp == 109);
 
 	cc_hash_map_print(map, "\n");
+
+	assert(cc_hash_map_iter_init(&iter, map));
+	while (cc_iter_next(&iter, &item_tmp, &index))
+		cc_debug_print("(%d){%zu -> %zu} ", index, item_tmp->key, item_tmp->value);
 
 	cc_hash_map_delete(map);
 

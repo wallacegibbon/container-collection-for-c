@@ -8,8 +8,8 @@ int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item
 
 	if (!check_and_reset_double_p(result))
 		return 0;
-
-	check_ret(cc_list_iter_init(&iter, self->data, 0));
+	if (!cc_list_iter_init(&iter, self->data, 0))
+		return 0;
 	while (cc_iter_next(&iter, &tmp, index)) {
 		if (self->cmp(key, (*tmp)->key) == 0) {
 			*result = *tmp;

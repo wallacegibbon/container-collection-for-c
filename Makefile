@@ -8,7 +8,9 @@ OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCE_FILES:.c=.c.o)))
 COMMON_C_FLAGS += -W -g $(addprefix -I, $(C_INCLUDES))
 #COMMON_C_FLAGS += -DNO_MALLOC
 
-ifneq ($(DEBUG), 1)
+ifeq ($(DEBUG), 1)
+DEBUG_SIGN = (debugging build)
+else
 COMMON_C_FLAGS += -DNDEBUG
 endif
 
@@ -16,7 +18,6 @@ ifeq ($(MEMCHECK), 1)
 COMMON_C_FLAGS += -fno-inline -fno-omit-frame-pointer
 COMMON_LD_FLAGS += -static-libgcc
 MEMORY_CHECK_PROG = drmemory --
-DEBUG_SIGN = (debugging build)
 endif
 
 C_FLAGS += $(COMMON_C_FLAGS) -MMD -MP -MF"$(@:%.o=%.d)"

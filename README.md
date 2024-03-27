@@ -13,6 +13,6 @@ Use [drmemory](https://github.com/DynamoRIO/drmemory) to check (potential) memor
 For example:
 
 ```sh
-make DEBUG=1 build/cc_list_test_1
+make DEBUG=1 MEMCHECK=1 build/cc_list_test_1
 ```
 

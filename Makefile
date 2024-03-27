@@ -1,6 +1,3 @@
-## To use drmemory, you need to compile the target with special flags.
-## Use the DEBUG variable to control the build process. (run `make DEBUG=1`)
-
 BUILD_DIR ?= build
 
 C_SOURCE_FILES += $(wildcard ./src/*.c)
@@ -11,19 +8,18 @@ OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCE_FILES:.c=.c.o)))
 COMMON_C_FLAGS += -W -g $(addprefix -I, $(C_INCLUDES))
 #COMMON_C_FLAGS += -DNO_MALLOC
 
-ifeq ($(DEBUG), 1)
+ifneq ($(DEBUG), 1)
+COMMON_C_FLAGS += -DNDEBUG
+endif
+
+ifeq ($(MEMCHECK), 1)
 COMMON_C_FLAGS += -fno-inline -fno-omit-frame-pointer
+COMMON_LD_FLAGS += -static-libgcc
 MEMORY_CHECK_PROG = drmemory --
 DEBUG_SIGN = (debugging build)
 endif
 
 C_FLAGS += $(COMMON_C_FLAGS) -MMD -MP -MF"$(@:%.o=%.d)"
-
-TEST_C_FLAGS += $(COMMON_C_FLAGS)
-
-ifeq ($(DEBUG), 1)
-TEST_C_FLAGS += -static-libgcc -static-libstdc++ -ggdb
-endif
 
 CC = gcc
 
@@ -41,7 +37,7 @@ vpath %.c ./test
 
 $(BUILD_DIR)/%: %.c $(OBJECTS)
 	@echo -e "\tCC $(DEBUG_SIGN) $<"
-	@$(CC) -o $@ $^ $(TEST_C_FLAGS)
+	@$(CC) -o $@ $^ $(COMMON_C_FLAGS) $(COMMON_LD_FLAGS)
 	@echo -e "\t./$@\n"
 	@$(MEMORY_CHECK_PROG) $@
 

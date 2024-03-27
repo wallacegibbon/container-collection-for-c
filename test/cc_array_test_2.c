@@ -1,5 +1,4 @@
 #include "cc_array.h"
-#include <assert.h>
 #include <stdlib.h>
 
 struct blah {
@@ -18,10 +17,10 @@ int main() {
 	for (i = 0; i < 10; i++) {
 		tmp.index = i;
 		tmp.payload = malloc(10);
-		assert(cc_array_set(array, i, &tmp));
+		check_ret(cc_array_set(array, i, &tmp));
 	}
 
-	assert(cc_array_iter_init(&iter, array));
+	check_ret(cc_array_iter_init(&iter, array));
 	while (cc_iter_next(&iter, (void **)&iter_tmp, NULL))
 		free(iter_tmp->payload);
 

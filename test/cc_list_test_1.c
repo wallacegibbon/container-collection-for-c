@@ -1,5 +1,4 @@
 #include "cc_list.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -27,24 +26,24 @@ int main() {
 		return 1;
 
 	for (i = 0; i < 10; i++) {
-		assert(cc_list_append(list, (void *)i));
-		assert(list->root.size == i + 1);
+		check_ret(cc_list_append(list, (void *)i));
+		check_ret(list->root.size == i + 1);
 	}
 
-	assert(!cc_list_insert(list, 11, (void *)55));
-	assert(cc_list_insert(list, 10, (void *)66));
-	assert(cc_list_insert(list, 0, (void *)77));
-	assert(cc_list_insert(list, 3, (void *)88));
+	check_ret(!cc_list_insert(list, 11, (void *)55));
+	check_ret(cc_list_insert(list, 10, (void *)66));
+	check_ret(cc_list_insert(list, 0, (void *)77));
+	check_ret(cc_list_insert(list, 3, (void *)88));
 
 	show_number_list(list, 1);
 
-	assert(!cc_list_remove(list, 13, (void **)&i));
-	assert(cc_list_remove(list, 12, (void **)&i));
-	assert(i == 66);
-	assert(cc_list_remove(list, 3, (void **)&i));
-	assert(i == 88);
-	assert(cc_list_remove(list, 0, (void **)&i));
-	assert(i == 77);
+	check_ret(!cc_list_remove(list, 13, (void **)&i));
+	check_ret(cc_list_remove(list, 12, (void **)&i));
+	check_ret(i == 66);
+	check_ret(cc_list_remove(list, 3, (void **)&i));
+	check_ret(i == 88);
+	check_ret(cc_list_remove(list, 0, (void **)&i));
+	check_ret(i == 77);
 
 	show_number_list(list, 1);
 

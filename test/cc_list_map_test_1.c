@@ -1,5 +1,4 @@
 #include "cc_list_map.h"
-#include <assert.h>
 #include <stdio.h>
 
 int main() {
@@ -14,21 +13,21 @@ int main() {
 	if (map == NULL)
 		return 1;
 
-	assert(cc_list_map_set(map, (void *)1, (void *)'a'));
-	assert(cc_map_set(map, (void *)2, (void *)'b'));
-	assert(cc_map_set(map, (void *)9, (void *)'c'));
+	check_ret(cc_list_map_set(map, (void *)1, (void *)'a'));
+	check_ret(cc_map_set(map, (void *)2, (void *)'b'));
+	check_ret(cc_map_set(map, (void *)9, (void *)'c'));
 
 	cc_list_map_print(map, "\n");
 
-	assert(cc_list_map_get(map, (void *)1, (void **)&tmp));
-	assert(tmp == 'a');
-	assert(cc_map_get(map, (void *)9, (void **)&tmp));
-	assert(tmp == 'c');
-	assert(cc_map_get(map, (void *)2, (void **)&tmp));
-	assert(tmp == 'b');
+	check_ret(cc_list_map_get(map, (void *)1, (void **)&tmp));
+	check_ret(tmp == 'a');
+	check_ret(cc_map_get(map, (void *)9, (void **)&tmp));
+	check_ret(tmp == 'c');
+	check_ret(cc_map_get(map, (void *)2, (void **)&tmp));
+	check_ret(tmp == 'b');
 
-	assert(cc_map_del(map, (void *)2, (void **)&tmp));
-	assert(tmp == 'b');
+	check_ret(cc_map_del(map, (void *)2, (void **)&tmp));
+	check_ret(tmp == 'b');
 
 	cc_list_map_print(map, "\n");
 

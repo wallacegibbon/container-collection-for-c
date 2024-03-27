@@ -1,6 +1,5 @@
 #include "cc_array.h"
 #include "cc_array_sort.h"
-#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -21,7 +20,7 @@ static void blah_array_display(struct cc_array *blahs, const char *prefix) {
 	struct blah *tmp;
 
 	cc_debug_print("%s", prefix);
-	assert(cc_array_iter_init(&iter, blahs));
+	check_ret(cc_array_iter_init(&iter, blahs));
 
 	while (cc_iter_next(&iter, &tmp, NULL))
 		blah_display(tmp);
@@ -47,23 +46,23 @@ int main() {
 
 	/// Pushing values to generic sequence
 	for (i = 0; i < 3; i++)
-		assert(cc_array_set(&array, i, (void *)&people[i]));
+		check_ret(cc_array_set(&array, i, (void *)&people[i]));
 
 	blah_array_display(&array, "\nbefore sort:\n");
 
-	assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_name));
+	check_ret(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_name));
 
 	blah_array_display(&array, "\nafter sort by name:\n");
 
-	assert(cc_array_get(&array, 0, &tmp));
-	assert(tmp.age == 50);
+	check_ret(cc_array_get(&array, 0, &tmp));
+	check_ret(tmp.age == 50);
 
-	assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_age));
+	check_ret(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_age));
 
 	blah_array_display(&array, "\nafter sort by age:\n");
 
-	assert(cc_array_get(&array, 0, &tmp));
-	assert(tmp.age == 109);
+	check_ret(cc_array_get(&array, 0, &tmp));
+	check_ret(tmp.age == 109);
 
 	putchar('\n');
 	return 0;

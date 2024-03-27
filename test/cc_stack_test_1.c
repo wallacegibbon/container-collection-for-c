@@ -1,5 +1,4 @@
 #include "cc_stack.h"
-#include <assert.h>
 #include <stdio.h>
 
 int main() {
@@ -18,11 +17,11 @@ int main() {
 	// p_stack = &stack;
 
 	for (i = 0; i < 10; i++)
-		assert(cc_stack_push(p_stack, &i));
+		check_ret(cc_stack_push(p_stack, &i));
 
 	for (i = 9; i >= 0; i--) {
-		assert(cc_stack_pop(p_stack, &tmp));
-		assert(tmp == i);
+		check_ret(cc_stack_pop(p_stack, &tmp));
+		check_ret(tmp == i);
 	}
 
 	cc_stack_delete(p_stack);

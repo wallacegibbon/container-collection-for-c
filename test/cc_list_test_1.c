@@ -10,8 +10,7 @@ void show_number_list(struct cc_list *list, int direction) {
 
 	cc_debug_print(">>> the whole list values:\n\t");
 
-	cc_list_iter_init(&iter, list, direction);
-
+	assert(cc_list_iter_init(&iter, list, direction));
 	while (cc_iter_next(&iter, &tmp, &count))
 		cc_debug_print("%zu (%d) ", *tmp, count);
 

@@ -72,7 +72,8 @@ void cc_list_map_print(struct cc_list_map *self, char *end_string) {
 	struct cc_map_item *tmp;
 	size_t index;
 
-	cc_list_map_iter_init(&iter, self);
+	if (!cc_list_map_iter_init(&iter, self))
+		return;
 	while (cc_iter_next(&iter, &tmp, &index))
 		cc_debug_print("(%d){%zu -> %zu} ", index, tmp->key, tmp->value);
 
@@ -106,7 +107,8 @@ void cc_list_map_delete(struct cc_list_map *self) {
 	struct cc_list_iter iter;
 	struct cc_map_item **tmp;
 
-	cc_list_iter_init(&iter, self->data, 0);
+	if (!cc_list_iter_init(&iter, self->data, 0))
+		return;
 	while (cc_iter_next(&iter, &tmp, NULL))
 		free(*tmp);
 

@@ -17,24 +17,24 @@ struct cc_array {
 
 #ifndef NO_MALLOC
 struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size);
-void cc_array_delete(struct cc_array *self);
+int cc_array_delete(struct cc_array *self);
 #endif
 
-void cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size);
+int cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size);
 
-void cc_array_get_unsafe(struct cc_array *self, size_t index, void *result);
-void cc_array_get_ref_unsafe(struct cc_array *self, size_t index, void **ref);
+int cc_array_get_unsafe(struct cc_array *self, size_t index, void *result);
+int cc_array_get_ref_unsafe(struct cc_array *self, size_t index, void **ref);
 
 int cc_array_get(struct cc_array *self, size_t index, void *result);
 int cc_array_get_ref(struct cc_array *self, size_t index, void **ref);
 
-void cc_array_set_unsafe(struct cc_array *self, size_t index, void *value);
+int cc_array_set_unsafe(struct cc_array *self, size_t index, void *value);
 int cc_array_set(struct cc_array *self, size_t index, void *value);
 
-int cc_array_check_index(struct cc_array *self, size_t index);
+int cc_array_is_valid_index(struct cc_array *self, size_t index);
 
 int cc_array_cmp(struct cc_array *self, cc_cmp_fn cmp, size_t i, size_t j);
-void cc_array_swap(struct cc_array *self, size_t i, size_t j);
+int cc_array_swap(struct cc_array *self, size_t i, size_t j);
 
 ///-----------------------------------------------------------------------------
 /// The iterator for the generic array

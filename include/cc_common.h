@@ -5,12 +5,12 @@
 
 #include <stddef.h>
 
-static inline int check_and_reset_double_p(void *pointer) {
+static inline int try_reset_double_p(void *pointer) {
 	if (pointer == NULL)
-		return 0;
+		return 1;
 
 	*(void **)pointer = NULL;
-	return 1;
+	return 0;
 }
 
 typedef void (*cc_cleanup_fn)(void *value);

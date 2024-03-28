@@ -10,28 +10,27 @@ int main() {
 	size_t tmp;
 
 	list = cc_list_new();
-	if (list == NULL)
-		return 1;
+	assert(list != NULL);
 
-	assert(!cc_list_remove(list, 0, (void **)&tmp));
-
-	assert(cc_list_insert(list, 0, (void *)1));
 	assert(cc_list_remove(list, 0, (void **)&tmp));
+
+	assert(!cc_list_insert(list, 0, (void *)1));
+	assert(!cc_list_remove(list, 0, (void **)&tmp));
 	assert(tmp == 1);
 
-	assert(cc_list_insert(list, 0, (void *)1));
-	assert(cc_list_insert(list, 0, (void *)2));
-	assert(cc_list_insert(list, 0, (void *)3));
+	assert(!cc_list_insert(list, 0, (void *)1));
+	assert(!cc_list_insert(list, 0, (void *)2));
+	assert(!cc_list_insert(list, 0, (void *)3));
 
-	assert(cc_list_remove(list, 0, (void **)&tmp));
+	assert(!cc_list_remove(list, 0, (void **)&tmp));
 	assert(tmp == 3);
-	assert(cc_list_remove(list, 0, (void **)&tmp));
+	assert(!cc_list_remove(list, 0, (void **)&tmp));
 	assert(tmp == 2);
-	assert(cc_list_remove(list, 0, (void **)&tmp));
+	assert(!cc_list_remove(list, 0, (void **)&tmp));
 	assert(tmp == 1);
 
-	assert(!cc_list_remove(list, 0, (void **)&tmp));
+	assert(cc_list_remove(list, 0, (void **)&tmp));
 
-	cc_list_delete(list);
+	assert(!cc_list_delete(list));
 	return 0;
 }

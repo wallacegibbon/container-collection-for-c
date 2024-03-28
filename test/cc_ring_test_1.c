@@ -6,25 +6,28 @@ int main() {
 	char i, tmp;
 
 	ring = cc_ring_new(8, sizeof(char));
+	assert(ring != NULL);
 	assert(cc_ring_space(ring) == 8);
 
 	for (i = 0; i < 8; i++) {
-		assert(cc_ring_append(ring, &i));
+		assert(!cc_ring_append(ring, &i));
 		assert(cc_ring_space(ring) == (size_t)(8 - i - 1));
 	}
 
 	assert(cc_ring_space(ring) == 0);
-	assert(!cc_ring_append(ring, &i));
+	/// this should fail since ring is full
+	assert(cc_ring_append(ring, &i));
 
 	for (i = 0; i < 8; i++) {
-		assert(cc_ring_shift(ring, &tmp));
+		assert(!cc_ring_shift(ring, &tmp));
 		assert(cc_ring_space(ring) == (size_t)i + 1);
 	}
 
 	assert(cc_ring_space(ring) == 8);
-	assert(!cc_ring_shift(ring, &tmp));
+	/// this should fail since ring is empty
+	assert(cc_ring_shift(ring, &tmp));
 
-	cc_ring_delete(ring);
+	assert(!cc_ring_delete(ring));
 
 	return 0;
 }

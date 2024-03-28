@@ -10,28 +10,27 @@ int main() {
 	size_t tmp;
 
 	map = cc_list_map_new(NULL);
-	if (map == NULL)
-		return 1;
+	assert(map != NULL);
 
-	assert(cc_list_map_set(map, (void *)1, (void *)'a'));
-	assert(cc_map_set(map, (void *)2, (void *)'b'));
-	assert(cc_map_set(map, (void *)9, (void *)'c'));
+	assert(!cc_list_map_set(map, (void *)1, (void *)'a'));
+	assert(!cc_map_set(map, (void *)2, (void *)'b'));
+	assert(!cc_map_set(map, (void *)9, (void *)'c'));
 
-	cc_list_map_print(map, "\n");
+	assert(!cc_list_map_print(map, "\n"));
 
-	assert(cc_list_map_get(map, (void *)1, (void **)&tmp));
+	assert(!cc_list_map_get(map, (void *)1, (void **)&tmp));
 	assert(tmp == 'a');
-	assert(cc_map_get(map, (void *)9, (void **)&tmp));
+	assert(!cc_map_get(map, (void *)9, (void **)&tmp));
 	assert(tmp == 'c');
-	assert(cc_map_get(map, (void *)2, (void **)&tmp));
+	assert(!cc_map_get(map, (void *)2, (void **)&tmp));
 	assert(tmp == 'b');
 
-	assert(cc_map_del(map, (void *)2, (void **)&tmp));
+	assert(!cc_map_del(map, (void *)2, (void **)&tmp));
 	assert(tmp == 'b');
 
-	cc_list_map_print(map, "\n");
+	assert(!cc_list_map_print(map, "\n"));
 
-	cc_list_map_delete(map);
+	assert(!cc_list_map_delete(map));
 
 	return 0;
 }

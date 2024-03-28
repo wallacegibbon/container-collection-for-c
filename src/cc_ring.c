@@ -3,7 +3,7 @@
 
 static inline size_t _next_index(struct cc_ring *self, size_t index) {
 	size_t next_index = index + 1;
-	if (cc_array_check_index(self->data, next_index))
+	if (cc_array_is_valid_index(self->data, next_index))
 		return next_index;
 	else
 		return 0;
@@ -22,28 +22,29 @@ int cc_ring_append(struct cc_ring *self, void *item) {
 
 	write_index_next = _next_index(self, self->write_index);
 	if (write_index_next == self->read_index)
-		return 0;
+		return 1;
 
 	cc_array_set(self->data, self->write_index, item);
 	self->write_index = write_index_next;
 
-	return 1;
+	return 0;
 }
 
 int cc_ring_shift(struct cc_ring *self, void *item) {
 	if (self->read_index == self->write_index)
-		return 0;
+		return 1;
 
 	cc_array_get(self->data, self->read_index, item);
 	self->read_index = _next_index(self, self->read_index);
 
-	return 1;
+	return 0;
 }
 
-void cc_ring_init(struct cc_ring *self, struct cc_array *data) {
+int cc_ring_init(struct cc_ring *self, struct cc_array *data) {
 	self->data = data;
 	self->read_index = 0;
 	self->write_index = 0;
+	return 0;
 }
 
 #ifndef NO_MALLOC
@@ -66,9 +67,10 @@ struct cc_ring *cc_ring_new(size_t elem_nums, size_t elem_size) {
 	return self;
 }
 
-void cc_ring_delete(struct cc_ring *self) {
+int cc_ring_delete(struct cc_ring *self) {
 	cc_array_delete(self->data);
 	free(self);
+	return 0;
 }
 
 #endif

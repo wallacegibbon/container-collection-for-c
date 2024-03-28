@@ -39,10 +39,10 @@ static void _cc_array_sort_quick(struct cc_array *self, cc_cmp_fn cmp, size_t st
 
 int cc_array_sort_quick(struct cc_array *self, cc_cmp_fn cmp) {
 	if (cmp == NULL)
-		return 0;
+		return 1;
 
 	_cc_array_sort_quick(self, cmp, 0, self->elem_nums);
-	return 1;
+	return 0;
 }
 
 ///-----------------------------------------------------------------------------
@@ -52,11 +52,11 @@ int cc_array_sort_bubble(struct cc_array *self, cc_cmp_fn cmp) {
 	size_t i, j, k;
 
 	if (cmp == NULL)
-		return 0;
+		return 1;
 
 	for (i = 0; i < self->elem_nums - 1; i++)
 		for (j = 0, k = 1; j < self->elem_nums - 1 - i; j++, k++)
 			if (cc_array_cmp(self, cmp, j, k) > 0)
 				cc_array_swap(self, j, k);
-	return 1;
+	return 0;
 }

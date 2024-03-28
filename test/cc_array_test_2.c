@@ -18,14 +18,14 @@ int main() {
 	for (i = 0; i < 10; i++) {
 		tmp.index = i;
 		tmp.payload = malloc(10);
-		assert(cc_array_set(array, i, &tmp));
+		assert(!cc_array_set(array, i, &tmp));
 	}
 
-	assert(cc_array_iter_init(&iter, array));
-	while (cc_iter_next(&iter, (void **)&iter_tmp, NULL))
+	assert(!cc_array_iter_init(&iter, array));
+	while (!cc_iter_next(&iter, (void **)&iter_tmp, NULL))
 		free(iter_tmp->payload);
 
-	cc_array_delete(array);
+	assert(!cc_array_delete(array));
 
 	return 0;
 }

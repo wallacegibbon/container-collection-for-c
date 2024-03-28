@@ -21,13 +21,13 @@ struct cc_hash_map {
 };
 
 struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn cmp, cc_hash_fn calc_hash);
-void cc_hash_map_delete(struct cc_hash_map *self);
+int cc_hash_map_delete(struct cc_hash_map *self);
 
 int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result);
 int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value);
 int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result);
 
-void cc_hash_map_print(struct cc_hash_map *self, char *end_string);
+int cc_hash_map_print(struct cc_hash_map *self, char *end_string);
 
 struct cc_hash_map_iter {
 	struct cc_iter_i *iterator;

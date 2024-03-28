@@ -29,9 +29,9 @@ struct cc_list {
 };
 
 struct cc_list *cc_list_new();
-void cc_list_delete(struct cc_list *self);
+int cc_list_delete(struct cc_list *self);
 
-void cc_list_init(struct cc_list *self);
+int cc_list_init(struct cc_list *self);
 
 int cc_list_append(struct cc_list *self, void *value);
 int cc_list_concat(struct cc_list *left, struct cc_list *right);

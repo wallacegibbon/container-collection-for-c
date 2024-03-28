@@ -13,10 +13,10 @@ struct cc_ring {
 
 #ifndef NO_MALLOC
 struct cc_ring *cc_ring_new(size_t elem_nums, size_t elem_size);
-void cc_ring_delete(struct cc_ring *self);
+int cc_ring_delete(struct cc_ring *self);
 #endif
 
-void cc_ring_init(struct cc_ring *self, struct cc_array *data);
+int cc_ring_init(struct cc_ring *self, struct cc_array *data);
 size_t cc_ring_space(struct cc_ring *self);
 
 int cc_ring_append(struct cc_ring *self, void *item);

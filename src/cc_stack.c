@@ -2,24 +2,25 @@
 #include <stdlib.h>
 
 int cc_stack_push(struct cc_stack *self, void *item) {
-	if (!cc_array_set(self->data, self->top, item))
-		return 0;
+	if (cc_array_set(self->data, self->top, item))
+		return 1;
 
 	self->top++;
-	return 1;
+	return 0;
 }
 
 int cc_stack_pop(struct cc_stack *self, void *item) {
 	if (self->top == 0)
-		return 0;
+		return 1;
 
 	self->top--;
 	return cc_array_get(self->data, self->top, item);
 }
 
-void cc_stack_init(struct cc_stack *self, struct cc_array *data) {
+int cc_stack_init(struct cc_stack *self, struct cc_array *data) {
 	self->data = data;
 	self->top = 0;
+	return 0;
 }
 
 #ifndef NO_MALLOC
@@ -41,9 +42,10 @@ struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size) {
 	return self;
 }
 
-void cc_stack_delete(struct cc_stack *self) {
+int cc_stack_delete(struct cc_stack *self) {
 	cc_array_delete(self->data);
 	free(self);
+	return 0;
 }
 
 #endif

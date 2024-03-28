@@ -16,9 +16,8 @@ static void char_array_display(struct cc_array *chars, const char *prefix) {
 	char *tmp;
 
 	cc_debug_print("%s", prefix);
-	assert(cc_array_iter_init(&iter, chars));
-
-	while (cc_iter_next(&iter, &tmp, NULL))
+	assert(!cc_array_iter_init(&iter, chars));
+	while (!cc_iter_next(&iter, &tmp, NULL))
 		cc_debug_print("%c", *tmp);
 }
 
@@ -27,16 +26,16 @@ int main() {
 	uint8_t buffer[10];
 	int i;
 
-	cc_array_init(&array, buffer, 10, 1);
+	assert(!cc_array_init(&array, buffer, 10, 1));
 
 	for (i = 0; i < 10; i++)
-		assert(cc_array_set(&array, i, (void *)&sample[i]));
+		assert(!cc_array_set(&array, i, (void *)&sample[i]));
 
 	char_array_display(&array, "\nbefore sort: ");
 
 	/// sort the sequence
-	// assert(cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
-	assert(cc_array_sort_quick(&array, (cc_cmp_fn)cmp_char));
+	// assert(!cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
+	assert(!cc_array_sort_quick(&array, (cc_cmp_fn)cmp_char));
 
 	// assert(!strncmp((const char *)array.buffer, "  Abcikqru", 10));
 	assert(!strncmp((const char *)array.buffer, "urqkicbA  ", 10));

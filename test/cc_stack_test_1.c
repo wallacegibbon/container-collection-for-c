@@ -10,22 +10,21 @@ int main() {
 	char tmp;
 
 	p_stack = cc_stack_new(10, sizeof(char));
-	if (p_stack == NULL)
-		return 1;
+	assert(p_stack != NULL);
 
-	// cc_array_init(&array, buffer, 10, 1);
-	// cc_stack_init(&stack, &array);
+	// assert(!cc_array_init(&array, buffer, 10, 1));
+	// assert(!cc_stack_init(&stack, &array));
 	// p_stack = &stack;
 
 	for (i = 0; i < 10; i++)
-		assert(cc_stack_push(p_stack, &i));
+		assert(!cc_stack_push(p_stack, &i));
 
 	for (i = 9; i >= 0; i--) {
-		assert(cc_stack_pop(p_stack, &tmp));
+		assert(!cc_stack_pop(p_stack, &tmp));
 		assert(tmp == i);
 	}
 
-	cc_stack_delete(p_stack);
+	assert(!cc_stack_delete(p_stack));
 
 	return 0;
 }

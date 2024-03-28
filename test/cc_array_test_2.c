@@ -15,6 +15,8 @@ int main() {
 	int i;
 
 	array = cc_array_new(10, sizeof(struct blah));
+	assert(array != NULL);
+
 	for (i = 0; i < 10; i++) {
 		tmp.index = i;
 		tmp.payload = malloc(10);

@@ -42,7 +42,7 @@ int main() {
 	int i;
 	struct blah tmp;
 
-	cc_array_init(&array, buffer, 3, sizeof(struct blah));
+	assert(!cc_array_init(&array, buffer, 3, sizeof(struct blah)));
 
 	/// Pushing values to generic sequence
 	for (i = 0; i < 3; i++)

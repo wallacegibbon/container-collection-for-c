@@ -31,15 +31,21 @@ struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size) {
 
 	self = malloc(sizeof(*self));
 	if (self == NULL)
-		return NULL;
+		goto fail1;
 
 	data = cc_array_new(elem_nums, elem_size);
 	if (data == NULL)
-		return NULL;
+		goto fail2;
 
-	cc_stack_init(self, data);
+	if (cc_stack_init(self, data))
+		goto fail2;
 
 	return self;
+
+fail2:
+	free(self);
+fail1:
+	return NULL;
 }
 
 int cc_stack_delete(struct cc_stack *self) {

@@ -94,9 +94,13 @@ struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size) {
 	if (buffer == NULL)
 		goto fail2;
 
-	cc_array_init(self, buffer, elem_nums, elem_size);
+	if (cc_array_init(self, buffer, elem_nums, elem_size))
+		goto fail3;
+
 	return self;
 
+fail3:
+	free(buffer);
 fail2:
 	free(self);
 fail1:

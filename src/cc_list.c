@@ -105,10 +105,17 @@ struct cc_list *cc_list_new() {
 	struct cc_list *self;
 	self = malloc(sizeof(*self));
 	if (self == NULL)
-		return NULL;
+		goto fail1;
 
-	cc_list_init(self);
+	if (cc_list_init(self))
+		goto fail2;
+
 	return self;
+
+fail2:
+	free(self);
+fail1:
+	return NULL;
 }
 
 static inline struct cc_list_node *free_and_next(struct cc_list_node *current) {

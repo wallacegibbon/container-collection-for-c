@@ -55,16 +55,22 @@ struct cc_ring *cc_ring_new(size_t elem_nums, size_t elem_size) {
 
 	self = malloc(sizeof(*self));
 	if (self == NULL)
-		return NULL;
+		goto fail1;
 
 	/// 1 element will be wasted, so pass `elem_nums + 1` to `cc_array_new`.
 	data = cc_array_new(elem_nums + 1, elem_size);
 	if (data == NULL)
-		return NULL;
+		goto fail2;
 
-	cc_ring_init(self, data);
+	if (cc_ring_init(self, data))
+		goto fail2;
 
 	return self;
+
+fail2:
+	free(self);
+fail1:
+	return NULL;
 }
 
 int cc_ring_delete(struct cc_ring *self) {

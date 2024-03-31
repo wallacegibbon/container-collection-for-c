@@ -74,7 +74,8 @@ fail1:
 }
 
 int cc_ring_delete(struct cc_ring *self) {
-	cc_array_delete(self->data);
+	if (cc_array_delete(self->data))
+		return 1;
 	free(self);
 	return 0;
 }

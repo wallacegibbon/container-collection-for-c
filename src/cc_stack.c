@@ -49,7 +49,8 @@ fail1:
 }
 
 int cc_stack_delete(struct cc_stack *self) {
-	cc_array_delete(self->data);
+	if (cc_array_delete(self->data))
+		return 1;
 	free(self);
 	return 0;
 }

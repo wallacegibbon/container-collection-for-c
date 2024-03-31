@@ -140,11 +140,15 @@ int cc_hash_map_delete(struct cc_hash_map *self) {
 	if (cc_array_iter_init(&iter, self->data))
 		return 1;
 	while (!cc_iter_next(&iter, &item, NULL)) {
-		if (*item != NULL)
-			cc_list_map_delete(*item);
+		if (*item != NULL) {
+			if (cc_list_map_delete(*item))
+				return 2;
+		}
 	}
 
-	cc_array_delete(self->data);
+	if (cc_array_delete(self->data))
+		return 3;
+
 	free(self);
 	return 0;
 }

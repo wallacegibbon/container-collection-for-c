@@ -123,7 +123,9 @@ int cc_list_map_delete(struct cc_list_map *self) {
 	while (!cc_iter_next(&iter, &item, NULL))
 		free(*item);
 
-	cc_list_delete(self->data);
+	if (cc_list_delete(self->data))
+		return 2;
+
 	free(self);
 	return 0;
 }

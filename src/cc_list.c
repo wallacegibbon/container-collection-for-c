@@ -90,7 +90,9 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right) {
 
 	left->root.size += right->root.size;
 
-	cc_list_init(right);
+	if (cc_list_init(right))
+		return 2;
+
 	return 0;
 }
 

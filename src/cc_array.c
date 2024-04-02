@@ -73,6 +73,23 @@ int cc_array_set(struct cc_array *self, size_t index, void *value) {
 	return 0;
 }
 
+int cc_array_reverse(struct cc_array *self, size_t start, size_t end) {
+	size_t middle, i;
+
+	if (start == end)
+		return 1;
+	if (start >= self->elem_nums)
+		return 2;
+	if (end > self->elem_nums)
+		end = self->elem_nums;
+
+	middle = start + (end - start) / 2;
+	for (i = start; i < middle; i++)
+		cc_array_swap(self, i, end - i - 1 + start);
+
+	return 0;
+}
+
 int cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size) {
 	self->elem_nums = elem_nums;
 	self->elem_size = elem_size;

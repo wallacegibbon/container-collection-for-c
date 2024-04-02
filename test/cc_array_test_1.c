@@ -23,6 +23,9 @@ int main() {
 		assert(fabs(tmp - i) < 0.000001);
 	}
 
+	assert(!cc_array_reverse(&array, 3, 7));
+	assert(!cc_array_reverse(&array, 0, array.elem_nums));
+
 	assert(!cc_array_iter_init(&iter, &array));
 	while (!cc_iter_next(&iter, &iter_tmp, &count))
 		cc_debug_print("(index: %02d) %.9f\n", count, *iter_tmp);

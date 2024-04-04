@@ -83,9 +83,9 @@ int cc_array_reverse(struct cc_array *self, size_t start, size_t end) {
 	if (end > self->elem_nums)
 		end = self->elem_nums;
 
-	middle = start + (end - start) / 2;
-	for (i = start; i < middle; i++)
-		cc_array_swap(self, i, end - i - 1 + start);
+	middle = (end - start) / 2;
+	for (i = 0; i < middle; i++)
+		cc_array_swap(self, start + i, end - 1 - i);
 
 	return 0;
 }

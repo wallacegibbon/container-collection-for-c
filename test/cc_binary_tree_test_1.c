@@ -3,17 +3,28 @@
 #include "cc_list.h"
 #include <assert.h>
 
-int main() {
-	struct cc_binary_tree *tree;
+void show_tree_elements(struct cc_binary_tree *tree) {
 	struct cc_binary_tree_iter iter;
 	struct cc_list *queue;
 	size_t *tmp, index;
 
-	tree = cc_binary_tree_new();
-	assert(tree != NULL);
-
 	queue = cc_list_new();
 	assert(queue != NULL);
+
+	assert(!cc_binary_tree_iter_init(&iter, tree, queue));
+	while (!cc_iter_next(&iter, &tmp, &index))
+		cc_debug_print("(%d)%u, ", index, *tmp);
+
+	cc_debug_print("\n");
+	assert(!cc_list_delete(queue));
+}
+
+int main() {
+	struct cc_binary_tree *tree;
+	int tmp;
+
+	tree = cc_binary_tree_new();
+	assert(tree != NULL);
 
 	assert(!cc_binary_node_insert_left(&tree->root, (void **)1));
 	assert(!cc_binary_node_insert_left(&tree->root, (void **)2));
@@ -33,10 +44,7 @@ int main() {
 
 	assert(!cc_binary_node_print(&tree->root, 0));
 
-	assert(!cc_binary_tree_iter_init(&iter, tree, queue));
-	while (!cc_iter_next(&iter, &tmp, &index))
-		cc_debug_print("(%u) %d, ", index, *tmp);
-	cc_debug_print("\n");
+	show_tree_elements(tree);
 
 	assert(!cc_binary_node_rotate_left(&tree->root.right));
 	assert(!cc_binary_node_rotate_left(&tree->root.right));
@@ -57,12 +65,8 @@ int main() {
 
 	assert(!cc_binary_node_print(&tree->root, 0));
 
-	assert(!cc_binary_tree_iter_init(&iter, tree, queue));
-	while (!cc_iter_next(&iter, &tmp, &index))
-		cc_debug_print("(%u) %d, ", index, *tmp);
-	cc_debug_print("\n");
+	show_tree_elements(tree);
 
-	assert(!cc_list_delete(queue));
 	assert(!cc_binary_tree_delete(tree));
 
 	return 0;

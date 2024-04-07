@@ -7,13 +7,13 @@
 void show_number_list(struct cc_list *list, int direction) {
 	struct cc_list_iter iter;
 	size_t *tmp;
-	size_t count;
+	size_t index;
 
 	cc_debug_print(">>> the whole list values:\n\t");
 
 	assert(!cc_list_iter_init(&iter, list, direction));
-	while (!cc_iter_next(&iter, &tmp, &count))
-		cc_debug_print("%zu (%d) ", *tmp, count);
+	while (!cc_iter_next(&iter, &tmp, &index))
+		cc_debug_print("(%d)%u, ", index, *tmp);
 
 	cc_debug_print("\n");
 }

@@ -105,6 +105,7 @@ int cc_list_init(struct cc_list *self) {
 
 struct cc_list *cc_list_new() {
 	struct cc_list *self;
+
 	self = malloc(sizeof(*self));
 	if (self == NULL)
 		goto fail1;

@@ -5,7 +5,6 @@
 #error "You can NOT use linked list without support for the `malloc` function."
 #endif
 
-#include "cc_common.h"
 #include "cc_iter.h"
 #include <stdint.h>
 
@@ -30,8 +29,6 @@ struct cc_list {
 
 struct cc_list *cc_list_new();
 int cc_list_delete(struct cc_list *self);
-
-int cc_list_init(struct cc_list *self);
 
 int cc_list_append(struct cc_list *self, void *value);
 int cc_list_concat(struct cc_list *left, struct cc_list *right);

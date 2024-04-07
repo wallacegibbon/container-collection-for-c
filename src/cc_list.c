@@ -74,6 +74,8 @@ int cc_list_append(struct cc_list *self, void *value) {
 	return 0;
 }
 
+int cc_list_init(struct cc_list *self);
+
 /// Caution: You may need to delete `right` list after this concatenation.
 int cc_list_concat(struct cc_list *left, struct cc_list *right) {
 	/// `left` can not be NULL since it holds the result.

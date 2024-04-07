@@ -50,3 +50,8 @@ size_t cc_str_hash_fn_bkdr(void *obj) {
 
 	return hash;
 }
+
+void cc_print_n(const char *s, int n) {
+	while (n-- > 0)
+		cc_debug_print("%s", s);
+}

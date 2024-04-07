@@ -26,4 +26,6 @@ size_t cc_str_hash_fn_bkdr(void *obj);
 void cc_exit_info(int code, const char *format, ...);
 void cc_debug_print(const char *format, ...);
 
+void cc_print_n(const char *s, int n);
+
 #endif

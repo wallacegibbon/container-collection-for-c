@@ -1,48 +1,102 @@
 #include "cc_binary_tree.h"
+#include "cc_common.h"
 #include <stdlib.h>
 
-int cc_binary_insert_child(struct cc_binary_node *parent, struct cc_binary_node *child, int on_left) {
-	struct cc_binary_node **slot1, **slot2;
+struct cc_binary_node *cc_binary_node_new(struct cc_binary_node *parent, void *data) {
+	struct cc_binary_node *self;
+	self = malloc(sizeof(*self));
+	if (self == NULL)
+		return NULL;
 
-	if (parent == NULL)
+	self->parent = parent;
+	self->data = data;
+	self->left = NULL;
+	self->right = NULL;
+	return self;
+}
+
+int cc_binary_node_insert_left(struct cc_binary_node *self, void *data) {
+	struct cc_binary_node *node;
+	node = cc_binary_node_new(self, data);
+	if (node == NULL)
 		return 1;
-	if (child == NULL)
+
+	if (self->left != NULL)
+		self->left->parent = node;
+
+	node->left = self->left;
+	self->left = node;
+	return 0;
+}
+
+int cc_binary_node_insert_right(struct cc_binary_node *self, void *data) {
+	struct cc_binary_node *node;
+	node = cc_binary_node_new(self, data);
+	if (node == NULL)
+		return 1;
+
+	if (self->right != NULL)
+		self->right->parent = node;
+
+	node->right = self->right;
+	self->right = node;
+	return 0;
+}
+
+int cc_binary_node_rotate_left(struct cc_binary_node **start_slot) {
+	struct cc_binary_node *start = *start_slot;
+
+	if (start == NULL)
 		return 0;
+	if (start->right == NULL)
+		return 1;
 
-	child->parent = parent;
+	*start_slot = start->right;
+	start->right->parent = start->parent;
 
-	slot1 = on_left ? &parent->left : &parent->right;
-	slot2 = on_left ? &child->left : &child->right;
+	start->parent = start->right;
 
-	if (*slot1 != NULL)
-		(*slot1)->parent = child;
+	if (start->right->left != NULL)
+		start->right->left->parent = start;
 
-	*slot2 = *slot1;
-	*slot1 = child;
+	start->right = start->right->left;
+	(*start_slot)->left = start;
 
 	return 0;
 }
 
-int cc_binary_node_add(struct cc_binary_node *self, void *data, int on_left) {
-	struct cc_binary_node *node;
-	node = malloc(sizeof(*node));
-	if (node == NULL)
-		goto fail1;
+int cc_binary_node_rotate_right(struct cc_binary_node **start_slot) {
+	struct cc_binary_node *start = *start_slot;
 
-	node->parent = self;
-	node->data = data;
-	node->left = NULL;
-	node->right = NULL;
+	if (start == NULL)
+		return 0;
+	if (start->left == NULL)
+		return 1;
 
-	if (cc_binary_insert_child(self, node, on_left))
-		goto fail2;
+	*start_slot = start->left;
+	start->left->parent = start->parent;
+
+	start->parent = start->left;
+
+	if (start->left->right != NULL)
+		start->left->right->parent = start;
+
+	start->left = start->left->right;
+	(*start_slot)->right = start;
 
 	return 0;
+}
 
-fail2:
-	free(node);
-fail1:
-	return 1;
+int cc_binary_node_print(struct cc_binary_node *root, int depth) {
+	cc_print_n("\t", depth);
+	if (root == NULL) {
+		cc_debug_print("<NULL>\n");
+		return 0;
+	}
+	cc_debug_print("%d\n", root->data);
+	cc_binary_node_print(root->right, depth + 1);
+	cc_binary_node_print(root->left, depth + 1);
+	return 0;
 }
 
 int cc_binary_tree_init(struct cc_binary_tree *self) {

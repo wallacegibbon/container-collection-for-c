@@ -18,8 +18,15 @@ struct cc_binary_node {
 	};
 };
 
-int cc_binary_insert_child(struct cc_binary_node *parent, struct cc_binary_node *child, int on_left);
-int cc_binary_node_add(struct cc_binary_node *self, void *data, int on_left);
+struct cc_binary_node *cc_binary_node_new(struct cc_binary_node *parent, void *data);
+
+int cc_binary_node_insert_left(struct cc_binary_node *self, void *data);
+int cc_binary_node_insert_right(struct cc_binary_node *self, void *data);
+
+int cc_binary_node_rotate_left(struct cc_binary_node **start_slot);
+int cc_binary_node_rotate_right(struct cc_binary_node **start_slot);
+
+int cc_binary_node_print(struct cc_binary_node *root, int depth);
 
 struct cc_binary_tree {
 	struct cc_binary_node root;

@@ -38,9 +38,11 @@ int cc_binary_tree_delete(struct cc_binary_tree *self);
 struct cc_binary_tree_iter {
 	struct cc_iter_i *iterator;
 	struct cc_binary_tree *tree;
+	struct cc_list *queue;
+	size_t index;
 };
 
-int cc_binary_tree_iter_init(struct cc_binary_tree_iter *self, struct cc_binary_tree *tree);
+int cc_binary_tree_iter_init(struct cc_binary_tree_iter *self, struct cc_binary_tree *tree, struct cc_list *queue);
 int cc_binary_tree_iter_next(struct cc_binary_tree_iter *self, void **item, size_t *index);
 
 #endif

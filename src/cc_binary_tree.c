@@ -1,5 +1,6 @@
 #include "cc_binary_tree.h"
 #include "cc_common.h"
+#include "cc_list.h"
 #include <stdlib.h>
 
 struct cc_binary_node *cc_binary_node_new(struct cc_binary_node *parent, void *data) {
@@ -148,4 +149,44 @@ int cc_binary_tree_delete(struct cc_binary_tree *self) {
 
 	free(self);
 	return ret;
+}
+
+static const struct cc_iter_i iterator_interface = {
+	.next = (cc_iter_next_fn)cc_binary_tree_iter_next,
+};
+
+int cc_binary_tree_iter_init(struct cc_binary_tree_iter *self, struct cc_binary_tree *tree, struct cc_list *queue) {
+	if (tree == NULL)
+		return 1;
+	if (queue == NULL)
+		return 2;
+
+	self->iterator = (struct cc_iter_i *)&iterator_interface;
+	self->index = 0;
+	self->queue = queue;
+	if (cc_list_append(queue, tree))
+		return 3;
+
+	return 0;
+}
+
+int cc_binary_tree_iter_next(struct cc_binary_tree_iter *self, void **item, size_t *index) {
+	struct cc_binary_node *current;
+	int tmp;
+
+	if (cc_list_remove(self->queue, 0, (void **)&current))
+		return 1;
+
+	*item = &current->data;
+
+	if (current->left && cc_list_append(self->queue, current->left))
+		return 3;
+	if (current->right && cc_list_append(self->queue, current->right))
+		return 4;
+
+	if (index != NULL)
+		*index = self->index;
+
+	self->index++;
+	return 0;
 }

@@ -6,7 +6,7 @@ void show_tree_elements(struct cc_binary_tree *tree) {
 	struct cc_binary_tree_iter *iter;
 	size_t *tmp, index;
 
-	iter = cc_binary_tree_iter_new(tree, CC_TRAVERSE_BREADTH_RIGHT);
+	iter = cc_binary_tree_iter_new(tree, CC_TRAVERSE_DEPTH_LEFT);
 	assert(iter != NULL);
 
 	while (!cc_iter_next(iter, &tmp, &index))

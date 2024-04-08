@@ -174,6 +174,8 @@ static int iter_queue_add_child(struct cc_binary_tree_iter *self, struct cc_bina
 	} else if (self->direction == CC_TRAVERSE_DEPTH_RIGHT || self->direction == CC_TRAVERSE_BREADTH_LEFT) {
 		tmp |= iter_queue_add(self, node->left);
 		tmp |= iter_queue_add(self, node->right);
+	} else {
+		tmp = 0xff;
 	}
 	return tmp;
 }

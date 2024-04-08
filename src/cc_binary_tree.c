@@ -155,7 +155,7 @@ static const struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_binary_tree_iter_next,
 };
 
-static int cc_binary_tree_iter_queue_add(struct cc_binary_tree_iter *self, void *data) {
+static int iter_queue_add(struct cc_binary_tree_iter *self, void *data) {
 	if (data == NULL)
 		return 0;
 	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_DEPTH_RIGHT)
@@ -164,20 +164,17 @@ static int cc_binary_tree_iter_queue_add(struct cc_binary_tree_iter *self, void 
 		return cc_list_append(self->queue, data);
 }
 
-static int cc_binary_tree_iter_queue_add_child(struct cc_binary_tree_iter *self, struct cc_binary_node *node) {
+static int iter_queue_add_child(struct cc_binary_tree_iter *self, struct cc_binary_node *node) {
 	int tmp = 0;
-
 	if (node == NULL)
 		return 0;
-
 	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_BREADTH_RIGHT) {
-		tmp |= cc_binary_tree_iter_queue_add(self, node->right);
-		tmp |= cc_binary_tree_iter_queue_add(self, node->left);
+		tmp |= iter_queue_add(self, node->right);
+		tmp |= iter_queue_add(self, node->left);
 	} else if (self->direction == CC_TRAVERSE_DEPTH_RIGHT || self->direction == CC_TRAVERSE_BREADTH_LEFT) {
-		tmp |= cc_binary_tree_iter_queue_add(self, node->left);
-		tmp |= cc_binary_tree_iter_queue_add(self, node->right);
+		tmp |= iter_queue_add(self, node->left);
+		tmp |= iter_queue_add(self, node->right);
 	}
-
 	return tmp;
 }
 
@@ -228,7 +225,7 @@ int cc_binary_tree_iter_next(struct cc_binary_tree_iter *self, void **item, size
 
 	*item = &current->data;
 
-	if (cc_binary_tree_iter_queue_add_child(self, current))
+	if (iter_queue_add_child(self, current))
 		return 3;
 
 	if (index != NULL)

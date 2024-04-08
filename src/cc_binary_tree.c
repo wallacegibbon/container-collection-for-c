@@ -89,15 +89,16 @@ int cc_binary_node_rotate_right(struct cc_binary_node **start_slot) {
 }
 
 int cc_binary_node_print(struct cc_binary_node *root, int depth) {
+	int tmp = 0;
 	cc_print_n("\t", depth);
 	if (root == NULL) {
 		cc_debug_print("<NULL>\n");
 		return 0;
 	}
 	cc_debug_print("%d\n", root->data);
-	cc_binary_node_print(root->right, depth + 1);
-	cc_binary_node_print(root->left, depth + 1);
-	return 0;
+	tmp |= cc_binary_node_print(root->right, depth + 1);
+	tmp |= cc_binary_node_print(root->left, depth + 1);
+	return tmp;
 }
 
 int cc_binary_tree_init(struct cc_binary_tree *self) {

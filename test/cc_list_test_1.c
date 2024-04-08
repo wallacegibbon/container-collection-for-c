@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void show_number_list(struct cc_list *list, int direction) {
+int show_number_list(struct cc_list *list, int direction) {
 	struct cc_list_iter iter;
 	size_t *tmp;
 	size_t index;
@@ -16,6 +16,7 @@ void show_number_list(struct cc_list *list, int direction) {
 		cc_debug_print("(%d)%u, ", index, *tmp);
 
 	cc_debug_print("\n");
+	return 0;
 }
 
 int main() {

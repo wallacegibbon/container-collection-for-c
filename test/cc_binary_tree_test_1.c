@@ -2,7 +2,7 @@
 #include "cc_common.h"
 #include <assert.h>
 
-void show_tree_elements(struct cc_binary_tree *tree) {
+int show_tree_elements(struct cc_binary_tree *tree) {
 	struct cc_binary_tree_iter *iter;
 	size_t *tmp, index;
 
@@ -15,6 +15,7 @@ void show_tree_elements(struct cc_binary_tree *tree) {
 	cc_debug_print("\n");
 
 	assert(!cc_binary_tree_iter_delete(iter));
+	return 0;
 }
 
 int main() {

@@ -87,7 +87,7 @@ int cc_list_map_print(struct cc_list_map *self, char *end_string) {
 	return 0;
 }
 
-static const struct cc_map_i map_interface = {
+static struct cc_map_i map_interface = {
 	.get = (cc_map_get_fn)cc_list_map_get,
 	.set = (cc_map_set_fn)cc_list_map_set,
 	.del = (cc_map_del_fn)cc_list_map_del,
@@ -100,7 +100,7 @@ struct cc_list_map *cc_list_map_new(cc_cmp_fn cmp) {
 	if (self == NULL)
 		goto fail1;
 
-	self->interface = (struct cc_map_i *)&map_interface;
+	self->interface = &map_interface;
 	self->data = cc_list_new();
 	if (self->data == NULL)
 		goto fail2;
@@ -130,7 +130,7 @@ int cc_list_map_delete(struct cc_list_map *self) {
 	return 0;
 }
 
-static const struct cc_iter_i iterator_interface = {
+static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_list_map_iter_next,
 };
 
@@ -138,7 +138,7 @@ int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map
 	if (map == NULL)
 		return 1;
 
-	self->iterator = (struct cc_iter_i *)&iterator_interface;
+	self->iterator = &iterator_interface;
 	return cc_list_iter_init(&self->inner_iter, map->data, 0);
 }
 

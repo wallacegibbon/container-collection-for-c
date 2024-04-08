@@ -42,7 +42,7 @@ int cc_array_reverse(struct cc_array *self, size_t start, size_t end);
 /// The iterator for the generic array
 ///-----------------------------------------------------------------------------
 struct cc_array_iter {
-	struct cc_iter_i **iterator;
+	struct cc_iter_i *iterator;
 	struct cc_array *data;
 	size_t cursor;
 };

@@ -141,7 +141,7 @@ int cc_list_delete(struct cc_list *self) {
 	return 0;
 }
 
-static const struct cc_iter_i iterator_interface = {
+static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_list_iter_next,
 };
 
@@ -156,7 +156,7 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t d
 	if (list == NULL)
 		return 1;
 
-	self->iterator = (struct cc_iter_i *)&iterator_interface;
+	self->iterator = &iterator_interface;
 	self->list = list;
 	self->index = 0;
 	self->direction = direction;

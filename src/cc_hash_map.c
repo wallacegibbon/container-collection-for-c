@@ -69,12 +69,12 @@ int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result) {
 	return cc_list_map_del(*list_map_tmp, key, result);
 }
 
-void cc_hash_map_print_slot(struct cc_list_map *slot, int index) {
+int cc_hash_map_print_slot(struct cc_list_map *slot, int index) {
 	cc_debug_print("[% 9d] ", index);
 	if (slot != NULL)
-		cc_list_map_print(slot, "\n");
+		return cc_list_map_print(slot, "\n");
 	else
-		cc_debug_print("\n");
+		return cc_debug_print("\n");
 }
 
 int cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
@@ -91,7 +91,7 @@ int cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
 	return 0;
 }
 
-static const struct cc_map_i map_interface = {
+static struct cc_map_i map_interface = {
 	.get = (cc_map_get_fn)cc_hash_map_get,
 	.set = (cc_map_set_fn)cc_hash_map_set,
 	.del = (cc_map_del_fn)cc_hash_map_del,
@@ -109,7 +109,7 @@ struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn cmp, cc_hash_f
 	if (self == NULL)
 		goto fail1;
 
-	self->interface = (struct cc_map_i *)&map_interface;
+	self->interface = &map_interface;
 	self->data = cc_array_new(bucket_size, sizeof(struct cc_list_map *));
 	if (self->data == NULL)
 		goto fail2;
@@ -153,7 +153,7 @@ int cc_hash_map_delete(struct cc_hash_map *self) {
 	return 0;
 }
 
-static const struct cc_iter_i iterator_interface = {
+static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_hash_map_iter_next,
 };
 
@@ -179,7 +179,7 @@ int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map
 	if (cc_hash_map_iter_step(self))
 		return 3;
 
-	self->iterator = (struct cc_iter_i *)&iterator_interface;
+	self->iterator = &iterator_interface;
 	self->count = 0;
 	return 0;
 }

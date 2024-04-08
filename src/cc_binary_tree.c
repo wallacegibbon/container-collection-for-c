@@ -1,6 +1,7 @@
 #include "cc_binary_tree.h"
 #include "cc_common.h"
 #include "cc_list.h"
+#include <stdarg.h>
 #include <stdlib.h>
 
 struct cc_binary_node *cc_binary_node_new(struct cc_binary_node *parent, void *data) {
@@ -152,7 +153,7 @@ int cc_binary_tree_delete(struct cc_binary_tree *self) {
 	return ret;
 }
 
-static const struct cc_iter_i iterator_interface = {
+static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_binary_tree_iter_next,
 };
 
@@ -165,19 +166,30 @@ static int iter_queue_add(struct cc_binary_tree_iter *self, void *data) {
 		return cc_list_append(self->queue, data);
 }
 
+static int iter_queue_add_multi(struct cc_binary_tree_iter *self, int n, ...) {
+	va_list args;
+	va_start(args, n);
+	while (n-- > 0) {
+		if (iter_queue_add(self, va_arg(args, struct cc_binary_node *)))
+			return 1;
+	}
+	va_end(args);
+	return 0;
+}
+
 static int iter_queue_add_child(struct cc_binary_tree_iter *self, struct cc_binary_node *node) {
 	int tmp = 0;
+
 	if (node == NULL)
 		return 0;
-	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_BREADTH_RIGHT) {
-		tmp |= iter_queue_add(self, node->right);
-		tmp |= iter_queue_add(self, node->left);
-	} else if (self->direction == CC_TRAVERSE_DEPTH_RIGHT || self->direction == CC_TRAVERSE_BREADTH_LEFT) {
-		tmp |= iter_queue_add(self, node->left);
-		tmp |= iter_queue_add(self, node->right);
-	} else {
-		tmp = 0xff;
-	}
+
+	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_BREADTH_RIGHT)
+		tmp = iter_queue_add_multi(self, 2, node->right, node->left);
+	else if (self->direction == CC_TRAVERSE_DEPTH_RIGHT || self->direction == CC_TRAVERSE_BREADTH_LEFT)
+		tmp = iter_queue_add_multi(self, 2, node->left, node->right);
+	else
+		tmp = 2;
+
 	return tmp;
 }
 
@@ -198,7 +210,7 @@ struct cc_binary_tree_iter *cc_binary_tree_iter_new(struct cc_binary_tree *tree,
 	if (cc_list_append(self->queue, tree))
 		goto fail3;
 
-	self->iterator = (struct cc_iter_i *)&iterator_interface;
+	self->iterator = &iterator_interface;
 	self->index = 0;
 	self->direction = direction;
 

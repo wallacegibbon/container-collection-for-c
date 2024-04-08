@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void cc_exit_info(int code, const char *format, ...) {
+int cc_exit_info(int code, char *format, ...) {
 	va_list args;
 
 	va_start(args, format);
@@ -12,16 +12,19 @@ void cc_exit_info(int code, const char *format, ...) {
 	va_end(args);
 
 	exit(code);
+	return code;
 }
 
-void cc_debug_print(const char *format, ...) {
+int cc_debug_print(char *format, ...) {
 	va_list args;
+	int result;
 
 	va_start(args, format);
-	vfprintf(stdout, format, args);
+	result = vfprintf(stdout, format, args);
 	va_end(args);
 
 	fflush(stdout);
+	return result;
 }
 
 int cc_default_cmp_fn(void *left, void *right) {
@@ -33,7 +36,7 @@ size_t cc_default_hash_fn(void *obj) {
 }
 
 size_t cc_str_hash_fn_simple(void *obj) {
-	const char *s = obj;
+	char *s = obj;
 	size_t hash = 0;
 	while (*s)
 		hash += *s++;
@@ -42,7 +45,7 @@ size_t cc_str_hash_fn_simple(void *obj) {
 }
 
 size_t cc_str_hash_fn_bkdr(void *obj) {
-	const char *s = obj;
+	char *s = obj;
 	size_t hash = 0;
 	while (*s)
 		/// 31, 131, 1313, 13131, ...
@@ -51,7 +54,8 @@ size_t cc_str_hash_fn_bkdr(void *obj) {
 	return hash;
 }
 
-void cc_print_n(const char *s, int n) {
+int cc_print_n(char *s, int n) {
 	while (n-- > 0)
 		cc_debug_print("%s", s);
+	return n;
 }

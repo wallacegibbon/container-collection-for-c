@@ -30,9 +30,9 @@ size_t cc_default_hash_fn(void *obj);
 size_t cc_str_hash_fn_simple(void *obj);
 size_t cc_str_hash_fn_bkdr(void *obj);
 
-void cc_exit_info(int code, const char *format, ...);
-void cc_debug_print(const char *format, ...);
+int cc_exit_info(int code, char *format, ...);
+int cc_debug_print(char *format, ...);
 
-void cc_print_n(const char *s, int n);
+int cc_print_n(char *s, int n);
 
 #endif

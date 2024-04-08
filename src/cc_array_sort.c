@@ -3,7 +3,7 @@
 ///-----------------------------------------------------------------------------
 /// Quick sort (https://en.wikipedia.org/wiki/Quicksort)
 ///-----------------------------------------------------------------------------
-static size_t _cc_array_divide(struct cc_array *self, cc_cmp_fn cmp, size_t start, size_t end) {
+static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn cmp, size_t start, size_t end) {
 	size_t left, right, middle;
 
 	middle = end - 1;
@@ -26,22 +26,22 @@ static size_t _cc_array_divide(struct cc_array *self, cc_cmp_fn cmp, size_t star
 	return left + 1;
 }
 
-static void _cc_array_sort_quick(struct cc_array *self, cc_cmp_fn cmp, size_t start, size_t end) {
+static void cc_array_sort_quick_recur(struct cc_array *self, cc_cmp_fn cmp, size_t start, size_t end) {
 	size_t middle;
 	if (start >= end - 1)
 		return;
 
-	middle = _cc_array_divide(self, cmp, start, end);
+	middle = cc_array_divide(self, cmp, start, end);
 
-	_cc_array_sort_quick(self, cmp, start, middle);
-	_cc_array_sort_quick(self, cmp, middle, end);
+	cc_array_sort_quick_recur(self, cmp, start, middle);
+	cc_array_sort_quick_recur(self, cmp, middle, end);
 }
 
 int cc_array_sort_quick(struct cc_array *self, cc_cmp_fn cmp) {
 	if (cmp == NULL)
 		return 1;
 
-	_cc_array_sort_quick(self, cmp, 0, self->elem_nums);
+	cc_array_sort_quick_recur(self, cmp, 0, self->elem_nums);
 	return 0;
 }
 

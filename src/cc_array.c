@@ -2,23 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-static inline void _cc_array_get(struct cc_array *self, size_t index, void *result) {
+static inline void cc_array_get_(struct cc_array *self, size_t index, void *result) {
 	memcpy(result, self->buffer + index * self->elem_size, self->elem_size);
 }
 
-static inline void _cc_array_get_ref(struct cc_array *self, size_t index, void **ref) {
+static inline void cc_array_get_ref_(struct cc_array *self, size_t index, void **ref) {
 	*ref = self->buffer + index * self->elem_size;
 }
 
-static inline void _cc_array_set(struct cc_array *self, size_t index, void *value) {
+static inline void cc_array_set_(struct cc_array *self, size_t index, void *value) {
 	memcpy(self->buffer + index * self->elem_size, value, self->elem_size);
 }
 
 int cc_array_swap(struct cc_array *self, size_t i, size_t j) {
 	uint8_t tmp[self->elem_size];
-	_cc_array_get(self, i, tmp);
+	cc_array_get_(self, i, tmp);
 	memcpy(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size, self->elem_size);
-	_cc_array_set(self, j, tmp);
+	cc_array_set_(self, j, tmp);
 	return 0;
 }
 
@@ -31,12 +31,12 @@ int cc_array_is_valid_index(struct cc_array *self, size_t index) {
 }
 
 int cc_array_get_unsafe(struct cc_array *self, size_t index, void *result) {
-	_cc_array_get(self, index, result);
+	cc_array_get_(self, index, result);
 	return 0;
 }
 
 int cc_array_get_ref_unsafe(struct cc_array *self, size_t index, void **ref) {
-	_cc_array_get_ref(self, index, ref);
+	cc_array_get_ref_(self, index, ref);
 	return 0;
 }
 
@@ -46,7 +46,7 @@ int cc_array_get(struct cc_array *self, size_t index, void *result) {
 	if (index >= self->elem_nums)
 		return 2;
 
-	_cc_array_get(self, index, result);
+	cc_array_get_(self, index, result);
 	return 0;
 }
 
@@ -56,12 +56,12 @@ int cc_array_get_ref(struct cc_array *self, size_t index, void **ref) {
 	if (index >= self->elem_nums)
 		return 2;
 
-	_cc_array_get_ref(self, index, ref);
+	cc_array_get_ref_(self, index, ref);
 	return 0;
 }
 
 int cc_array_set_unsafe(struct cc_array *self, size_t index, void *value) {
-	_cc_array_set(self, index, value);
+	cc_array_set_(self, index, value);
 	return 0;
 }
 
@@ -69,7 +69,7 @@ int cc_array_set(struct cc_array *self, size_t index, void *value) {
 	if (index >= self->elem_nums)
 		return 1;
 
-	_cc_array_set(self, index, value);
+	cc_array_set_(self, index, value);
 	return 0;
 }
 

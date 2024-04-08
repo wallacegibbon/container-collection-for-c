@@ -1,7 +1,7 @@
 #include "cc_ring.h"
 #include <stdlib.h>
 
-static inline size_t _next_index(struct cc_ring *self, size_t index) {
+static inline size_t next_index(struct cc_ring *self, size_t index) {
 	size_t next_index = index + 1;
 	if (cc_array_is_valid_index(self->data, next_index))
 		return next_index;
@@ -20,7 +20,7 @@ size_t cc_ring_space(struct cc_ring *self) {
 int cc_ring_append(struct cc_ring *self, void *item) {
 	size_t write_index_next;
 
-	write_index_next = _next_index(self, self->write_index);
+	write_index_next = next_index(self, self->write_index);
 	if (write_index_next == self->read_index)
 		return 1;
 
@@ -35,7 +35,7 @@ int cc_ring_shift(struct cc_ring *self, void *item) {
 		return 1;
 
 	cc_array_get(self->data, self->read_index, item);
-	self->read_index = _next_index(self, self->read_index);
+	self->read_index = next_index(self, self->read_index);
 
 	return 0;
 }

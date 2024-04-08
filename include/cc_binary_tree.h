@@ -5,6 +5,7 @@
 #error "You can NOT use binary tree without support for the `malloc` function."
 #endif
 
+#include "cc_common.h"
 #include "cc_iter.h"
 #include <stddef.h>
 
@@ -40,9 +41,11 @@ struct cc_binary_tree_iter {
 	struct cc_binary_tree *tree;
 	struct cc_list *queue;
 	size_t index;
+	enum cc_traverse_direction direction;
 };
 
-int cc_binary_tree_iter_init(struct cc_binary_tree_iter *self, struct cc_binary_tree *tree, struct cc_list *queue);
+struct cc_binary_tree_iter *cc_binary_tree_iter_new(struct cc_binary_tree *tree, enum cc_traverse_direction direction);
+int cc_binary_tree_iter_delete(struct cc_binary_tree_iter *self);
 int cc_binary_tree_iter_next(struct cc_binary_tree_iter *self, void **item, size_t *index);
 
 #endif

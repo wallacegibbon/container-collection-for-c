@@ -1,22 +1,20 @@
 #include "cc_binary_tree.h"
 #include "cc_common.h"
-#include "cc_list.h"
 #include <assert.h>
 
 void show_tree_elements(struct cc_binary_tree *tree) {
-	struct cc_binary_tree_iter iter;
-	struct cc_list *queue;
+	struct cc_binary_tree_iter *iter;
 	size_t *tmp, index;
 
-	queue = cc_list_new();
-	assert(queue != NULL);
+	iter = cc_binary_tree_iter_new(tree, CC_TRAVERSE_BREADTH_RIGHT);
+	assert(iter != NULL);
 
-	assert(!cc_binary_tree_iter_init(&iter, tree, queue));
-	while (!cc_iter_next(&iter, &tmp, &index))
+	while (!cc_iter_next(iter, &tmp, &index))
 		cc_debug_print("(%d)%u, ", index, *tmp);
 
 	cc_debug_print("\n");
-	assert(!cc_list_delete(queue));
+
+	assert(!cc_binary_tree_iter_delete(iter));
 }
 
 int main() {

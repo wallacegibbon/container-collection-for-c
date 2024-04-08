@@ -5,6 +5,13 @@
 
 #include <stddef.h>
 
+enum cc_traverse_direction {
+	CC_TRAVERSE_DEPTH_LEFT = 4,
+	CC_TRAVERSE_DEPTH_RIGHT,
+	CC_TRAVERSE_BREADTH_LEFT = 8,
+	CC_TRAVERSE_BREADTH_RIGHT,
+};
+
 static inline int try_reset_double_p(void *pointer) {
 	if (pointer == NULL)
 		return 1;

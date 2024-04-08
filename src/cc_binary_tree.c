@@ -155,18 +155,67 @@ static const struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_binary_tree_iter_next,
 };
 
-int cc_binary_tree_iter_init(struct cc_binary_tree_iter *self, struct cc_binary_tree *tree, struct cc_list *queue) {
+static int cc_binary_tree_iter_queue_add(struct cc_binary_tree_iter *self, void *data) {
+	if (data == NULL)
+		return 0;
+	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_DEPTH_RIGHT)
+		return cc_list_insert(self->queue, 0, data);
+	else
+		return cc_list_append(self->queue, data);
+}
+
+static int cc_binary_tree_iter_queue_add_child(struct cc_binary_tree_iter *self, struct cc_binary_node *node) {
+	int tmp = 0;
+
+	if (node == NULL)
+		return 0;
+
+	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_BREADTH_RIGHT) {
+		tmp |= cc_binary_tree_iter_queue_add(self, node->right);
+		tmp |= cc_binary_tree_iter_queue_add(self, node->left);
+	} else if (self->direction == CC_TRAVERSE_DEPTH_RIGHT || self->direction == CC_TRAVERSE_BREADTH_LEFT) {
+		tmp |= cc_binary_tree_iter_queue_add(self, node->left);
+		tmp |= cc_binary_tree_iter_queue_add(self, node->right);
+	}
+
+	return tmp;
+}
+
+struct cc_binary_tree_iter *cc_binary_tree_iter_new(struct cc_binary_tree *tree, enum cc_traverse_direction direction) {
+	struct cc_binary_tree_iter *self;
+	struct cc_list *queue;
+
 	if (tree == NULL)
-		return 1;
-	if (queue == NULL)
-		return 2;
+		goto fail1;
+
+	self = malloc(sizeof(*self));
+	if (self == NULL)
+		goto fail1;
+
+	self->queue = cc_list_new();
+	if (self->queue == NULL)
+		goto fail2;
+	if (cc_list_append(self->queue, tree))
+		goto fail3;
 
 	self->iterator = (struct cc_iter_i *)&iterator_interface;
 	self->index = 0;
-	self->queue = queue;
-	if (cc_list_append(queue, tree))
-		return 3;
+	self->direction = direction;
 
+	return self;
+
+fail3:
+	cc_list_delete(self->queue);
+fail2:
+	free(self);
+fail1:
+	return NULL;
+}
+
+int cc_binary_tree_iter_delete(struct cc_binary_tree_iter *self) {
+	if (cc_list_delete(self->queue))
+		return 1;
+	free(self);
 	return 0;
 }
 
@@ -179,10 +228,8 @@ int cc_binary_tree_iter_next(struct cc_binary_tree_iter *self, void **item, size
 
 	*item = &current->data;
 
-	if (current->left && cc_list_append(self->queue, current->left))
+	if (cc_binary_tree_iter_queue_add_child(self, current))
 		return 3;
-	if (current->right && cc_list_append(self->queue, current->right))
-		return 4;
 
 	if (index != NULL)
 		*index = self->index;

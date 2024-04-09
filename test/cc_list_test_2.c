@@ -7,7 +7,7 @@
 
 int main() {
 	struct cc_list *list;
-	size_t tmp;
+	uintptr_t tmp;
 
 	list = cc_list_new();
 	assert(list != NULL);

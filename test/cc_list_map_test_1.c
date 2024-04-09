@@ -6,8 +6,8 @@ int main() {
 	struct cc_list_map *map;
 
 	/// Caution: The `&tmp` is used as `void *` to accapt data.
-	/// So the size of `tmp` should NOT be smaller than `size_t`, or data nearby would be overwritten.
-	size_t tmp;
+	/// So the size of `tmp` should NOT be smaller than `uintptr_t`, or data nearby would be overwritten.
+	uintptr_t tmp;
 
 	map = cc_list_map_new(NULL);
 	assert(map != NULL);

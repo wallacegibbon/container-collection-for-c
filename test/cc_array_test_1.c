@@ -6,7 +6,7 @@ int main() {
 	struct cc_array array;
 	struct cc_array_iter iter;
 	unsigned char buffer[10 * sizeof(float)];
-	size_t count;
+	size_t index;
 
 	float i;
 	float tmp;
@@ -26,8 +26,8 @@ int main() {
 	assert(!cc_array_reverse(&array, 0, array.elem_nums));
 
 	assert(!cc_array_iter_init(&iter, &array));
-	while (!cc_iter_next(&iter, &iter_tmp, &count))
-		cc_debug_print("(index: %02d) %.9f\n", count, *iter_tmp);
+	while (!cc_iter_next(&iter, &iter_tmp, &index))
+		cc_debug_print("(index: %02d) %.9f\n", index, *iter_tmp);
 
 	cc_debug_print("\n");
 

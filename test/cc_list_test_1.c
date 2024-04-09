@@ -21,7 +21,7 @@ int show_number_list(struct cc_list *list, int direction) {
 
 int main() {
 	struct cc_list *list;
-	size_t i;
+	uintptr_t i;
 
 	list = cc_list_new();
 	assert(list != NULL);

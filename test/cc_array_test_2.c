@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 struct blah {
-	size_t index;
+	int index;
 	void *payload;
 };
 

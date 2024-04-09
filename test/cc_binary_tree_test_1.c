@@ -20,7 +20,6 @@ int show_tree_elements(struct cc_binary_tree *tree) {
 
 int main() {
 	struct cc_binary_tree *tree;
-	int tmp;
 
 	tree = cc_binary_tree_new();
 	assert(tree != NULL);

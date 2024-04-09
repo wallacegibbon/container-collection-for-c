@@ -9,7 +9,7 @@ char s3[] = {"duplicated_key"};
 
 int main() {
 	struct cc_hash_map *map;
-	size_t tmp;
+	uintptr_t tmp;
 
 	/// When using `char *`s as keys, you should use `strcmp` as the `cmp` function.
 	// map = cc_hash_map_new(20, NULL, cc_str_hash_fn_bkdr);

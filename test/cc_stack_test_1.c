@@ -1,13 +1,14 @@
+#include "cc_common.h"
 #include "cc_stack.h"
 #include <assert.h>
+#include <stdint.h>
 #include <stdio.h>
 
 int main() {
 	struct cc_array array;
 	struct cc_stack stack, *p_stack;
 	unsigned char buffer[10];
-	char i;
-	char tmp;
+	char i, tmp;
 
 	p_stack = cc_stack_new(10, sizeof(char));
 	assert(p_stack != NULL);
@@ -21,6 +22,7 @@ int main() {
 
 	for (i = 9; i >= 0; i--) {
 		assert(!cc_stack_pop(p_stack, &tmp));
+		cc_debug_print("%llu, %llu", tmp, i);
 		assert(tmp == i);
 	}
 

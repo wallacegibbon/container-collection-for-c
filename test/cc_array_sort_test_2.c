@@ -38,7 +38,7 @@ static int cmp_age(struct blah *left, struct blah *right) {
 
 int main() {
 	struct cc_array array;
-	uint8_t buffer[3 * sizeof(struct blah)];
+	unsigned char buffer[3 * sizeof(struct blah)];
 	int i;
 	struct blah tmp;
 

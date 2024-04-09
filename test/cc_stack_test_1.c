@@ -5,7 +5,7 @@
 int main() {
 	struct cc_array array;
 	struct cc_stack stack, *p_stack;
-	uint8_t buffer[10];
+	unsigned char buffer[10];
 	char i;
 	char tmp;
 

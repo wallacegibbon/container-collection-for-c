@@ -23,7 +23,7 @@ static void char_array_display(struct cc_array *chars, const char *prefix) {
 
 int main() {
 	struct cc_array array;
-	uint8_t buffer[10];
+	unsigned char buffer[10];
 	int i;
 
 	assert(!cc_array_init(&array, buffer, 10, 1));

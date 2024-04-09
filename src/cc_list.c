@@ -152,7 +152,7 @@ static inline void cc_list_iter_step(struct cc_list_iter *self) {
 		self->cursor = self->cursor->prev;
 }
 
-int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t direction) {
+int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direction) {
 	if (list == NULL)
 		return 1;
 

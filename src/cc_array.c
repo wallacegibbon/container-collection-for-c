@@ -15,7 +15,7 @@ static inline void cc_array_set_(struct cc_array *self, size_t index, void *valu
 }
 
 int cc_array_swap(struct cc_array *self, size_t i, size_t j) {
-	uint8_t tmp[self->elem_size];
+	unsigned char tmp[self->elem_size];
 	cc_array_get_(self, i, tmp);
 	memcpy(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size, self->elem_size);
 	cc_array_set_(self, j, tmp);
@@ -90,7 +90,7 @@ int cc_array_reverse(struct cc_array *self, size_t start, size_t end) {
 	return 0;
 }
 
-int cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size) {
+int cc_array_init(struct cc_array *self, unsigned char *buffer, size_t elem_nums, size_t elem_size) {
 	self->elem_nums = elem_nums;
 	self->elem_size = elem_size;
 	self->buffer = buffer;
@@ -101,7 +101,7 @@ int cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size
 
 struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size) {
 	struct cc_array *self;
-	uint8_t *buffer;
+	unsigned char *buffer;
 
 	self = malloc(sizeof(*self));
 	if (self == NULL)

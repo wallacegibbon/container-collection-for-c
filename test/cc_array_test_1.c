@@ -1,12 +1,11 @@
 #include "cc_array.h"
 #include <assert.h>
 #include <math.h>
-#include <stdint.h>
 
 int main() {
 	struct cc_array array;
 	struct cc_array_iter iter;
-	uint8_t buffer[10 * sizeof(float)];
+	unsigned char buffer[10 * sizeof(float)];
 	size_t count;
 
 	float i;

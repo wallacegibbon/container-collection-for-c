@@ -4,13 +4,12 @@
 #include "cc_common.h"
 #include "cc_iter.h"
 #include <stddef.h>
-#include <stdint.h>
 
 ///-----------------------------------------------------------------------------
 /// Generic array for data of different length
 ///-----------------------------------------------------------------------------
 struct cc_array {
-	uint8_t *buffer;
+	unsigned char *buffer;
 	size_t elem_nums;
 	size_t elem_size;
 };
@@ -20,7 +19,7 @@ struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size);
 int cc_array_delete(struct cc_array *self);
 #endif
 
-int cc_array_init(struct cc_array *self, uint8_t *buffer, size_t elem_nums, size_t elem_size);
+int cc_array_init(struct cc_array *self, unsigned char *buffer, size_t elem_nums, size_t elem_size);
 
 int cc_array_get_unsafe(struct cc_array *self, size_t index, void *result);
 int cc_array_get_ref_unsafe(struct cc_array *self, size_t index, void **ref);

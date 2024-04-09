@@ -6,7 +6,6 @@
 #endif
 
 #include "cc_iter.h"
-#include <stdint.h>
 
 ///-----------------------------------------------------------------------------
 /// List node for the doubly linked list
@@ -44,10 +43,10 @@ struct cc_list_iter {
 	struct cc_list *list;
 	struct cc_list_node *cursor;
 	size_t index;
-	uint8_t direction;
+	int direction;
 };
 
-int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, uint8_t direction);
+int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direction);
 int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index);
 
 #endif

@@ -136,16 +136,6 @@ static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_array_iter_next,
 };
 
-int cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data) {
-	if (data == NULL)
-		return 1;
-
-	self->iterator = &iterator_interface;
-	self->data = data;
-	self->cursor = 0;
-	return 0;
-}
-
 int cc_array_iter_next(struct cc_array_iter *self, void **item, size_t *index) {
 	if (try_reset_double_p(item))
 		return 1;
@@ -156,5 +146,15 @@ int cc_array_iter_next(struct cc_array_iter *self, void **item, size_t *index) {
 		*index = self->cursor;
 
 	self->cursor++;
+	return 0;
+}
+
+int cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data) {
+	if (data == NULL)
+		return 1;
+
+	self->iterator = &iterator_interface;
+	self->data = data;
+	self->cursor = 0;
 	return 0;
 }

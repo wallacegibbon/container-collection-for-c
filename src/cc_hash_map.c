@@ -171,19 +171,6 @@ static int cc_hash_map_iter_step(struct cc_hash_map_iter *self) {
 	return cc_list_map_iter_init(&self->inner_list_map_iter, *cursor);
 }
 
-int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map) {
-	if (map == NULL)
-		return 1;
-	if (cc_array_iter_init(&self->inner_array_iter, map->data))
-		return 2;
-	if (cc_hash_map_iter_step(self))
-		return 3;
-
-	self->iterator = &iterator_interface;
-	self->count = 0;
-	return 0;
-}
-
 int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index) {
 	if (try_reset_double_p(item))
 		return 1;
@@ -201,5 +188,18 @@ success:
 		*index = self->count;
 
 	self->count++;
+	return 0;
+}
+
+int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map) {
+	if (map == NULL)
+		return 1;
+	if (cc_array_iter_init(&self->inner_array_iter, map->data))
+		return 2;
+	if (cc_hash_map_iter_step(self))
+		return 3;
+
+	self->iterator = &iterator_interface;
+	self->count = 0;
 	return 0;
 }

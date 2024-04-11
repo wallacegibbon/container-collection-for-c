@@ -152,20 +152,6 @@ static inline void cc_list_iter_step(struct cc_list_iter *self) {
 		self->cursor = self->cursor->prev;
 }
 
-int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direction) {
-	if (list == NULL)
-		return 1;
-
-	self->iterator = &iterator_interface;
-	self->list = list;
-	self->index = 0;
-	self->direction = direction;
-	self->cursor = &self->list->root;
-
-	cc_list_iter_step(self);
-	return 0;
-}
-
 int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index) {
 	if (try_reset_double_p(item))
 		return 1;
@@ -178,6 +164,20 @@ int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index) {
 		*index = self->index;
 
 	self->index++;
+
+	cc_list_iter_step(self);
+	return 0;
+}
+
+int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direction) {
+	if (list == NULL)
+		return 1;
+
+	self->iterator = &iterator_interface;
+	self->list = list;
+	self->index = 0;
+	self->direction = direction;
+	self->cursor = &self->list->root;
 
 	cc_list_iter_step(self);
 	return 0;

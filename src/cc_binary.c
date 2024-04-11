@@ -160,6 +160,25 @@ static int iter_queue_add_child(struct cc_binary_iter *self, struct cc_binary *n
 	return tmp;
 }
 
+int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index) {
+	struct cc_binary *current;
+	int tmp;
+
+	if (cc_list_remove(self->queue, 0, (void **)&current))
+		return 1;
+
+	*item = &current->data;
+
+	if (iter_queue_add_child(self, current))
+		return 3;
+
+	if (index != NULL)
+		*index = self->index;
+
+	self->index++;
+	return 0;
+}
+
 struct cc_binary_iter *cc_binary_iter_new(struct cc_binary *root, enum cc_traverse_direction direction) {
 	struct cc_binary_iter *self;
 	struct cc_list *queue;
@@ -198,23 +217,4 @@ int cc_binary_iter_delete(struct cc_binary_iter *self) {
 
 	free(self);
 	return tmp;
-}
-
-int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index) {
-	struct cc_binary *current;
-	int tmp;
-
-	if (cc_list_remove(self->queue, 0, (void **)&current))
-		return 1;
-
-	*item = &current->data;
-
-	if (iter_queue_add_child(self, current))
-		return 3;
-
-	if (index != NULL)
-		*index = self->index;
-
-	self->index++;
-	return 0;
 }

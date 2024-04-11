@@ -134,14 +134,6 @@ static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn)cc_list_map_iter_next,
 };
 
-int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map) {
-	if (map == NULL)
-		return 1;
-
-	self->iterator = &iterator_interface;
-	return cc_list_iter_init(&self->inner_iter, map->data, 0);
-}
-
 int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index) {
 	struct cc_map_item **tmp_item;
 
@@ -152,4 +144,12 @@ int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *in
 
 	*item = *tmp_item;
 	return 0;
+}
+
+int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map) {
+	if (map == NULL)
+		return 1;
+
+	self->iterator = &iterator_interface;
+	return cc_list_iter_init(&self->inner_iter, map->data, 0);
 }

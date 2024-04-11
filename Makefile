@@ -42,3 +42,5 @@ build_dir:
 clean:
 	@rm -rf $(BUILD_DIR)
 
+-include $(OBJECTS:.o=.d)
+

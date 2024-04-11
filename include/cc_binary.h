@@ -1,5 +1,5 @@
-#ifndef __CC_BINARY_TREE_H
-#define __CC_BINARY_TREE_H
+#ifndef __CC_BINARY_H
+#define __CC_BINARY_H
 
 #ifdef NO_MALLOC
 #error "You can NOT use `cc_binary` without support for the `malloc` function."

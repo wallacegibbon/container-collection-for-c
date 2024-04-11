@@ -2,7 +2,7 @@
 #define __CC_BINARY_TREE_H
 
 #ifdef NO_MALLOC
-#error "You can NOT use binary tree without support for the `malloc` function."
+#error "You can NOT use `cc_binary` without support for the `malloc` function."
 #endif
 
 #include "cc_common.h"

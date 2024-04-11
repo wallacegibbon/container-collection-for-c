@@ -2,14 +2,13 @@
 #define __CC_LIST_H
 
 #ifdef NO_MALLOC
-#error "You can NOT use linked list without support for the `malloc` function."
+#error "You can NOT use `cc_list` without support for the `malloc` function."
 #endif
 
 #include "cc_iter.h"
 
-///-----------------------------------------------------------------------------
-/// List node for the doubly linked list
-///-----------------------------------------------------------------------------
+/// The `cc_list_node` is used both for real nodes and the root node.
+/// For root node, the `data` field is used as `size` to keep the number of elements in the list.
 struct cc_list_node {
 	struct cc_list_node *prev;
 	struct cc_list_node *next;
@@ -19,9 +18,6 @@ struct cc_list_node {
 	};
 };
 
-///-----------------------------------------------------------------------------
-/// Doubly linked list
-///-----------------------------------------------------------------------------
 struct cc_list {
 	struct cc_list_node root;
 };
@@ -35,9 +31,6 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right);
 int cc_list_insert(struct cc_list *self, size_t index, void *value);
 int cc_list_remove(struct cc_list *self, size_t index, void **result);
 
-///-----------------------------------------------------------------------------
-/// The iterator for the doubly linked list
-///-----------------------------------------------------------------------------
 struct cc_list_iter {
 	struct cc_iter_i *iterator;
 	struct cc_list *list;

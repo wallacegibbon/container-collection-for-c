@@ -1,7 +1,5 @@
-#include "cc_common.h"
 #include "cc_stack.h"
 #include <assert.h>
-#include <stdint.h>
 #include <stdio.h>
 
 int main() {
@@ -22,7 +20,6 @@ int main() {
 
 	for (i = 9; i >= 0; i--) {
 		assert(!cc_stack_pop(p_stack, &tmp));
-		cc_debug_print("%llu, %llu", tmp, i);
 		assert(tmp == i);
 	}
 

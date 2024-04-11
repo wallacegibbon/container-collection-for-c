@@ -2,7 +2,7 @@
 #define __CC_LIST_MAP_H
 
 #ifdef NO_MALLOC
-#error "You can NOT use list map without support for the `malloc` function."
+#error "You can NOT use `cc_list_map` without support for the `malloc` function."
 #endif
 
 #include "cc_common.h"

@@ -2,7 +2,7 @@
 #define __CC_HASH_MAP_H
 
 #ifdef NO_MALLOC
-#error "You can NOT use hash map without support for the `malloc` function."
+#error "You can NOT use `cc_hash_map` without support for the `malloc` function."
 #endif
 
 #include "cc_array.h"

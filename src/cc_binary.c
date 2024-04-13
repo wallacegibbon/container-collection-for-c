@@ -113,9 +113,11 @@ int cc_binary_print(struct cc_binary *root, int depth) {
 		cc_debug_print("<NULL>\n");
 		return 0;
 	}
+
 	cc_debug_print("%d\n", root->data);
 	tmp |= cc_binary_print(root->right, depth + 1);
 	tmp |= cc_binary_print(root->left, depth + 1);
+
 	return tmp;
 }
 

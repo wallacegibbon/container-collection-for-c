@@ -1,6 +1,7 @@
 #include "cc_binary.h"
 #include "cc_common.h"
 #include <assert.h>
+#include <stdint.h>
 
 int show_tree_elements(struct cc_binary *tree) {
 	struct cc_binary_iter *iter;
@@ -16,6 +17,10 @@ int show_tree_elements(struct cc_binary *tree) {
 
 	assert(!cc_binary_iter_delete(iter));
 	return 0;
+}
+
+static int print_1(void *data) {
+	return cc_debug_print("%ld", (uintptr_t)data);
 }
 
 int main() {
@@ -40,7 +45,7 @@ int main() {
 	assert(root->right->right->data == (void *)6);
 	assert(root->right->right->right->data == (void *)5);
 
-	assert(!cc_binary_print(root, 0));
+	assert(!cc_binary_print(root, 0, print_1));
 
 	show_tree_elements(root);
 
@@ -61,7 +66,7 @@ int main() {
 	assert(root->right->left->data == (void *)6);
 	assert(root->right->left->left->data == (void *)7);
 
-	assert(!cc_binary_print(root, 0));
+	assert(!cc_binary_print(root, 0, print_1));
 
 	show_tree_elements(root);
 

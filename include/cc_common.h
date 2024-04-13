@@ -20,7 +20,7 @@ static inline int try_reset_double_p(void *pointer) {
 	return 0;
 }
 
-typedef void (*cc_cleanup_fn)(void *value);
+typedef int (*cc_simple_fn_1)(void *value);
 typedef int (*cc_cmp_fn)(void *left, void *right);
 typedef size_t (*cc_hash_fn)(void *obj);
 

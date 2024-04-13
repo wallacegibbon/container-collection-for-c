@@ -1,5 +1,4 @@
 #include "cc_binary.h"
-#include "cc_common.h"
 #include "cc_list.h"
 #include <stdarg.h>
 #include <stdlib.h>
@@ -164,8 +163,10 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
 	struct cc_binary *current;
 	int tmp;
 
-	if (cc_list_remove(self->queue, 0, (void **)&current))
+	if (try_reset_double_p(item))
 		return 1;
+	if (cc_list_remove(self->queue, 0, (void **)&current))
+		return 2;
 
 	*item = &current->data;
 

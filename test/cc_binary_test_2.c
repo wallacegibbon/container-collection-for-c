@@ -56,13 +56,6 @@ struct parser {
 	struct cc_binary *root;
 };
 
-int parser_adjust(struct parser *self) {
-	struct cc_binary *cursor;
-	struct blah_node *tmp;
-
-	return 0;
-}
-
 int parser_step(struct parser *self, int *error) {
 	struct blah_node *new_node;
 	char c;
@@ -77,15 +70,19 @@ int parser_step(struct parser *self, int *error) {
 	else
 		new_node = blah_node_new_op(c);
 
-	if (new_node == NULL)
-		return 2;
-	if (cc_binary_insert_left(self->root, new_node))
-		return 3;
+	if (new_node == NULL) {
+		*error = 2;
+		goto fail;
+	}
 
-	if (parser_adjust(self))
-		return 4;
+	if (cc_binary_insert_left(self->root, new_node)) {
+		*error = 3;
+		goto fail;
+	}
 
 	return 0;
+fail:
+	return 1;
 }
 
 int parser_parse(struct parser *self, struct cc_binary **result) {
@@ -97,7 +94,7 @@ int parser_parse(struct parser *self, struct cc_binary **result) {
 		;
 
 	*result = self->root;
-	return error || 0;
+	return error;
 }
 
 struct parser *parser_new(char *input) {
@@ -142,14 +139,21 @@ int parser_delete(struct parser *self) {
 	return 0;
 }
 
+static char *expr1 = "1+2";
+
 int main() {
 	struct parser *parser;
 	struct cc_binary *result;
 
-	parser = parser_new("1+2*3+4*5*6*7");
+	parser = parser_new(expr1);
 	assert(parser != NULL);
 
+	cc_debug_print("parsing expression: \"%s\"\n", expr1);
 	assert(!parser_parse(parser, &result));
+
+	assert(!cc_binary_rotate_right(&result->left));
+	assert(((struct blah_node *)result->left->data)->op_sign == '+');
+
 	cc_binary_print(result, 0, (cc_simple_fn_1)blah_node_print);
 
 	assert(!parser_delete(parser));

@@ -107,20 +107,20 @@ int cc_binary_delete(struct cc_binary *self) {
 	return cc_binary_destroy(self, 0);
 }
 
-int cc_binary_print(struct cc_binary *root, int depth, cc_simple_fn_1 print_fn) {
+int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1 print_fn) {
 	int tmp = 0;
 
 	cc_print_n("\t", depth);
-	if (root == NULL) {
+	if (current == NULL) {
 		cc_debug_print("<NULL>\n");
 		return 0;
 	}
 
-	print_fn(root->data);
+	print_fn(current->data);
 	cc_debug_print("\n");
 
-	tmp |= cc_binary_print(root->right, depth + 1, print_fn);
-	tmp |= cc_binary_print(root->left, depth + 1, print_fn);
+	tmp |= cc_binary_print(current->right, depth + 1, print_fn);
+	tmp |= cc_binary_print(current->left, depth + 1, print_fn);
 
 	return tmp;
 }

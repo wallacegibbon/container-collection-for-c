@@ -89,22 +89,16 @@ struct cc_binary *cc_binary_new(struct cc_binary *parent, void *data) {
 	return self;
 }
 
-/// Destroy the node recursively. Free all nodes except the root.
-static int cc_binary_destroy(struct cc_binary *root, int depth) {
-	if (root == NULL)
+int cc_binary_delete(struct cc_binary *self) {
+	if (self == NULL)
 		return 0;
-
-	if (cc_binary_destroy(root->left, depth + 1))
+	if (cc_binary_delete(self->left))
 		return 1;
-	if (cc_binary_destroy(root->right, depth + 1))
+	if (cc_binary_delete(self->right))
 		return 2;
 
-	free(root);
+	free(self);
 	return 0;
-}
-
-int cc_binary_delete(struct cc_binary *self) {
-	return cc_binary_destroy(self, 0);
 }
 
 int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1 print_fn) {
@@ -167,7 +161,6 @@ static int iter_queue_add_child(struct cc_binary_iter *self, struct cc_binary *n
 
 int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index) {
 	struct cc_binary *current;
-	int tmp;
 
 	if (try_reset_double_p(item))
 		return 1;
@@ -188,7 +181,6 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
 
 struct cc_binary_iter *cc_binary_iter_new(struct cc_binary *root, enum cc_traverse_direction direction) {
 	struct cc_binary_iter *self;
-	struct cc_list *queue;
 
 	if (root == NULL)
 		goto fail1;

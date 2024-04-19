@@ -13,10 +13,10 @@
 struct cc_list_map {
 	struct cc_map_i *interface;
 	struct cc_list *data;
-	cc_cmp_fn cmp;
+	cc_cmp_fn_t cmp;
 };
 
-struct cc_list_map *cc_list_map_new(cc_cmp_fn cmp);
+struct cc_list_map *cc_list_map_new(cc_cmp_fn_t cmp);
 int cc_list_map_delete(struct cc_list_map *self);
 
 int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result, size_t *index);

@@ -142,7 +142,7 @@ int cc_list_delete(struct cc_list *self) {
 }
 
 static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn)cc_list_iter_next,
+	.next = (cc_iter_next_fn_t)cc_list_iter_next,
 };
 
 static inline void cc_list_iter_step(struct cc_list_iter *self) {

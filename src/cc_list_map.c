@@ -88,12 +88,12 @@ int cc_list_map_print(struct cc_list_map *self, char *end_string) {
 }
 
 static struct cc_map_i map_interface = {
-	.get = (cc_map_get_fn)cc_list_map_get,
-	.set = (cc_map_set_fn)cc_list_map_set,
-	.del = (cc_map_del_fn)cc_list_map_del,
+	.get = (cc_map_get_fn_t)cc_list_map_get,
+	.set = (cc_map_set_fn_t)cc_list_map_set,
+	.del = (cc_map_del_fn_t)cc_list_map_del,
 };
 
-struct cc_list_map *cc_list_map_new(cc_cmp_fn cmp) {
+struct cc_list_map *cc_list_map_new(cc_cmp_fn_t cmp) {
 	struct cc_list_map *self;
 
 	self = malloc(sizeof(*self));
@@ -131,7 +131,7 @@ int cc_list_map_delete(struct cc_list_map *self) {
 }
 
 static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn)cc_list_map_iter_next,
+	.next = (cc_iter_next_fn_t)cc_list_map_iter_next,
 };
 
 int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index) {

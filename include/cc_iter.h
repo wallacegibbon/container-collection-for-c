@@ -3,10 +3,10 @@
 
 #include <stddef.h>
 
-typedef int (*cc_iter_next_fn)(void *self, void **item, size_t *index);
+typedef int (*cc_iter_next_fn_t)(void *self, void **item, size_t *index);
 
 struct cc_iter_i {
-	cc_iter_next_fn next;
+	cc_iter_next_fn_t next;
 };
 
 static inline int cc_iter_next(void *self, void *item, size_t *index) {

@@ -92,12 +92,12 @@ int cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
 }
 
 static struct cc_map_i map_interface = {
-	.get = (cc_map_get_fn)cc_hash_map_get,
-	.set = (cc_map_set_fn)cc_hash_map_set,
-	.del = (cc_map_del_fn)cc_hash_map_del,
+	.get = (cc_map_get_fn_t)cc_hash_map_get,
+	.set = (cc_map_set_fn_t)cc_hash_map_set,
+	.del = (cc_map_del_fn_t)cc_hash_map_del,
 };
 
-struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn cmp, cc_hash_fn calc_hash) {
+struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash) {
 	struct cc_hash_map *self;
 	struct cc_list_map **item;
 	struct cc_array_iter iter;
@@ -154,7 +154,7 @@ int cc_hash_map_delete(struct cc_hash_map *self) {
 }
 
 static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn)cc_hash_map_iter_next,
+	.next = (cc_iter_next_fn_t)cc_hash_map_iter_next,
 };
 
 /// Initialize the self->inner_list_map_iter

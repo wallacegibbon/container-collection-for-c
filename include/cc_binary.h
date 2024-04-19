@@ -25,7 +25,7 @@ int cc_binary_insert_right(struct cc_binary *self, void *data);
 int cc_binary_rotate_left(struct cc_binary **start_slot);
 int cc_binary_rotate_right(struct cc_binary **start_slot);
 
-int cc_binary_print(struct cc_binary *root, int depth, cc_simple_fn_1 print_fn);
+int cc_binary_print(struct cc_binary *root, int depth, cc_simple_fn_1_t print_fn);
 
 struct cc_binary_iter {
 	struct cc_iter_i *iterator;

@@ -22,7 +22,7 @@ int cc_array_swap(struct cc_array *self, size_t i, size_t j) {
 	return 0;
 }
 
-int cc_array_cmp(struct cc_array *self, cc_cmp_fn cmp, size_t i, size_t j) {
+int cc_array_cmp(struct cc_array *self, cc_cmp_fn_t cmp, size_t i, size_t j) {
 	return cmp(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size);
 }
 
@@ -133,7 +133,7 @@ int cc_array_delete(struct cc_array *self) {
 #endif
 
 static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn)cc_array_iter_next,
+	.next = (cc_iter_next_fn_t)cc_array_iter_next,
 };
 
 int cc_array_iter_next(struct cc_array_iter *self, void **item, size_t *index) {

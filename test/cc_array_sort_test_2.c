@@ -50,14 +50,14 @@ int main() {
 
 	blah_array_display(&array, "\nbefore sort:\n");
 
-	assert(!cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_name));
+	assert(!cc_array_sort_bubble(&array, (cc_cmp_fn_t)cmp_name));
 
 	blah_array_display(&array, "\nafter sort by name:\n");
 
 	assert(!cc_array_get(&array, 0, &tmp));
 	assert(tmp.age == 50);
 
-	assert(!cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_age));
+	assert(!cc_array_sort_bubble(&array, (cc_cmp_fn_t)cmp_age));
 
 	blah_array_display(&array, "\nafter sort by age:\n");
 

@@ -35,7 +35,7 @@ int main() {
 
 	/// sort the sequence
 	// assert(!cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
-	assert(!cc_array_sort_quick(&array, (cc_cmp_fn)cmp_char));
+	assert(!cc_array_sort_quick(&array, (cc_cmp_fn_t)cmp_char));
 
 	// assert(!strncmp((const char *)array.buffer, "  Abcikqru", 10));
 	assert(!strncmp((const char *)array.buffer, "urqkicbA  ", 10));

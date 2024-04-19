@@ -1,14 +1,14 @@
 #ifndef __CC_MAP_H
 #define __CC_MAP_H
 
-typedef int (*cc_map_get_fn)(void *self, void *key, void **result);
-typedef int (*cc_map_set_fn)(void *self, void *key, void *value);
-typedef int (*cc_map_del_fn)(void *self, void *key, void **result);
+typedef int (*cc_map_get_fn_t)(void *self, void *key, void **result);
+typedef int (*cc_map_set_fn_t)(void *self, void *key, void *value);
+typedef int (*cc_map_del_fn_t)(void *self, void *key, void **result);
 
 struct cc_map_i {
-	cc_map_get_fn get;
-	cc_map_set_fn set;
-	cc_map_del_fn del;
+	cc_map_get_fn_t get;
+	cc_map_set_fn_t set;
+	cc_map_del_fn_t del;
 };
 
 static inline int cc_map_get(void *self, void *key, void **result) {

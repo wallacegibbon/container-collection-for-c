@@ -101,7 +101,7 @@ int cc_binary_delete(struct cc_binary *self) {
 	return 0;
 }
 
-int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1 print_fn) {
+int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1_t print_fn) {
 	int tmp = 0;
 
 	cc_print_n("\t", depth);
@@ -120,7 +120,7 @@ int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1 print_f
 }
 
 static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn)cc_binary_iter_next,
+	.next = (cc_iter_next_fn_t)cc_binary_iter_next,
 };
 
 static int iter_queue_add(struct cc_binary_iter *self, void *data) {

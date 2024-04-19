@@ -154,7 +154,7 @@ int main() {
 	assert(!cc_binary_rotate_right(&result->left));
 	assert(((struct blah_node *)result->left->data)->op_sign == '+');
 
-	cc_binary_print(result, 0, (cc_simple_fn_1)blah_node_print);
+	cc_binary_print(result, 0, (cc_simple_fn_1_t)blah_node_print);
 
 	assert(!parser_delete(parser));
 	return 0;

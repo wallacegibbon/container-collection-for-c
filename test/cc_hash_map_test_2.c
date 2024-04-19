@@ -13,9 +13,9 @@ int main() {
 
 	/// When using `char *`s as keys, you should use `strcmp` as the `cmp` function.
 	// map = cc_hash_map_new(20, NULL, cc_str_hash_fn_bkdr);
-	map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, cc_str_hash_fn_bkdr);
-	// map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, cc_str_hash_fn_simple);
-	// map = cc_hash_map_new(20, (cc_cmp_fn)strcmp, NULL);
+	map = cc_hash_map_new(20, (cc_cmp_fn_t)strcmp, cc_str_hash_fn_bkdr);
+	// map = cc_hash_map_new(20, (cc_cmp_fn_t)strcmp, cc_str_hash_fn_simple);
+	// map = cc_hash_map_new(20, (cc_cmp_fn_t)strcmp, NULL);
 
 	assert(map != NULL);
 

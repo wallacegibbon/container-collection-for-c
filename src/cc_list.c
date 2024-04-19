@@ -2,7 +2,8 @@
 #include "cc_common.h"
 #include <stdlib.h>
 
-static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {
+static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index)
+{
 	struct cc_list_node *node;
 
 	node = &self->root;
@@ -12,7 +13,8 @@ static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index) {
 	return node;
 }
 
-int cc_list_insert(struct cc_list *self, size_t index, void *value) {
+int cc_list_insert(struct cc_list *self, size_t index, void *value)
+{
 	struct cc_list_node *entry, *node;
 
 	if (index > self->root.size)
@@ -34,7 +36,8 @@ int cc_list_insert(struct cc_list *self, size_t index, void *value) {
 	return 0;
 }
 
-int cc_list_remove(struct cc_list *self, size_t index, void **result) {
+int cc_list_remove(struct cc_list *self, size_t index, void **result)
+{
 	struct cc_list_node *node, *node_to_remove;
 
 	/// You have to provide `result`, or the `node_to_remove->data` may leak.
@@ -56,7 +59,8 @@ int cc_list_remove(struct cc_list *self, size_t index, void **result) {
 	return 0;
 }
 
-int cc_list_append(struct cc_list *self, void *value) {
+int cc_list_append(struct cc_list *self, void *value)
+{
 	struct cc_list_node *node;
 
 	node = malloc(sizeof(*node));
@@ -77,7 +81,8 @@ int cc_list_append(struct cc_list *self, void *value) {
 int cc_list_init(struct cc_list *self);
 
 /// Caution: You may need to delete `right` list after this concatenation.
-int cc_list_concat(struct cc_list *left, struct cc_list *right) {
+int cc_list_concat(struct cc_list *left, struct cc_list *right)
+{
 	/// `left` can not be NULL since it holds the result.
 	if (left == NULL)
 		return 1;
@@ -98,14 +103,16 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right) {
 	return 0;
 }
 
-int cc_list_init(struct cc_list *self) {
+int cc_list_init(struct cc_list *self)
+{
 	self->root.prev = &self->root;
 	self->root.next = &self->root;
 	self->root.size = 0;
 	return 0;
 }
 
-struct cc_list *cc_list_new() {
+struct cc_list *cc_list_new()
+{
 	struct cc_list *self;
 
 	self = malloc(sizeof(*self));
@@ -123,14 +130,16 @@ fail1:
 	return NULL;
 }
 
-static inline struct cc_list_node *free_and_next(struct cc_list_node *current) {
+static inline struct cc_list_node *free_and_next(struct cc_list_node *current)
+{
 	struct cc_list_node *next;
 	next = current->next;
 	free(current);
 	return next;
 }
 
-int cc_list_delete(struct cc_list *self) {
+int cc_list_delete(struct cc_list *self)
+{
 	struct cc_list_node *node;
 
 	node = self->root.next;
@@ -145,14 +154,16 @@ static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn_t)cc_list_iter_next,
 };
 
-static inline void cc_list_iter_step(struct cc_list_iter *self) {
+static inline void cc_list_iter_step(struct cc_list_iter *self)
+{
 	if (self->direction == 0)
 		self->cursor = self->cursor->next;
 	else
 		self->cursor = self->cursor->prev;
 }
 
-int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index) {
+int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index)
+{
 	if (try_reset_double_p(item))
 		return 1;
 	if (self->cursor == &self->list->root)
@@ -169,7 +180,8 @@ int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index) {
 	return 0;
 }
 
-int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direction) {
+int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direction)
+{
 	if (list == NULL)
 		return 1;
 

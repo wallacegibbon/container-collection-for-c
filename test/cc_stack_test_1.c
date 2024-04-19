@@ -2,7 +2,8 @@
 #include <assert.h>
 #include <stdio.h>
 
-int main() {
+int main()
+{
 	struct cc_array array;
 	struct cc_stack stack, *p_stack;
 	unsigned char buffer[10];

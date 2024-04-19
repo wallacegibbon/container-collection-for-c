@@ -1,7 +1,8 @@
 #include "cc_stack.h"
 #include <stdlib.h>
 
-int cc_stack_push(struct cc_stack *self, void *item) {
+int cc_stack_push(struct cc_stack *self, void *item)
+{
 	if (cc_array_set(self->data, self->top, item))
 		return 1;
 
@@ -9,7 +10,8 @@ int cc_stack_push(struct cc_stack *self, void *item) {
 	return 0;
 }
 
-int cc_stack_pop(struct cc_stack *self, void *item) {
+int cc_stack_pop(struct cc_stack *self, void *item)
+{
 	if (self->top == 0)
 		return 1;
 
@@ -17,7 +19,8 @@ int cc_stack_pop(struct cc_stack *self, void *item) {
 	return cc_array_get(self->data, self->top, item);
 }
 
-int cc_stack_init(struct cc_stack *self, struct cc_array *data) {
+int cc_stack_init(struct cc_stack *self, struct cc_array *data)
+{
 	self->data = data;
 	self->top = 0;
 	return 0;
@@ -25,7 +28,8 @@ int cc_stack_init(struct cc_stack *self, struct cc_array *data) {
 
 #ifndef NO_MALLOC
 
-struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size) {
+struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size)
+{
 	struct cc_stack *self;
 	struct cc_array *data;
 
@@ -48,7 +52,8 @@ fail1:
 	return NULL;
 }
 
-int cc_stack_delete(struct cc_stack *self) {
+int cc_stack_delete(struct cc_stack *self)
+{
 	if (cc_array_delete(self->data))
 		return 1;
 	free(self);

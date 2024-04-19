@@ -4,7 +4,8 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-int cc_binary_insert_left(struct cc_binary *self, void *data) {
+int cc_binary_insert_left(struct cc_binary *self, void *data)
+{
 	struct cc_binary *node;
 	node = cc_binary_new(self, data);
 	if (node == NULL)
@@ -18,7 +19,8 @@ int cc_binary_insert_left(struct cc_binary *self, void *data) {
 	return 0;
 }
 
-int cc_binary_insert_right(struct cc_binary *self, void *data) {
+int cc_binary_insert_right(struct cc_binary *self, void *data)
+{
 	struct cc_binary *node;
 	node = cc_binary_new(self, data);
 	if (node == NULL)
@@ -32,7 +34,8 @@ int cc_binary_insert_right(struct cc_binary *self, void *data) {
 	return 0;
 }
 
-int cc_binary_rotate_left(struct cc_binary **start_slot) {
+int cc_binary_rotate_left(struct cc_binary **start_slot)
+{
 	struct cc_binary *start = *start_slot;
 
 	if (start == NULL)
@@ -54,7 +57,8 @@ int cc_binary_rotate_left(struct cc_binary **start_slot) {
 	return 0;
 }
 
-int cc_binary_rotate_right(struct cc_binary **start_slot) {
+int cc_binary_rotate_right(struct cc_binary **start_slot)
+{
 	struct cc_binary *start = *start_slot;
 
 	if (start == NULL)
@@ -76,7 +80,8 @@ int cc_binary_rotate_right(struct cc_binary **start_slot) {
 	return 0;
 }
 
-struct cc_binary *cc_binary_new(struct cc_binary *parent, void *data) {
+struct cc_binary *cc_binary_new(struct cc_binary *parent, void *data)
+{
 	struct cc_binary *self;
 	self = malloc(sizeof(*self));
 	if (self == NULL)
@@ -89,7 +94,8 @@ struct cc_binary *cc_binary_new(struct cc_binary *parent, void *data) {
 	return self;
 }
 
-int cc_binary_delete(struct cc_binary *self) {
+int cc_binary_delete(struct cc_binary *self)
+{
 	if (self == NULL)
 		return 0;
 	if (cc_binary_delete(self->left))
@@ -101,7 +107,8 @@ int cc_binary_delete(struct cc_binary *self) {
 	return 0;
 }
 
-int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1_t print_fn) {
+int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1_t print_fn)
+{
 	int tmp = 0;
 
 	cc_print_n("\t", depth);
@@ -123,7 +130,8 @@ static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn_t)cc_binary_iter_next,
 };
 
-static int iter_queue_add(struct cc_binary_iter *self, void *data) {
+static int iter_queue_add(struct cc_binary_iter *self, void *data)
+{
 	if (data == NULL)
 		return 0;
 	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_DEPTH_RIGHT)
@@ -132,7 +140,8 @@ static int iter_queue_add(struct cc_binary_iter *self, void *data) {
 		return cc_list_append(self->queue, data);
 }
 
-static int iter_queue_add_multi(struct cc_binary_iter *self, int n, ...) {
+static int iter_queue_add_multi(struct cc_binary_iter *self, int n, ...)
+{
 	va_list args;
 	va_start(args, n);
 	while (n-- > 0) {
@@ -143,7 +152,8 @@ static int iter_queue_add_multi(struct cc_binary_iter *self, int n, ...) {
 	return 0;
 }
 
-static int iter_queue_add_child(struct cc_binary_iter *self, struct cc_binary *node) {
+static int iter_queue_add_child(struct cc_binary_iter *self, struct cc_binary *node)
+{
 	int tmp = 0;
 
 	if (node == NULL)
@@ -159,7 +169,8 @@ static int iter_queue_add_child(struct cc_binary_iter *self, struct cc_binary *n
 	return tmp;
 }
 
-int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index) {
+int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
+{
 	struct cc_binary *current;
 
 	if (try_reset_double_p(item))
@@ -179,7 +190,8 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
 	return 0;
 }
 
-struct cc_binary_iter *cc_binary_iter_new(struct cc_binary *root, enum cc_traverse_direction direction) {
+struct cc_binary_iter *cc_binary_iter_new(struct cc_binary *root, enum cc_traverse_direction direction)
+{
 	struct cc_binary_iter *self;
 
 	if (root == NULL)
@@ -209,7 +221,8 @@ fail1:
 	return NULL;
 }
 
-int cc_binary_iter_delete(struct cc_binary_iter *self) {
+int cc_binary_iter_delete(struct cc_binary_iter *self)
+{
 	int tmp = 0;
 	if (cc_list_delete(self->queue))
 		tmp = 1;

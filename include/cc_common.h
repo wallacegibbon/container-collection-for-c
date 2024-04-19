@@ -12,7 +12,8 @@ enum cc_traverse_direction {
 	CC_TRAVERSE_BREADTH_RIGHT,
 };
 
-static inline int try_reset_double_p(void *pointer) {
+static inline int try_reset_double_p(void *pointer)
+{
 	if (pointer == NULL)
 		return 1;
 

@@ -7,7 +7,8 @@ char s1[] = {"duplicated_key"};
 char s2[] = {"duplicated_key"};
 char s3[] = {"duplicated_key"};
 
-int main() {
+int main()
+{
 	struct cc_hash_map *map;
 	uintptr_t tmp;
 

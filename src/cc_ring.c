@@ -1,7 +1,8 @@
 #include "cc_ring.h"
 #include <stdlib.h>
 
-static inline size_t next_index(struct cc_ring *self, size_t index) {
+static inline size_t next_index(struct cc_ring *self, size_t index)
+{
 	size_t next_index = index + 1;
 	if (cc_array_is_valid_index(self->data, next_index))
 		return next_index;
@@ -9,7 +10,8 @@ static inline size_t next_index(struct cc_ring *self, size_t index) {
 		return 0;
 }
 
-size_t cc_ring_space(struct cc_ring *self) {
+size_t cc_ring_space(struct cc_ring *self)
+{
 	if (self->write_index >= self->read_index)
 		return self->data->elem_nums - (self->write_index - self->read_index) - 1;
 	else
@@ -17,7 +19,8 @@ size_t cc_ring_space(struct cc_ring *self) {
 		return self->read_index - self->write_index - 1;
 }
 
-int cc_ring_append(struct cc_ring *self, void *item) {
+int cc_ring_append(struct cc_ring *self, void *item)
+{
 	size_t write_index_next;
 
 	write_index_next = next_index(self, self->write_index);
@@ -30,7 +33,8 @@ int cc_ring_append(struct cc_ring *self, void *item) {
 	return 0;
 }
 
-int cc_ring_shift(struct cc_ring *self, void *item) {
+int cc_ring_shift(struct cc_ring *self, void *item)
+{
 	if (self->read_index == self->write_index)
 		return 1;
 
@@ -40,7 +44,8 @@ int cc_ring_shift(struct cc_ring *self, void *item) {
 	return 0;
 }
 
-int cc_ring_init(struct cc_ring *self, struct cc_array *data) {
+int cc_ring_init(struct cc_ring *self, struct cc_array *data)
+{
 	self->data = data;
 	self->read_index = 0;
 	self->write_index = 0;
@@ -49,7 +54,8 @@ int cc_ring_init(struct cc_ring *self, struct cc_array *data) {
 
 #ifndef NO_MALLOC
 
-struct cc_ring *cc_ring_new(size_t elem_nums, size_t elem_size) {
+struct cc_ring *cc_ring_new(size_t elem_nums, size_t elem_size)
+{
 	struct cc_ring *self;
 	struct cc_array *data;
 
@@ -73,7 +79,8 @@ fail1:
 	return NULL;
 }
 
-int cc_ring_delete(struct cc_ring *self) {
+int cc_ring_delete(struct cc_ring *self)
+{
 	if (cc_array_delete(self->data))
 		return 1;
 	free(self);

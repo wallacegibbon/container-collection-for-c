@@ -2,7 +2,8 @@
 #include <assert.h>
 #include <stdio.h>
 
-int main() {
+int main()
+{
 	struct cc_list_map *map;
 
 	/// Caution: The `&tmp` is used as `void *` to accapt data.

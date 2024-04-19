@@ -11,15 +11,18 @@ struct cc_map_i {
 	cc_map_del_fn_t del;
 };
 
-static inline int cc_map_get(void *self, void *key, void **result) {
+static inline int cc_map_get(void *self, void *key, void **result)
+{
 	return (*(struct cc_map_i **)self)->get(self, key, result);
 }
 
-static inline int cc_map_set(void *self, void *key, void *value) {
+static inline int cc_map_set(void *self, void *key, void *value)
+{
 	return (*(struct cc_map_i **)self)->set(self, key, value);
 }
 
-static inline int cc_map_del(void *self, void *key, void **result) {
+static inline int cc_map_del(void *self, void *key, void **result)
+{
 	return (*(struct cc_map_i **)self)->del(self, key, result);
 }
 

@@ -6,12 +6,14 @@
 
 static const char *sample = "A quick brown fox jumps over the lazy dog.";
 
-static int cmp_char(char *left, char *right) {
+static int cmp_char(char *left, char *right)
+{
 	// return *left - *right;
 	return -(*left - *right);
 }
 
-static void char_array_display(struct cc_array *chars, const char *prefix) {
+static void char_array_display(struct cc_array *chars, const char *prefix)
+{
 	struct cc_array_iter iter;
 	char *tmp;
 
@@ -21,7 +23,8 @@ static void char_array_display(struct cc_array *chars, const char *prefix) {
 		cc_debug_print("%c", *tmp);
 }
 
-int main() {
+int main()
+{
 	struct cc_array array;
 	unsigned char buffer[10];
 	int i;

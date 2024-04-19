@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int show_number_list(struct cc_list *list, int direction) {
+int show_number_list(struct cc_list *list, int direction)
+{
 	struct cc_list_iter iter;
 	size_t *tmp;
 	size_t index;
@@ -19,7 +20,8 @@ int show_number_list(struct cc_list *list, int direction) {
 	return 0;
 }
 
-int main() {
+int main()
+{
 	struct cc_list *list;
 	uintptr_t i;
 

@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result, size_t *index) {
+int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result, size_t *index)
+{
 	struct cc_list_iter iter;
 	struct cc_map_item **item;
 
@@ -20,7 +21,8 @@ int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item
 	return 3;
 }
 
-int cc_list_map_get(struct cc_list_map *self, void *key, void **result) {
+int cc_list_map_get(struct cc_list_map *self, void *key, void **result)
+{
 	struct cc_map_item *item;
 
 	if (try_reset_double_p(result))
@@ -32,7 +34,8 @@ int cc_list_map_get(struct cc_list_map *self, void *key, void **result) {
 	return 0;
 }
 
-int cc_list_map_set(struct cc_list_map *self, void *key, void *value) {
+int cc_list_map_set(struct cc_list_map *self, void *key, void *value)
+{
 	struct cc_map_item *item;
 	int tmp;
 
@@ -57,7 +60,8 @@ fail:
 	return 2;
 }
 
-int cc_list_map_del(struct cc_list_map *self, void *key, void **result) {
+int cc_list_map_del(struct cc_list_map *self, void *key, void **result)
+{
 	struct cc_map_item *item;
 	size_t index;
 
@@ -73,7 +77,8 @@ int cc_list_map_del(struct cc_list_map *self, void *key, void **result) {
 	return 0;
 }
 
-int cc_list_map_print(struct cc_list_map *self, char *end_string) {
+int cc_list_map_print(struct cc_list_map *self, char *end_string)
+{
 	struct cc_list_map_iter iter;
 	struct cc_map_item *item;
 	size_t index;
@@ -93,7 +98,8 @@ static struct cc_map_i map_interface = {
 	.del = (cc_map_del_fn_t)cc_list_map_del,
 };
 
-struct cc_list_map *cc_list_map_new(cc_cmp_fn_t cmp) {
+struct cc_list_map *cc_list_map_new(cc_cmp_fn_t cmp)
+{
 	struct cc_list_map *self;
 
 	self = malloc(sizeof(*self));
@@ -114,7 +120,8 @@ fail1:
 	return NULL;
 }
 
-int cc_list_map_delete(struct cc_list_map *self) {
+int cc_list_map_delete(struct cc_list_map *self)
+{
 	struct cc_list_iter iter;
 	struct cc_map_item **item;
 
@@ -134,7 +141,8 @@ static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn_t)cc_list_map_iter_next,
 };
 
-int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index) {
+int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index)
+{
 	struct cc_map_item **tmp_item;
 
 	if (try_reset_double_p(item))
@@ -146,7 +154,8 @@ int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *in
 	return 0;
 }
 
-int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map) {
+int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map)
+{
 	if (map == NULL)
 		return 1;
 

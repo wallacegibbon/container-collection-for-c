@@ -3,7 +3,8 @@
 #include <assert.h>
 #include <stdint.h>
 
-int show_tree_elements(struct cc_binary *tree) {
+int show_tree_elements(struct cc_binary *tree)
+{
 	struct cc_binary_iter *iter;
 	size_t *tmp, index;
 
@@ -19,11 +20,13 @@ int show_tree_elements(struct cc_binary *tree) {
 	return 0;
 }
 
-static int print_1(void *data) {
+static int print_1(void *data)
+{
 	return cc_debug_print("%ld", (uintptr_t)data);
 }
 
-int main() {
+int main()
+{
 	struct cc_binary *root;
 
 	root = cc_binary_new(NULL, NULL);

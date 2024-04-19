@@ -15,7 +15,8 @@ struct blah_node {
 	};
 };
 
-struct blah_node *blah_node_new_number(int number) {
+struct blah_node *blah_node_new_number(int number)
+{
 	struct blah_node *self;
 	self = malloc(sizeof(*self));
 	if (self == NULL)
@@ -26,7 +27,8 @@ struct blah_node *blah_node_new_number(int number) {
 	return self;
 }
 
-struct blah_node *blah_node_new_op(char op_sign) {
+struct blah_node *blah_node_new_op(char op_sign)
+{
 	struct blah_node *self;
 	self = malloc(sizeof(*self));
 	if (self == NULL)
@@ -37,7 +39,8 @@ struct blah_node *blah_node_new_op(char op_sign) {
 	return self;
 }
 
-int blah_node_print(struct blah_node *node) {
+int blah_node_print(struct blah_node *node)
+{
 	if (node == NULL)
 		return 0;
 	if (node->type == NUMBER)
@@ -46,7 +49,8 @@ int blah_node_print(struct blah_node *node) {
 		return cc_debug_print("<%c>", node->op_sign);
 }
 
-int blah_node_delete(struct blah_node *self) {
+int blah_node_delete(struct blah_node *self)
+{
 	free(self);
 	return 0;
 }
@@ -56,7 +60,8 @@ struct parser {
 	struct cc_binary *root;
 };
 
-int parser_step(struct parser *self, int *error) {
+int parser_step(struct parser *self, int *error)
+{
 	struct blah_node *new_node;
 	char c;
 
@@ -85,7 +90,8 @@ fail:
 	return 1;
 }
 
-int parser_parse(struct parser *self, struct cc_binary **result) {
+int parser_parse(struct parser *self, struct cc_binary **result)
+{
 	int error;
 	if (try_reset_double_p(result))
 		return 255;
@@ -97,7 +103,8 @@ int parser_parse(struct parser *self, struct cc_binary **result) {
 	return error;
 }
 
-struct parser *parser_new(char *input) {
+struct parser *parser_new(char *input)
+{
 	struct parser *self;
 	if (input == NULL)
 		goto fail1;
@@ -120,7 +127,8 @@ fail1:
 }
 
 /// Delete the parser along with the result cc_binary tree.
-int parser_delete(struct parser *self) {
+int parser_delete(struct parser *self)
+{
 	struct cc_binary_iter *iter;
 	struct blah_node **tmp;
 
@@ -141,7 +149,8 @@ int parser_delete(struct parser *self) {
 
 static char *expr1 = "1+2";
 
-int main() {
+int main()
+{
 	struct parser *parser;
 	struct cc_binary *result;
 

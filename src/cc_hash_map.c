@@ -3,13 +3,15 @@
 #include <stdlib.h>
 
 /// Get the slot (whose type is `struct cc_list_map **`) by key.
-static inline int get_list_map(struct cc_hash_map *self, void *key, struct cc_list_map ***result) {
+static inline int get_list_map(struct cc_hash_map *self, void *key, struct cc_list_map ***result)
+{
 	size_t hash_tmp;
 	hash_tmp = self->calc_hash(key) % self->bucket_size;
 	return cc_array_get_ref(self->data, hash_tmp, (void **)result);
 }
 
-int cc_hash_map_get_item(struct cc_hash_map *self, void *key, struct cc_map_item **result) {
+int cc_hash_map_get_item(struct cc_hash_map *self, void *key, struct cc_map_item **result)
+{
 	struct cc_list_map **list_map_tmp;
 
 	if (try_reset_double_p(result))
@@ -22,7 +24,8 @@ int cc_hash_map_get_item(struct cc_hash_map *self, void *key, struct cc_map_item
 	return cc_list_map_get_item(*list_map_tmp, key, result, NULL);
 }
 
-int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result) {
+int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result)
+{
 	struct cc_map_item *item;
 
 	if (try_reset_double_p(result))
@@ -34,7 +37,8 @@ int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result) {
 	return 0;
 }
 
-int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value) {
+int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value)
+{
 	struct cc_map_item *item;
 	struct cc_list_map **list_map_tmp;
 
@@ -55,7 +59,8 @@ int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value) {
 	return cc_list_map_set(*list_map_tmp, key, value);
 }
 
-int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result) {
+int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result)
+{
 	struct cc_list_map **list_map_tmp;
 	size_t hash_tmp;
 
@@ -69,7 +74,8 @@ int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result) {
 	return cc_list_map_del(*list_map_tmp, key, result);
 }
 
-int cc_hash_map_print_slot(struct cc_list_map *slot, int index) {
+int cc_hash_map_print_slot(struct cc_list_map *slot, int index)
+{
 	cc_debug_print("[% 9d] ", index);
 	if (slot != NULL)
 		return cc_list_map_print(slot, "\n");
@@ -77,7 +83,8 @@ int cc_hash_map_print_slot(struct cc_list_map *slot, int index) {
 		return cc_debug_print("\n");
 }
 
-int cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
+int cc_hash_map_print(struct cc_hash_map *self, char *end_string)
+{
 	struct cc_array_iter iter;
 	struct cc_list_map **item;
 	int i = 0;
@@ -97,7 +104,8 @@ static struct cc_map_i map_interface = {
 	.del = (cc_map_del_fn_t)cc_hash_map_del,
 };
 
-struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash) {
+struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash)
+{
 	struct cc_hash_map *self;
 	struct cc_list_map **item;
 	struct cc_array_iter iter;
@@ -133,7 +141,8 @@ fail1:
 	return NULL;
 }
 
-int cc_hash_map_delete(struct cc_hash_map *self) {
+int cc_hash_map_delete(struct cc_hash_map *self)
+{
 	struct cc_array_iter iter;
 	struct cc_list_map **item;
 
@@ -158,7 +167,8 @@ static struct cc_iter_i iterator_interface = {
 };
 
 /// Initialize the self->inner_list_map_iter
-static int cc_hash_map_iter_step(struct cc_hash_map_iter *self) {
+static int cc_hash_map_iter_step(struct cc_hash_map_iter *self)
+{
 	struct cc_list_map **cursor;
 
 	while (1) {
@@ -171,7 +181,8 @@ static int cc_hash_map_iter_step(struct cc_hash_map_iter *self) {
 	return cc_list_map_iter_init(&self->inner_list_map_iter, *cursor);
 }
 
-int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index) {
+int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index)
+{
 	if (try_reset_double_p(item))
 		return 1;
 
@@ -191,7 +202,8 @@ success:
 	return 0;
 }
 
-int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map) {
+int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map)
+{
 	if (map == NULL)
 		return 1;
 	if (cc_array_iter_init(&self->inner_array_iter, map->data))

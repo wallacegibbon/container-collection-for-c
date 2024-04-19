@@ -1,3 +1,6 @@
+TARGET = container_collection
+#INSTALL_DIR = /home/wallace/lib/container_collection
+INSTALL_DIR = C:/lib/container_collection
 BUILD_DIR ?= build
 
 C_SOURCE_FILES += $(wildcard ./src/*.c)
@@ -16,9 +19,10 @@ COMMON_LD_FLAGS += -static-libgcc
 MEMORY_CHECK_PROG = drmemory --
 endif
 
-CC = gcc
+CC = cc
+AR = ar
 
-.PHONY: all build_dir clean
+.PHONY: all install build_dir clean
 
 vpath %.c $(sort $(dir $(C_SOURCE_FILES)))
 
@@ -28,6 +32,9 @@ $(BUILD_DIR)/%.c.o: %.c | build_dir
 	@echo -e "\tCC $<"
 	@$(CC) -c -o $@ $< $(COMMON_C_FLAGS)
 
+$(BUILD_DIR)/lib$(TARGET).a: $(OBJECTS)
+	@$(AR) -rcs $@ $^
+
 vpath %.c ./test
 
 $(BUILD_DIR)/%: %.c $(OBJECTS)
@@ -35,6 +42,14 @@ $(BUILD_DIR)/%: %.c $(OBJECTS)
 	@$(CC) -o $@ $^ $(COMMON_C_FLAGS) $(COMMON_LD_FLAGS)
 	@echo -e "\t./$@\n"
 	@$(MEMORY_CHECK_PROG) $@
+
+install: $(BUILD_DIR)/lib$(TARGET).a
+	@mkdir -p $(INSTALL_DIR)/{lib,include}
+	@cp -r include/* $(INSTALL_DIR)/include/
+	@cp $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/lib/
+	@echo
+	@echo -e "\tlibrary \"$(TARGET)\" has been installed. (Succeed!)"
+	@echo
 
 build_dir:
 	@mkdir -p $(BUILD_DIR)

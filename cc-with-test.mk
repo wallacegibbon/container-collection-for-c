@@ -1,11 +1,10 @@
-BUILD_DIR ?= build
-
 OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCE_FILES:.c=.c.o)))
 
-#COMMON_C_FLAGS += -W -g -ffunction-sections -fdata-sections -MMD -MP $(addprefix -I, $(C_INCLUDES))
-COMMON_C_FLAGS += -W -g -MMD -MP $(addprefix -I, $(C_INCLUDES)) -Wno-unused-parameter
+COMMON_C_FLAGS += -g -Wall -Wextra -Wno-unused-parameter -ffunction-sections -fdata-sections \
+-Wp,-MMD,-MT"$@",-MF"$(@:.o=.d)",-MP \
+$(addprefix -I, $(C_INCLUDES))
 
-COMMON_LD_FLAGS += -Wl,--gc-sections -Wl,-Map=$@.map
+COMMON_LD_FLAGS += -Wl,--gc-sections,-Map=$@.map
 
 ifeq ($(MEMCHECK), 1)
 COMMON_C_FLAGS += -fno-inline -fno-omit-frame-pointer
@@ -14,6 +13,8 @@ MEMORY_CHECK_PROG = drmemory --
 endif
 
 CC = cc
+
+BUILD_DIR ?= build
 
 .PHONY: all build_dir clean
 

@@ -1,61 +1,27 @@
 TARGET = container_collection
-#INSTALL_DIR = /home/wallace/lib/container_collection
-INSTALL_DIR = C:/lib/container_collection
-BUILD_DIR ?= build
+
+#INSTALL_DIR = /home/wallace/lib
+INSTALL_DIR = C:/lib
 
 C_SOURCE_FILES += $(wildcard ./src/*.c)
 C_INCLUDES += ./src ./include
 
-OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCE_FILES:.c=.c.o)))
-
-#COMMON_C_FLAGS += -W -g -ffunction-sections -fdata-sections -MMD -MP $(addprefix -I, $(C_INCLUDES))
-COMMON_C_FLAGS += -W -g -MMD -MP $(addprefix -I, $(C_INCLUDES))
 #COMMON_C_FLAGS += -DNO_MALLOC
-COMMON_LD_FLAGS += -Wl,--gc-sections -Wl,-Map=$@.map
 
-ifeq ($(MEMCHECK), 1)
-COMMON_C_FLAGS += -fno-inline -fno-omit-frame-pointer
-COMMON_LD_FLAGS += -static-libgcc
-MEMORY_CHECK_PROG = drmemory --
-endif
-
-CC = cc
 AR = ar
 
-.PHONY: all install build_dir clean
+.PHONY: install
 
-vpath %.c $(sort $(dir $(C_SOURCE_FILES)))
-
-all: $(OBJECTS)
-
-$(BUILD_DIR)/%.c.o: %.c | build_dir
-	@echo -e "\tCC $<"
-	@$(CC) -c -o $@ $< $(COMMON_C_FLAGS)
+include ./cc-with-test.mk
 
 $(BUILD_DIR)/lib$(TARGET).a: $(OBJECTS)
 	@$(AR) -rcs $@ $^
 
-vpath %.c ./test
-
-$(BUILD_DIR)/%: %.c $(OBJECTS)
-	@echo -e "\tCC $<"
-	@$(CC) -o $@ $^ $(COMMON_C_FLAGS) $(COMMON_LD_FLAGS)
-	@echo -e "\t./$@\n"
-	@$(MEMORY_CHECK_PROG) $@
-
 install: $(BUILD_DIR)/lib$(TARGET).a
-	@mkdir -p $(INSTALL_DIR)/{lib,include}
-	@cp -r include/* $(INSTALL_DIR)/include/
-	@cp $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/lib/
+	@mkdir -p $(INSTALL_DIR)/$(TARGET)/{lib,include}
+	@cp -r include/* $(INSTALL_DIR)/$(TARGET)/include/
+	@cp $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/$(TARGET)/lib/
 	@echo
 	@echo -e "\tlibrary \"$(TARGET)\" has been installed. (Succeed!)"
 	@echo
-
-build_dir:
-	@mkdir -p $(BUILD_DIR)
-
-clean:
-	@rm -rf $(BUILD_DIR)
-
--include $(OBJECTS:.o=.d)
 

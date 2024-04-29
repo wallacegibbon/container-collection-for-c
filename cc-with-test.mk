@@ -1,22 +1,26 @@
 OBJECTS += $(addprefix $(BUILD_DIR)/, $(notdir $(C_SOURCE_FILES:.c=.c.o)))
 
-COMMON_C_FLAGS += -g -Wall -Wextra -Wno-unused-parameter -ffunction-sections -fdata-sections \
+C_FLAGS += -g -Wall -Wextra -Wno-unused -ffunction-sections -fdata-sections \
 -Wp,-MMD,-MT"$@",-MF"$(@:.o=.d)",-MP \
 $(addprefix -I, $(C_INCLUDES))
 
-COMMON_LD_FLAGS += -Wl,--gc-sections,-Map=$@.map
+LD_FLAGS += -Wl,--gc-sections,-Map=$@.map
 
 ifeq ($(MEMCHECK), 1)
-COMMON_C_FLAGS += -fno-inline -fno-omit-frame-pointer
-COMMON_LD_FLAGS += -static-libgcc
+C_FLAGS += -fno-inline -fno-omit-frame-pointer
+LD_FLAGS += -static-libgcc
 MEMORY_CHECK_PROG = drmemory --
 endif
 
-CC = cc
-
+TARGET ?= target
 BUILD_DIR ?= build
+#INSTALL_DIR ?= /usr/local/lib
+INSTALL_DIR ?= C:/lib
 
-.PHONY: all build_dir clean
+CC = cc
+AR = ar
+
+.PHONY: all build_dir clean install
 
 vpath %.c $(sort $(dir $(C_SOURCE_FILES)))
 
@@ -24,21 +28,31 @@ all: $(OBJECTS)
 
 $(BUILD_DIR)/%.c.o: %.c | build_dir
 	@echo -e "\tCC $<"
-	@$(CC) -c -o $@ $< $(COMMON_C_FLAGS)
+	@$(CC) -c -o $@ $< $(C_FLAGS)
 
-vpath %.c ./test
+$(BUILD_DIR)/lib$(TARGET).a: $(OBJECTS)
+	@echo -e "\tAR $@"
+	@$(AR) -rcsv $@ $^
 
-$(BUILD_DIR)/%: %.c $(OBJECTS) | build_dir
-	@echo -e "\tCC $<"
-	@$(CC) -o $@ $^ $(COMMON_C_FLAGS) $(COMMON_LD_FLAGS)
-	@echo -e "\t./$@\n"
-	@$(MEMORY_CHECK_PROG) $@
+install: $(BUILD_DIR)/lib$(TARGET).a
+	@mkdir -p $(INSTALL_DIR)/$(TARGET)/{lib,include}
+	@cp -r include/* $(INSTALL_DIR)/$(TARGET)/include/
+	@echo -e "\tCP $(BUILD_DIR)/lib$(TARGET).a"
+	@cp $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/$(TARGET)/lib/
 
 build_dir:
 	@mkdir -p $(BUILD_DIR)
 
 clean:
 	@rm -rf $(BUILD_DIR)
+
+vpath %.c ./test
+
+$(BUILD_DIR)/%: %.c $(OBJECTS) | build_dir
+	@echo -e "\tCC $<"
+	@$(CC) -o $@ $^ $(C_FLAGS) $(LD_FLAGS)
+	@echo -e "\t./$@\n"
+	@$(MEMORY_CHECK_PROG) $@
 
 -include $(OBJECTS:.o=.d)
 

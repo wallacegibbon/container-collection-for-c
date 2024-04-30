@@ -28,6 +28,8 @@ typedef size_t (*cc_hash_fn_t)(void *obj);
 int cc_default_cmp_fn(void *left, void *right);
 
 size_t cc_default_hash_fn(void *obj);
+size_t cc_address_hash_fn(void *obj);
+
 size_t cc_str_hash_fn_simple(void *obj);
 size_t cc_str_hash_fn_bkdr(void *obj);
 

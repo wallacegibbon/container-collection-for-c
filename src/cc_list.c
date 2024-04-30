@@ -150,6 +150,22 @@ int cc_list_delete(struct cc_list *self)
 	return 0;
 }
 
+int cc_list_print(struct cc_list *self, int direction)
+{
+	struct cc_list_iter iter;
+	size_t *tmp;
+	size_t index;
+
+	cc_debug_print("list content: \n");
+	if (cc_list_iter_init(&iter, self, direction))
+		return 1;
+	while (!cc_iter_next(&iter, &tmp, &index))
+		cc_debug_print("(%d)%llu, ", index, *tmp);
+
+	cc_debug_print("\n\n");
+	return 0;
+}
+
 static struct cc_iter_i iterator_interface = {
 	.next = (cc_iter_next_fn_t)cc_list_iter_next,
 };

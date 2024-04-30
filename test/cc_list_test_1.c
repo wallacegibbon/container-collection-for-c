@@ -4,22 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int show_number_list(struct cc_list *list, int direction)
-{
-	struct cc_list_iter iter;
-	size_t *tmp;
-	size_t index;
-
-	cc_debug_print(">>> the whole list values:\n\t");
-
-	assert(!cc_list_iter_init(&iter, list, direction));
-	while (!cc_iter_next(&iter, &tmp, &index))
-		cc_debug_print("(%d)%u, ", index, *tmp);
-
-	cc_debug_print("\n");
-	return 0;
-}
-
 int main()
 {
 	struct cc_list *list;
@@ -38,7 +22,7 @@ int main()
 	assert(!cc_list_insert(list, 0, (void *)77));
 	assert(!cc_list_insert(list, 3, (void *)88));
 
-	show_number_list(list, 1);
+	cc_list_print(list, 1);
 
 	assert(cc_list_remove(list, 13, (void **)&i));
 	assert(!cc_list_remove(list, 12, (void **)&i));
@@ -48,7 +32,7 @@ int main()
 	assert(!cc_list_remove(list, 0, (void **)&i));
 	assert(i == 77);
 
-	show_number_list(list, 1);
+	cc_list_print(list, 1);
 
 	assert(!cc_list_delete(list));
 	return 0;

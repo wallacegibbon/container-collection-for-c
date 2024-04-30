@@ -31,6 +31,8 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right);
 int cc_list_insert(struct cc_list *self, size_t index, void *value);
 int cc_list_remove(struct cc_list *self, size_t index, void **result);
 
+int cc_list_print(struct cc_list *self, int direction);
+
 struct cc_list_iter {
 	struct cc_iter_i *iterator;
 	struct cc_list *list;

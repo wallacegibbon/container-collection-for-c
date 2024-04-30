@@ -36,8 +36,9 @@ $(BUILD_DIR)/lib$(TARGET).a: $(OBJECTS)
 
 install: $(BUILD_DIR)/lib$(TARGET).a
 	@mkdir -p $(INSTALL_DIR)/$(TARGET)/{lib,include}
+	@echo -e "\tCP include/* $(INSTALL_DIR)/$(TARGET)/include/"
 	@cp -r include/* $(INSTALL_DIR)/$(TARGET)/include/
-	@echo -e "\tCP $(BUILD_DIR)/lib$(TARGET).a"
+	@echo -e "\tCP $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/$(TARGET)/lib/"
 	@cp $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/$(TARGET)/lib/
 
 build_dir:

@@ -173,7 +173,7 @@ static int cc_hash_map_iter_step(struct cc_hash_map_iter *self)
 
 	while (1) {
 		if (cc_array_iter_next(&self->inner_array_iter, (void **)&cursor, NULL))
-			return 1;
+			return 11;
 		if (*cursor != NULL)
 			break;
 	}
@@ -185,14 +185,16 @@ int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *in
 {
 	if (try_reset_double_p(item))
 		return 1;
+	if (self->is_empty)
+		return 2;
 
 	if (!cc_list_map_iter_next(&self->inner_list_map_iter, item, NULL))
 		goto success;
 
 	if (cc_hash_map_iter_step(self))
-		return 2;
-	if (cc_list_map_iter_next(&self->inner_list_map_iter, item, NULL))
 		return 3;
+	if (cc_list_map_iter_next(&self->inner_list_map_iter, item, NULL))
+		return 4;
 
 success:
 	if (index != NULL)
@@ -204,14 +206,26 @@ success:
 
 int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map)
 {
+	int tmp;
 	if (map == NULL)
 		return 1;
 	if (cc_array_iter_init(&self->inner_array_iter, map->data))
 		return 2;
-	if (cc_hash_map_iter_step(self))
-		return 3;
 
 	self->iterator = &iterator_interface;
 	self->count = 0;
+
+	/// `hash_map`'s `init` will call `step`, which is dangerous. Be careful with code here.
+	tmp = cc_hash_map_iter_step(self);
+	if (tmp == 0) {
+		self->is_empty = 0;
+		return 0;
+	} else if (tmp == 11) {
+		self->is_empty = 1;
+		return 0;
+	} else {
+		return 3;
+	}
+
 	return 0;
 }

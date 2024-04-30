@@ -34,6 +34,7 @@ struct cc_hash_map_iter {
 	struct cc_array_iter inner_array_iter;
 	struct cc_list_map_iter inner_list_map_iter;
 	size_t count;
+	unsigned char is_empty;
 };
 
 int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map);

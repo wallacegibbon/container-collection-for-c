@@ -3,75 +3,65 @@
 #include <stdlib.h>
 
 /// Get the slot (whose type is `struct cc_list_map **`) by key.
-static inline int get_list_map(struct cc_hash_map *self, void *key, struct cc_list_map ***result)
+static inline int get_list_map_ref(struct cc_hash_map *self, void *key, struct cc_list_map ***result)
 {
 	size_t hash_tmp;
 	hash_tmp = self->calc_hash(key) % self->bucket_size;
 	return cc_array_get_ref(self->data, hash_tmp, (void **)result);
 }
 
-int cc_hash_map_get_item(struct cc_hash_map *self, void *key, struct cc_map_item **result)
-{
-	struct cc_list_map **list_map_tmp;
-
-	if (try_reset_double_p(result))
-		return 1;
-	if (get_list_map(self, key, &list_map_tmp))
-		return 2;
-	if (*list_map_tmp == NULL)
-		return 3;
-
-	return cc_list_map_get_item(*list_map_tmp, key, result, NULL);
-}
-
 int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result)
 {
-	struct cc_map_item *item;
+	struct cc_list_map **list_map_ref;
 
 	if (try_reset_double_p(result))
 		return 1;
-	if (cc_hash_map_get_item(self, key, &item))
-		return 2;
 
-	*result = item->value;
-	return 0;
+	if (get_list_map_ref(self, key, &list_map_ref))
+		return 2;
+	if (*list_map_ref == NULL)
+		return 3;
+
+	return cc_list_map_get(*list_map_ref, key, result);
+}
+
+int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value)
+{
+	struct cc_list_map **list_map_ref;
+
+	if (get_list_map_ref(self, key, &list_map_ref))
+		return 1;
+	if (*list_map_ref == NULL)
+		*list_map_ref = cc_list_map_new(self->cmp);
+
+	return cc_list_map_set_new(*list_map_ref, key, value);
 }
 
 int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value)
 {
-	struct cc_map_item *item;
-	struct cc_list_map **list_map_tmp;
+	struct cc_list_map **list_map_ref;
 
-	/// Try to find existing map item for `key`.
-
-	if (!cc_hash_map_get_item(self, key, &item)) {
-		item->value = value;
-		return 0;
-	}
-
-	/// No existing item for `key`.
-
-	if (get_list_map(self, key, &list_map_tmp))
+	if (get_list_map_ref(self, key, &list_map_ref))
 		return 1;
-	if (*list_map_tmp == NULL)
-		*list_map_tmp = cc_list_map_new(self->cmp);
+	if (*list_map_ref == NULL)
+		*list_map_ref = cc_list_map_new(self->cmp);
 
-	return cc_list_map_set(*list_map_tmp, key, value);
+	return cc_list_map_set(*list_map_ref, key, value);
 }
 
 int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result)
 {
-	struct cc_list_map **list_map_tmp;
-	size_t hash_tmp;
+	struct cc_list_map **list_map_ref;
 
 	if (try_reset_double_p(result))
 		return 1;
-	if (get_list_map(self, key, &list_map_tmp))
+
+	if (get_list_map_ref(self, key, &list_map_ref))
 		return 2;
-	if (*list_map_tmp == NULL)
+	if (*list_map_ref == NULL)
 		return 3;
 
-	return cc_list_map_del(*list_map_tmp, key, result);
+	return cc_list_map_del(*list_map_ref, key, result);
 }
 
 int cc_hash_map_print_slot(struct cc_list_map *slot, int index)
@@ -101,6 +91,7 @@ int cc_hash_map_print(struct cc_hash_map *self, char *end_string)
 static struct cc_map_i map_interface = {
 	.get = (cc_map_get_fn_t)cc_hash_map_get,
 	.set = (cc_map_set_fn_t)cc_hash_map_set,
+	.set_new = (cc_map_set_fn_t)cc_hash_map_set_new,
 	.del = (cc_map_del_fn_t)cc_hash_map_del,
 };
 

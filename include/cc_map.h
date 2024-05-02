@@ -3,11 +3,13 @@
 
 typedef int (*cc_map_get_fn_t)(void *self, void *key, void **result);
 typedef int (*cc_map_set_fn_t)(void *self, void *key, void *value);
+typedef int (*cc_map_set_new_fn_t)(void *self, void *key, void *value);
 typedef int (*cc_map_del_fn_t)(void *self, void *key, void **result);
 
 struct cc_map_i {
 	cc_map_get_fn_t get;
 	cc_map_set_fn_t set;
+	cc_map_set_new_fn_t set_new;
 	cc_map_del_fn_t del;
 };
 
@@ -19,6 +21,11 @@ static inline int cc_map_get(void *self, void *key, void **result)
 static inline int cc_map_set(void *self, void *key, void *value)
 {
 	return (*(struct cc_map_i **)self)->set(self, key, value);
+}
+
+static inline int cc_map_set_new(void *self, void *key, void *value)
+{
+	return (*(struct cc_map_i **)self)->set_new(self, key, value);
 }
 
 static inline int cc_map_del(void *self, void *key, void **result)

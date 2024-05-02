@@ -25,6 +25,9 @@ int main()
 	assert(!cc_map_set(map, (void *)63, (void *)603));
 	assert(!cc_map_set(map, (void *)66, (void *)606));
 
+	assert(cc_map_set_new(map, (void *)66, (void *)607));
+	assert(!cc_map_set(map, (void *)66, (void *)608));
+
 	assert(!cc_hash_map_print(map, "\n"));
 
 	assert(!cc_hash_map_get(map, (void *)11, (void **)&tmp));

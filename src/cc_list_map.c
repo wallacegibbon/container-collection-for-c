@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result, size_t *index)
+static int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result, size_t *index)
 {
 	struct cc_list_iter iter;
 	struct cc_map_item **item;
@@ -34,15 +34,9 @@ int cc_list_map_get(struct cc_list_map *self, void *key, void **result)
 	return 0;
 }
 
-int cc_list_map_set(struct cc_list_map *self, void *key, void *value)
+int cc_list_map_insert_new(struct cc_list_map *self, void *key, void *value)
 {
 	struct cc_map_item *item;
-	int tmp;
-
-	if (!cc_list_map_get_item(self, key, &item, NULL)) {
-		item->value = value;
-		return 0;
-	}
 
 	item = malloc(sizeof(*item));
 	if (item == NULL)
@@ -58,6 +52,33 @@ int cc_list_map_set(struct cc_list_map *self, void *key, void *value)
 fail:
 	free(item);
 	return 2;
+}
+
+int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value)
+{
+	struct cc_map_item *item;
+
+	if (!cc_list_map_get_item(self, key, &item, NULL))
+		return 1;
+	if (cc_list_map_insert_new(self, key, value))
+		return 2;
+
+	return 0;
+}
+
+int cc_list_map_set(struct cc_list_map *self, void *key, void *value)
+{
+	struct cc_map_item *item;
+
+	if (!cc_list_map_get_item(self, key, &item, NULL)) {
+		item->value = value;
+		return 0;
+	}
+
+	if (cc_list_map_insert_new(self, key, value))
+		return 1;
+
+	return 0;
 }
 
 int cc_list_map_del(struct cc_list_map *self, void *key, void **result)
@@ -95,6 +116,7 @@ int cc_list_map_print(struct cc_list_map *self, char *end_string)
 static struct cc_map_i map_interface = {
 	.get = (cc_map_get_fn_t)cc_list_map_get,
 	.set = (cc_map_set_fn_t)cc_list_map_set,
+	.set_new = (cc_map_set_fn_t)cc_list_map_set_new,
 	.del = (cc_map_del_fn_t)cc_list_map_del,
 };
 

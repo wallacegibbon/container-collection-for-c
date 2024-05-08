@@ -23,7 +23,7 @@ static void char_array_display(struct cc_array *chars, const char *prefix)
 		cc_debug_print("%c", *tmp);
 }
 
-int main()
+int main(void)
 {
 	struct cc_array array;
 	unsigned char buffer[10];

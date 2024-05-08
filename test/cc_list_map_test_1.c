@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-int main()
+int main(void)
 {
 	struct cc_list_map *map;
 

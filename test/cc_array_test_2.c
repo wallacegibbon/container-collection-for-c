@@ -7,7 +7,7 @@ struct blah {
 	void *payload;
 };
 
-int main()
+int main(void)
 {
 	struct cc_array *array;
 	struct cc_array_iter iter;

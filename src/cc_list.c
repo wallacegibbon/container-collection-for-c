@@ -111,7 +111,7 @@ int cc_list_init(struct cc_list *self)
 	return 0;
 }
 
-struct cc_list *cc_list_new()
+struct cc_list *cc_list_new(void)
 {
 	struct cc_list *self;
 

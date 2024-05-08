@@ -40,7 +40,7 @@ static int cmp_age(struct blah *left, struct blah *right)
 	return -(left->age - right->age);
 }
 
-int main()
+int main(void)
 {
 	struct cc_array array;
 	unsigned char buffer[3 * sizeof(struct blah)];

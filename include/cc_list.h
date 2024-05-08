@@ -22,7 +22,7 @@ struct cc_list {
 	struct cc_list_node root;
 };
 
-struct cc_list *cc_list_new();
+struct cc_list *cc_list_new(void);
 int cc_list_delete(struct cc_list *self);
 
 int cc_list_append(struct cc_list *self, void *value);

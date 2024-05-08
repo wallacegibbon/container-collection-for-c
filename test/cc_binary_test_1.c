@@ -25,7 +25,7 @@ static int print_1(void *data)
 	return cc_debug_print("%ld", (uintptr_t)data);
 }
 
-int main()
+int main(void)
 {
 	struct cc_binary *root;
 

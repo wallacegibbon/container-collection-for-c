@@ -149,7 +149,7 @@ int parser_delete(struct parser *self)
 
 static char *expr1 = "1+2";
 
-int main()
+int main(void)
 {
 	struct parser *parser;
 	struct cc_binary *result;

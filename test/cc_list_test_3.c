@@ -5,7 +5,7 @@
 
 /// Example of using `cc_list` as a queue.
 
-int main()
+int main(void)
 {
 	struct cc_list *list;
 	uintptr_t tmp;

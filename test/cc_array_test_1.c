@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <math.h>
 
-int main()
+int main(void)
 {
 	struct cc_array array;
 	struct cc_array_iter iter;

@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-int main()
+int main(void)
 {
 	struct cc_hash_map *map;
 	struct cc_hash_map_iter iter;

@@ -21,10 +21,13 @@ struct cc_hash_map {
 };
 
 struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash);
+
 int cc_hash_map_delete(struct cc_hash_map *self);
 
 int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result);
+
 int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value);
+
 int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result);
 
 int cc_hash_map_print(struct cc_hash_map *self, char *end_string);
@@ -38,6 +41,7 @@ struct cc_hash_map_iter {
 };
 
 int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map);
+
 int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index);
 
 #endif

@@ -2,8 +2,11 @@
 #define __CC_MAP_H
 
 typedef int (*cc_map_get_fn_t)(void *self, void *key, void **result);
+
 typedef int (*cc_map_set_fn_t)(void *self, void *key, void *value);
+
 typedef int (*cc_map_set_new_fn_t)(void *self, void *key, void *value);
+
 typedef int (*cc_map_del_fn_t)(void *self, void *key, void **result);
 
 struct cc_map_i {

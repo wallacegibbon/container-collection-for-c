@@ -1,5 +1,6 @@
 #include "cc_binary.h"
 #include "cc_common.h"
+#include "cc_debug.h"
 #include "cc_list.h"
 #include <stdarg.h>
 #include <stdlib.h>
@@ -214,7 +215,7 @@ struct cc_binary_iter *cc_binary_iter_new(struct cc_binary *root, enum cc_traver
 	return self;
 
 fail3:
-	cc_list_delete(self->queue);
+	CC_ENSURE(cc_list_delete(self->queue));
 fail2:
 	free(self);
 fail1:

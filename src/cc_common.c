@@ -41,7 +41,6 @@ size_t cc_default_hash_fn(void *obj)
 
 size_t cc_address_hash_fn(void *obj)
 {
-	/// Addresses are aligned by 4-byte or 8-byte.
 	return (((unsigned long long)obj >> 3) + 1) * 131;
 }
 

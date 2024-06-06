@@ -22,19 +22,22 @@ static inline int try_reset_double_p(void *pointer)
 }
 
 typedef int (*cc_simple_fn_1_t)(void *value);
-
 typedef int (*cc_cmp_fn_t)(void *left, void *right);
-
 typedef size_t (*cc_hash_fn_t)(void *obj);
 
+/// Simply do: left - right
 int cc_default_cmp_fn(void *left, void *right);
 
+/// Return obj directly
 size_t cc_default_hash_fn(void *obj);
 
+/// Address is 4/8 byte aligned. Do some calculations to make it a good hash.
 size_t cc_address_hash_fn(void *obj);
 
+/// Calculate hash from string.
 size_t cc_str_hash_fn_simple(void *obj);
 
+/// Calculate hash from string in the BKDR (31, 131, 1313, ...) way.
 size_t cc_str_hash_fn_bkdr(void *obj);
 
 int cc_exit_info(int code, char *format, ...);

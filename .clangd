@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    - "-Wno-unused-parameter"
+Diagnostics:
+  UnusedIncludes: None

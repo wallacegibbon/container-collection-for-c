@@ -131,10 +131,9 @@ int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size)
 		goto fail2;
 	}
 
-	if (cc_array_init(tmp, buffer, elem_nums, elem_size)) {
-		code = 3;
+	code = cc_array_init(tmp, buffer, elem_nums, elem_size);
+	if (code)
 		goto fail3;
-	}
 
 	*self = tmp;
 	return 0;

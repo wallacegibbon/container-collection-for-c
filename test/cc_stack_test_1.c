@@ -6,7 +6,7 @@ int main(void)
 {
 	struct cc_array array;
 	struct cc_stack stack, *p_stack;
-	unsigned char buffer[10];
+	// unsigned char buffer[10];
 	char i, tmp;
 
 	assert(!cc_stack_new(&p_stack, 10, sizeof(char)));

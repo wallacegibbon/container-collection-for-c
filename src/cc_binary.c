@@ -207,14 +207,13 @@ int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root, enu
 		goto fail1;
 	}
 
-	if (cc_list_new(&tmp->queue)) {
-		code = 2;
+	code = cc_list_new(&tmp->queue);
+	if (code)
 		goto fail2;
-	}
-	if (cc_list_append(tmp->queue, root)) {
-		code = 3;
+
+	code = cc_list_append(tmp->queue, root);
+	if (code)
 		goto fail3;
-	}
 
 	tmp->iterator = &iterator_interface;
 	tmp->index = 0;
@@ -224,8 +223,7 @@ int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root, enu
 	return 0;
 
 fail3:
-	if (cc_list_delete(tmp->queue))
-		code = 11;
+	code = cc_list_delete(tmp->queue);
 fail2:
 	free(tmp);
 fail1:

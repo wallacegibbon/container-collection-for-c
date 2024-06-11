@@ -118,18 +118,18 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t c
 	}
 
 	tmp->interface = &map_interface;
-	if (cc_array_new(&tmp->data, bucket_size, sizeof(struct cc_list_map *))) {
-		code = 3;
+
+	code = cc_array_new(&tmp->data, bucket_size, sizeof(struct cc_list_map *));
+	if (code)
 		goto fail2;
-	}
 
 	tmp->bucket_size = bucket_size;
 
 	/// The elements of the array should be initialized as NULLs.
-	if (cc_array_iter_init(&iter, tmp->data)) {
-		code = 4;
+	code = cc_array_iter_init(&iter, tmp->data);
+	if (code)
 		goto fail2;
-	}
+
 	while (!cc_iter_next(&iter, &item, NULL))
 		*item = NULL;
 

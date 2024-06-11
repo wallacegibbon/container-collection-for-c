@@ -1,4 +1,5 @@
 #include "cc_ring.h"
+#include "cc_array.h"
 #include <stdlib.h>
 
 static inline size_t next_index(struct cc_ring *self, size_t index)
@@ -67,19 +68,19 @@ int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size)
 	}
 
 	/// 1 element will be wasted, so pass `elem_nums + 1` to `cc_array_new`.
-	if (cc_array_new(&data, elem_nums + 1, elem_size)) {
-		code = 2;
+	code = cc_array_new(&data, elem_nums + 1, elem_size);
+	if (code)
 		goto fail2;
-	}
 
-	if (cc_ring_init(tmp, data)) {
-		code = 3;
-		goto fail2;
-	}
+	code = cc_ring_init(tmp, data);
+	if (code)
+		goto fail3;
 
 	*self = tmp;
 	return 0;
 
+fail3:
+	code = cc_array_delete(data);
 fail2:
 	free(tmp);
 fail1:
@@ -90,6 +91,7 @@ int cc_ring_delete(struct cc_ring *self)
 {
 	if (cc_array_delete(self->data))
 		return 1;
+
 	free(self);
 	return 0;
 }

@@ -126,10 +126,9 @@ int cc_list_new(struct cc_list **self)
 		goto fail1;
 	}
 
-	if (cc_list_init(tmp)) {
-		code = 2;
+	code = cc_list_init(tmp);
+	if (code)
 		goto fail2;
-	}
 
 	*self = tmp;
 	return 0;

@@ -1,4 +1,5 @@
 #include "cc_stack.h"
+#include "cc_array.h"
 #include <stdlib.h>
 
 int cc_stack_push(struct cc_stack *self, void *item)
@@ -40,19 +41,19 @@ int cc_stack_new(struct cc_stack **self, size_t elem_nums, size_t elem_size)
 		goto fail1;
 	}
 
-	if (cc_array_new(&data, elem_nums, elem_size)) {
-		code = 2;
+	code = cc_array_new(&data, elem_nums, elem_size);
+	if (code)
 		goto fail2;
-	}
 
-	if (cc_stack_init(tmp, data)) {
-		code = 3;
-		goto fail2;
-	}
+	code = cc_stack_init(tmp, data);
+	if (code)
+		goto fail3;
 
 	*self = tmp;
 	return 0;
 
+fail3:
+	code = cc_array_delete(data);
 fail2:
 	free(tmp);
 fail1:
@@ -63,6 +64,7 @@ int cc_stack_delete(struct cc_stack *self)
 {
 	if (cc_array_delete(self->data))
 		return 1;
+
 	free(self);
 	return 0;
 }

@@ -37,21 +37,26 @@ int cc_list_map_get(struct cc_list_map *self, void *key, void **result)
 int cc_list_map_insert_new(struct cc_list_map *self, void *key, void *value)
 {
 	struct cc_map_item *item;
+	int code = 0;
 
 	item = malloc(sizeof(*item));
-	if (item == NULL)
-		return 1;
+	if (item == NULL) {
+		code = 1;
+		goto fail1;
+	}
 
 	item->key = key;
 	item->value = value;
-	if (cc_list_insert(self->data, 0, item))
-		goto fail;
+	code = cc_list_insert(self->data, 0, item);
+	if (code)
+		goto fail2;
 
 	return 0;
 
-fail:
+fail2:
 	free(item);
-	return 2;
+fail1:
+	return code;
 }
 
 int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value)
@@ -133,10 +138,9 @@ int cc_list_map_new(struct cc_list_map **self, cc_cmp_fn_t cmp)
 
 	tmp->interface = &map_interface;
 
-	if (cc_list_new(&tmp->data)) {
-		code = 2;
+	code = cc_list_new(&tmp->data);
+	if (code)
 		goto fail2;
-	}
 
 	tmp->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
 

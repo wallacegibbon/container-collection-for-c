@@ -1,6 +1,5 @@
 #include "cc_binary.h"
 #include "cc_common.h"
-#include "cc_debug.h"
 #include "cc_list.h"
 #include <stdarg.h>
 #include <stdlib.h>

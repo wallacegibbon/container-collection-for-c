@@ -15,28 +15,30 @@ struct blah_node {
 	};
 };
 
-struct blah_node *blah_node_new_number(int number)
+int blah_node_new_number(struct blah_node **self, int number)
 {
-	struct blah_node *self;
-	self = malloc(sizeof(*self));
-	if (self == NULL)
-		return NULL;
+	struct blah_node *tmp;
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL)
+		return 1;
 
-	self->type = NUMBER;
-	self->number = number;
-	return self;
+	tmp->type = NUMBER;
+	tmp->number = number;
+	*self = tmp;
+	return 0;
 }
 
-struct blah_node *blah_node_new_op(char op_sign)
+int blah_node_new_op(struct blah_node **self, char op_sign)
 {
-	struct blah_node *self;
-	self = malloc(sizeof(*self));
-	if (self == NULL)
-		return NULL;
+	struct blah_node *tmp;
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL)
+		return 1;
 
-	self->type = OP;
-	self->op_sign = op_sign;
-	return self;
+	tmp->type = OP;
+	tmp->op_sign = op_sign;
+	*self = tmp;
+	return 0;
 }
 
 int blah_node_print(struct blah_node *node)
@@ -71,9 +73,9 @@ int parser_step(struct parser *self, int *error)
 		return 1;
 
 	if (c >= '0' && c <= '9')
-		new_node = blah_node_new_number(c - '0');
+		blah_node_new_number(&new_node, c - '0');
 	else
-		new_node = blah_node_new_op(c);
+		blah_node_new_op(&new_node, c);
 
 	if (new_node == NULL) {
 		*error = 2;
@@ -103,27 +105,35 @@ int parser_parse(struct parser *self, struct cc_binary **result)
 	return error;
 }
 
-struct parser *parser_new(char *input)
+int parser_new(struct parser **self, char *input)
 {
-	struct parser *self;
-	if (input == NULL)
-		goto fail1;
+	struct parser *tmp;
+	int code = 0;
 
-	self = malloc(sizeof(*self));
-	if (self == NULL)
+	if (input == NULL) {
+		code = 1;
 		goto fail1;
+	}
 
-	self->input = input;
-	self->root = cc_binary_new(NULL, NULL);
-	if (self->root == NULL)
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL) {
+		code = 2;
+		goto fail1;
+	}
+
+	tmp->input = input;
+	if (cc_binary_new(&tmp->root, NULL, NULL)) {
+		code = 3;
 		goto fail2;
+	}
 
-	return self;
+	*self = tmp;
+	return 0;
 
 fail2:
-	free(self);
+	free(tmp);
 fail1:
-	return NULL;
+	return code;
 }
 
 /// Delete the parser along with the result cc_binary tree.
@@ -132,8 +142,7 @@ int parser_delete(struct parser *self)
 	struct cc_binary_iter *iter;
 	struct blah_node **tmp;
 
-	iter = cc_binary_iter_new(self->root->left, CC_TRAVERSE_DEPTH_LEFT);
-	if (iter == NULL)
+	if (cc_binary_iter_new(&iter, self->root->left, CC_TRAVERSE_DEPTH_LEFT))
 		return 1;
 	while (!cc_iter_next(iter, &tmp, NULL))
 		assert(!blah_node_delete(*tmp));
@@ -154,8 +163,7 @@ int main(void)
 	struct parser *parser;
 	struct cc_binary *result;
 
-	parser = parser_new(expr1);
-	assert(parser != NULL);
+	assert(!parser_new(&parser, expr1));
 
 	cc_debug_print("parsing expression: \"%s\"\n", expr1);
 	assert(!parser_parse(parser, &result));

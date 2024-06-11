@@ -2,7 +2,7 @@
 #include "cc_common.h"
 #include <stdlib.h>
 
-static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index)
+static int prev_node_of(struct cc_list *self, struct cc_list_node **result, size_t index)
 {
 	struct cc_list_node *node;
 
@@ -10,7 +10,8 @@ static struct cc_list_node *prev_node_of(struct cc_list *self, size_t index)
 	while (index--)
 		node = node->next;
 
-	return node;
+	*result = node;
+	return 0;
 }
 
 int cc_list_insert(struct cc_list *self, size_t index, void *value)
@@ -26,7 +27,9 @@ int cc_list_insert(struct cc_list *self, size_t index, void *value)
 
 	node->data = value;
 
-	entry = prev_node_of(self, index);
+	if (prev_node_of(self, &entry, index))
+		return 3;
+
 	node->next = entry->next;
 	node->prev = entry;
 	entry->next->prev = node;
@@ -46,7 +49,8 @@ int cc_list_remove(struct cc_list *self, size_t index, void **result)
 	if (index >= self->root.size)
 		return 2;
 
-	node = prev_node_of(self, index);
+	if (prev_node_of(self, &node, index))
+		return 3;
 
 	node_to_remove = node->next;
 	node->next->next->prev = node;
@@ -111,31 +115,38 @@ int cc_list_init(struct cc_list *self)
 	return 0;
 }
 
-struct cc_list *cc_list_new(void)
+int cc_list_new(struct cc_list **self)
 {
-	struct cc_list *self;
+	struct cc_list *tmp;
+	int code = 0;
 
-	self = malloc(sizeof(*self));
-	if (self == NULL)
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL) {
+		code = 1;
 		goto fail1;
+	}
 
-	if (cc_list_init(self))
+	if (cc_list_init(tmp)) {
+		code = 2;
 		goto fail2;
+	}
 
-	return self;
+	*self = tmp;
+	return 0;
 
 fail2:
-	free(self);
+	free(tmp);
 fail1:
-	return NULL;
+	return code;
 }
 
-static inline struct cc_list_node *free_and_next(struct cc_list_node *current)
+static inline int free_and_next(struct cc_list_node **p_current)
 {
 	struct cc_list_node *next;
-	next = current->next;
-	free(current);
-	return next;
+	next = (*p_current)->next;
+	free(*p_current);
+	*p_current = next;
+	return 0;
 }
 
 int cc_list_delete(struct cc_list *self)
@@ -144,7 +155,7 @@ int cc_list_delete(struct cc_list *self)
 
 	node = self->root.next;
 	while (node != &self->root)
-		node = free_and_next(node);
+		free_and_next(&node);
 
 	free(self);
 	return 0;

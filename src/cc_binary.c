@@ -8,8 +8,7 @@
 int cc_binary_insert_left(struct cc_binary *self, void *data)
 {
 	struct cc_binary *node;
-	node = cc_binary_new(self, data);
-	if (node == NULL)
+	if (cc_binary_new(&node, self, data))
 		return 1;
 
 	if (self->left != NULL)
@@ -23,8 +22,7 @@ int cc_binary_insert_left(struct cc_binary *self, void *data)
 int cc_binary_insert_right(struct cc_binary *self, void *data)
 {
 	struct cc_binary *node;
-	node = cc_binary_new(self, data);
-	if (node == NULL)
+	if (cc_binary_new(&node, self, data))
 		return 1;
 
 	if (self->right != NULL)
@@ -81,18 +79,20 @@ int cc_binary_rotate_right(struct cc_binary **start_slot)
 	return 0;
 }
 
-struct cc_binary *cc_binary_new(struct cc_binary *parent, void *data)
+int cc_binary_new(struct cc_binary **self, struct cc_binary *parent, void *data)
 {
-	struct cc_binary *self;
-	self = malloc(sizeof(*self));
-	if (self == NULL)
-		return NULL;
+	struct cc_binary *tmp;
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL)
+		return 1;
 
-	self->parent = parent;
-	self->data = data;
-	self->left = NULL;
-	self->right = NULL;
-	return self;
+	tmp->parent = parent;
+	tmp->data = data;
+	tmp->left = NULL;
+	tmp->right = NULL;
+
+	*self = tmp;
+	return 0;
 }
 
 int cc_binary_delete(struct cc_binary *self)
@@ -191,35 +191,45 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
 	return 0;
 }
 
-struct cc_binary_iter *cc_binary_iter_new(struct cc_binary *root, enum cc_traverse_direction direction)
+int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root, enum cc_traverse_direction direction)
 {
-	struct cc_binary_iter *self;
+	struct cc_binary_iter *tmp;
+	int code = 0;
 
-	if (root == NULL)
+	if (root == NULL) {
+		code = 1;
 		goto fail1;
+	}
 
-	self = malloc(sizeof(*self));
-	if (self == NULL)
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL) {
+		code = 2;
 		goto fail1;
+	}
 
-	self->queue = cc_list_new();
-	if (self->queue == NULL)
+	if (cc_list_new(&tmp->queue)) {
+		code = 2;
 		goto fail2;
-	if (cc_list_append(self->queue, root))
+	}
+	if (cc_list_append(tmp->queue, root)) {
+		code = 3;
 		goto fail3;
+	}
 
-	self->iterator = &iterator_interface;
-	self->index = 0;
-	self->direction = direction;
+	tmp->iterator = &iterator_interface;
+	tmp->index = 0;
+	tmp->direction = direction;
 
-	return self;
+	*self = tmp;
+	return 0;
 
 fail3:
-	CC_ENSURE(cc_list_delete(self->queue));
+	if (cc_list_delete(tmp->queue))
+		code = 11;
 fail2:
-	free(self);
+	free(tmp);
 fail1:
-	return NULL;
+	return code;
 }
 
 int cc_binary_iter_delete(struct cc_binary_iter *self)

@@ -113,30 +113,38 @@ int cc_array_init(struct cc_array *self, unsigned char *buffer, size_t elem_nums
 
 #ifndef NO_MALLOC
 
-struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size)
+int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size)
 {
-	struct cc_array *self;
+	struct cc_array *tmp;
 	unsigned char *buffer;
+	int code;
 
-	self = malloc(sizeof(*self));
-	if (self == NULL)
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL) {
+		code = 1;
 		goto fail1;
+	}
 
 	buffer = malloc(elem_nums * elem_size);
-	if (buffer == NULL)
+	if (buffer == NULL) {
+		code = 2;
 		goto fail2;
+	}
 
-	if (cc_array_init(self, buffer, elem_nums, elem_size))
+	if (cc_array_init(tmp, buffer, elem_nums, elem_size)) {
+		code = 3;
 		goto fail3;
+	}
 
-	return self;
+	*self = tmp;
+	return 0;
 
 fail3:
 	free(buffer);
 fail2:
-	free(self);
+	free(tmp);
 fail1:
-	return NULL;
+	return code;
 }
 
 int cc_array_delete(struct cc_array *self)

@@ -10,8 +10,7 @@ int main(void)
 	/// So the size of `tmp` should NOT be smaller than `uintptr_t`, or data nearby would be overwritten.
 	uintptr_t tmp;
 
-	map = cc_list_map_new(NULL);
-	assert(map != NULL);
+	assert(!cc_list_map_new(&map, NULL));
 
 	assert(!cc_list_map_set(map, (void *)1, (void *)'a'));
 	assert(!cc_map_set(map, (void *)2, (void *)'b'));

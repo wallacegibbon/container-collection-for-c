@@ -10,8 +10,7 @@ int main(void)
 	uintptr_t tmp;
 	size_t index;
 
-	map = cc_hash_map_new(10, NULL, NULL);
-	assert(map != NULL);
+	assert(!cc_hash_map_new(&map, 10, NULL, NULL));
 	assert(!cc_hash_map_print(map, "\n"));
 
 	assert(!cc_hash_map_iter_init(&iter, map));

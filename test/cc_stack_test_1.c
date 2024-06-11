@@ -9,8 +9,7 @@ int main(void)
 	unsigned char buffer[10];
 	char i, tmp;
 
-	p_stack = cc_stack_new(10, sizeof(char));
-	assert(p_stack != NULL);
+	assert(!cc_stack_new(&p_stack, 10, sizeof(char)));
 
 	// assert(!cc_array_init(&array, buffer, 10, 1));
 	// assert(!cc_stack_init(&stack, &array));

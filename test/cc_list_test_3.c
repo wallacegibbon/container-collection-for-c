@@ -10,8 +10,7 @@ int main(void)
 	struct cc_list *list;
 	uintptr_t tmp;
 
-	list = cc_list_new();
-	assert(list != NULL);
+	assert(!cc_list_new(&list));
 
 	assert(cc_list_remove(list, 0, (void **)&tmp));
 

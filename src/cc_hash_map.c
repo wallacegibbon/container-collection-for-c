@@ -31,8 +31,10 @@ int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value)
 
 	if (get_list_map_ref(self, key, &list_map_ref))
 		return 1;
-	if (*list_map_ref == NULL)
-		*list_map_ref = cc_list_map_new(self->cmp);
+	if (*list_map_ref == NULL) {
+		if (cc_list_map_new(list_map_ref, self->cmp))
+			return 2;
+	}
 
 	return cc_list_map_set_new(*list_map_ref, key, value);
 }
@@ -43,8 +45,10 @@ int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value)
 
 	if (get_list_map_ref(self, key, &list_map_ref))
 		return 1;
-	if (*list_map_ref == NULL)
-		*list_map_ref = cc_list_map_new(self->cmp);
+	if (*list_map_ref == NULL) {
+		if (cc_list_map_new(list_map_ref, self->cmp))
+			return 2;
+	}
 
 	return cc_list_map_set(*list_map_ref, key, value);
 }
@@ -95,41 +99,50 @@ static struct cc_map_i map_interface = {
 	.del = (cc_map_del_fn_t)cc_hash_map_del,
 };
 
-struct cc_hash_map *cc_hash_map_new(size_t bucket_size, cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash)
+int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash)
 {
-	struct cc_hash_map *self;
+	struct cc_hash_map *tmp;
 	struct cc_list_map **item;
 	struct cc_array_iter iter;
+	int code = 0;
 
-	if (bucket_size == 0)
-		return NULL;
-
-	self = malloc(sizeof(*self));
-	if (self == NULL)
+	if (bucket_size == 0) {
+		code = 1;
 		goto fail1;
+	}
 
-	self->interface = &map_interface;
-	self->data = cc_array_new(bucket_size, sizeof(struct cc_list_map *));
-	if (self->data == NULL)
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL) {
+		code = 2;
+		goto fail1;
+	}
+
+	tmp->interface = &map_interface;
+	if (cc_array_new(&tmp->data, bucket_size, sizeof(struct cc_list_map *))) {
+		code = 3;
 		goto fail2;
+	}
 
-	self->bucket_size = bucket_size;
+	tmp->bucket_size = bucket_size;
 
 	/// The elements of the array should be initialized as NULLs.
-	if (cc_array_iter_init(&iter, self->data))
+	if (cc_array_iter_init(&iter, tmp->data)) {
+		code = 4;
 		goto fail2;
+	}
 	while (!cc_iter_next(&iter, &item, NULL))
 		*item = NULL;
 
-	self->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
-	self->calc_hash = CC_WITH_DEFAULT(calc_hash, cc_default_hash_fn);
+	tmp->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
+	tmp->calc_hash = CC_WITH_DEFAULT(calc_hash, cc_default_hash_fn);
 
-	return self;
+	*self = tmp;
+	return 0;
 
 fail2:
-	free(self);
+	free(tmp);
 fail1:
-	return NULL;
+	return code;
 }
 
 int cc_hash_map_delete(struct cc_hash_map *self)

@@ -120,26 +120,33 @@ static struct cc_map_i map_interface = {
 	.del = (cc_map_del_fn_t)cc_list_map_del,
 };
 
-struct cc_list_map *cc_list_map_new(cc_cmp_fn_t cmp)
+int cc_list_map_new(struct cc_list_map **self, cc_cmp_fn_t cmp)
 {
-	struct cc_list_map *self;
+	struct cc_list_map *tmp;
+	int code = 0;
 
-	self = malloc(sizeof(*self));
-	if (self == NULL)
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL) {
+		code = 1;
 		goto fail1;
+	}
 
-	self->interface = &map_interface;
-	self->data = cc_list_new();
-	if (self->data == NULL)
+	tmp->interface = &map_interface;
+
+	if (cc_list_new(&tmp->data)) {
+		code = 2;
 		goto fail2;
+	}
 
-	self->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
-	return self;
+	tmp->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
+
+	*self = tmp;
+	return 0;
 
 fail2:
-	free(self);
+	free(tmp);
 fail1:
-	return NULL;
+	return code;
 }
 
 int cc_list_map_delete(struct cc_list_map *self)

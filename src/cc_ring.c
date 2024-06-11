@@ -54,29 +54,36 @@ int cc_ring_init(struct cc_ring *self, struct cc_array *data)
 
 #ifndef NO_MALLOC
 
-struct cc_ring *cc_ring_new(size_t elem_nums, size_t elem_size)
+int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size)
 {
-	struct cc_ring *self;
+	struct cc_ring *tmp;
 	struct cc_array *data;
+	int code = 0;
 
-	self = malloc(sizeof(*self));
-	if (self == NULL)
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL) {
+		code = 1;
 		goto fail1;
+	}
 
 	/// 1 element will be wasted, so pass `elem_nums + 1` to `cc_array_new`.
-	data = cc_array_new(elem_nums + 1, elem_size);
-	if (data == NULL)
+	if (cc_array_new(&data, elem_nums + 1, elem_size)) {
+		code = 2;
 		goto fail2;
+	}
 
-	if (cc_ring_init(self, data))
+	if (cc_ring_init(tmp, data)) {
+		code = 3;
 		goto fail2;
+	}
 
-	return self;
+	*self = tmp;
+	return 0;
 
 fail2:
-	free(self);
+	free(tmp);
 fail1:
-	return NULL;
+	return code;
 }
 
 int cc_ring_delete(struct cc_ring *self)

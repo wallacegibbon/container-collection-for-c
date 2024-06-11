@@ -8,8 +8,7 @@ int show_tree_elements(struct cc_binary *tree)
 	struct cc_binary_iter *iter;
 	size_t *tmp, index;
 
-	iter = cc_binary_iter_new(tree, CC_TRAVERSE_DEPTH_LEFT);
-	assert(iter != NULL);
+	assert(!cc_binary_iter_new(&iter, tree, CC_TRAVERSE_DEPTH_LEFT));
 
 	while (!cc_iter_next(iter, &tmp, &index))
 		cc_debug_print("(%d)%u, ", index, *tmp);
@@ -29,8 +28,7 @@ int main(void)
 {
 	struct cc_binary *root;
 
-	root = cc_binary_new(NULL, NULL);
-	assert(root != NULL);
+	assert(!cc_binary_new(&root, NULL, NULL));
 
 	assert(!cc_binary_insert_left(root, (void **)1));
 	assert(!cc_binary_insert_left(root, (void **)2));

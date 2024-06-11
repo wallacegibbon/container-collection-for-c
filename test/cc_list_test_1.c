@@ -8,8 +8,7 @@ int main(void)
 	struct cc_list *list;
 	uintptr_t i;
 
-	list = cc_list_new();
-	assert(list != NULL);
+	assert(!cc_list_new(&list));
 
 	for (i = 0; i < 10; i++) {
 		assert(!cc_list_append(list, (void *)i));

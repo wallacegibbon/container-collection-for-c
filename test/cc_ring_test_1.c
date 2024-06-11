@@ -6,8 +6,7 @@ int main(void)
 	struct cc_ring *ring;
 	char i, tmp;
 
-	ring = cc_ring_new(8, sizeof(char));
-	assert(ring != NULL);
+	assert(!cc_ring_new(&ring, 8, sizeof(char)));
 	assert(cc_ring_space(ring) == 8);
 
 	for (i = 0; i < 8; i++) {

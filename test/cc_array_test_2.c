@@ -15,8 +15,7 @@ int main(void)
 	struct blah *iter_tmp;
 	int i;
 
-	array = cc_array_new(10, sizeof(struct blah));
-	assert(array != NULL);
+	assert(!cc_array_new(&array, 10, sizeof(struct blah)));
 
 	for (i = 0; i < 10; i++) {
 		tmp.index = i;

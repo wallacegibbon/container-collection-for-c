@@ -16,8 +16,7 @@ struct cc_array {
 
 #ifndef NO_MALLOC
 
-struct cc_array *cc_array_new(size_t elem_nums, size_t elem_size);
-
+int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size);
 int cc_array_delete(struct cc_array *self);
 
 #endif

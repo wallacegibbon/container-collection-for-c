@@ -28,28 +28,35 @@ int cc_stack_init(struct cc_stack *self, struct cc_array *data)
 
 #ifndef NO_MALLOC
 
-struct cc_stack *cc_stack_new(size_t elem_nums, size_t elem_size)
+int cc_stack_new(struct cc_stack **self, size_t elem_nums, size_t elem_size)
 {
-	struct cc_stack *self;
+	struct cc_stack *tmp;
 	struct cc_array *data;
+	int code = 0;
 
-	self = malloc(sizeof(*self));
-	if (self == NULL)
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL) {
+		code = 1;
 		goto fail1;
+	}
 
-	data = cc_array_new(elem_nums, elem_size);
-	if (data == NULL)
+	if (cc_array_new(&data, elem_nums, elem_size)) {
+		code = 2;
 		goto fail2;
+	}
 
-	if (cc_stack_init(self, data))
+	if (cc_stack_init(tmp, data)) {
+		code = 3;
 		goto fail2;
+	}
 
-	return self;
+	*self = tmp;
+	return 0;
 
 fail2:
-	free(self);
+	free(tmp);
 fail1:
-	return NULL;
+	return code;
 }
 
 int cc_stack_delete(struct cc_stack *self)

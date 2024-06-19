@@ -35,11 +35,8 @@ int cc_array_set(struct cc_array *self, size_t index, void *value);
 
 /// Check whether the index has exceeded the boundary of the array.
 int cc_array_is_valid_index(struct cc_array *self, size_t index);
-
 int cc_array_cmp(struct cc_array *self, cc_cmp_fn_t cmp, size_t i, size_t j);
-
 int cc_array_swap(struct cc_array *self, size_t i, size_t j);
-
 int cc_array_reverse(struct cc_array *self, size_t start, size_t end);
 
 ///-----------------------------------------------------------------------------

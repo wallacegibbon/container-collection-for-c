@@ -42,6 +42,7 @@ size_t cc_str_hash_fn_bkdr(void *obj);
 
 int cc_exit_info(int code, char *format, ...);
 
+/// Will call vfprintf followed by fflush on stdout.
 int cc_debug_print(char *format, ...);
 
 int cc_print_n(char *s, int n);

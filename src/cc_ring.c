@@ -28,7 +28,9 @@ int cc_ring_append(struct cc_ring *self, void *item)
 	if (write_index_next == self->read_index)
 		return 1;
 
-	cc_array_set(self->data, self->write_index, item);
+	if (cc_array_set_unsafe(self->data, self->write_index, item))
+		return 2;
+
 	self->write_index = write_index_next;
 
 	return 0;
@@ -39,7 +41,9 @@ int cc_ring_shift(struct cc_ring *self, void *item)
 	if (self->read_index == self->write_index)
 		return 1;
 
-	cc_array_get(self->data, self->read_index, item);
+	if (cc_array_get_unsafe(self->data, self->read_index, item))
+		return 2;
+
 	self->read_index = next_index(self, self->read_index);
 
 	return 0;

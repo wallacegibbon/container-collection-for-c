@@ -17,7 +17,7 @@ int cc_stack_pop(struct cc_stack *self, void *item)
 		return 1;
 
 	self->top--;
-	return cc_array_get(self->data, self->top, item);
+	return cc_array_get_unsafe(self->data, self->top, item);
 }
 
 int cc_stack_init(struct cc_stack *self, struct cc_array *data)

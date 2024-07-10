@@ -22,27 +22,27 @@ int main(void)
 
 	// assert(!cc_hash_map_print(map, "\n"));
 
-	assert(!cc_map_set(map, "lazy_dog", (void *)1));
-	assert(!cc_map_set(map, "quick_fox", (void *)2));
-	assert(!cc_map_set(map, "dumb_bunny", (void *)3));
-	assert(!cc_map_set(map, "sneaky_fox", (void *)4));
-	assert(!cc_map_set(map, "slow_sloth", (void *)5));
-	assert(!cc_map_set(map, "strong_bull", (void *)6));
-	assert(!cc_map_set(map, "blah1", (void *)15));
-	assert(!cc_map_set(map, "blah2", (void *)16));
-	assert(!cc_map_set(map, "blah3", (void *)17));
-	assert(!cc_map_set(map, "blah4", (void *)18));
-	assert(!cc_map_set(map, "blah5", (void *)19));
-	assert(!cc_map_set(map, "blah6", (void *)20));
-	assert(!cc_map_set(map, "blah7", (void *)31));
-	assert(!cc_map_set(map, "blah8", (void *)32));
-	assert(!cc_map_set(map, "blah9", (void *)33));
-	assert(!cc_map_set(map, "blah10", (void *)34));
-	assert(!cc_map_set(map, "blah11", (void *)35));
-	assert(!cc_map_set(map, "blah12", (void *)36));
-	assert(!cc_map_set(map, s1, (void *)40));
-	assert(!cc_map_set(map, s2, (void *)41));
-	assert(!cc_map_set(map, s3, (void *)42));
+	assert(!cc_map_set(map, "lazy_dog", (void *)1, NULL));
+	assert(!cc_map_set(map, "quick_fox", (void *)2, NULL));
+	assert(!cc_map_set(map, "dumb_bunny", (void *)3, NULL));
+	assert(!cc_map_set(map, "sneaky_fox", (void *)4, NULL));
+	assert(!cc_map_set(map, "slow_sloth", (void *)5, NULL));
+	assert(!cc_map_set(map, "strong_bull", (void *)6, NULL));
+	assert(!cc_map_set(map, "blah1", (void *)15, NULL));
+	assert(!cc_map_set(map, "blah2", (void *)16, NULL));
+	assert(!cc_map_set(map, "blah3", (void *)17, NULL));
+	assert(!cc_map_set(map, "blah4", (void *)18, NULL));
+	assert(!cc_map_set(map, "blah5", (void *)19, NULL));
+	assert(!cc_map_set(map, "blah6", (void *)20, NULL));
+	assert(!cc_map_set(map, "blah7", (void *)31, NULL));
+	assert(!cc_map_set(map, "blah8", (void *)32, NULL));
+	assert(!cc_map_set(map, "blah9", (void *)33, NULL));
+	assert(!cc_map_set(map, "blah10", (void *)34, NULL));
+	assert(!cc_map_set(map, "blah11", (void *)35, NULL));
+	assert(!cc_map_set(map, "blah12", (void *)36, NULL));
+	assert(!cc_map_set(map, s1, (void *)40, NULL));
+	assert(!cc_map_set(map, s2, (void *)41, NULL));
+	assert(!cc_map_set(map, s3, (void *)42, NULL));
 
 	assert(!cc_hash_map_print(map, "\n"));
 

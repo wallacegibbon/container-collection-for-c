@@ -39,7 +39,7 @@ int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value)
 	return cc_list_map_set_new(*list_map_ref, key, value);
 }
 
-int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value)
+int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value, void **old_value)
 {
 	struct cc_list_map **list_map_ref;
 
@@ -50,7 +50,7 @@ int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value)
 			return 2;
 	}
 
-	return cc_list_map_set(*list_map_ref, key, value);
+	return cc_list_map_set(*list_map_ref, key, value, old_value);
 }
 
 int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result)
@@ -95,7 +95,7 @@ int cc_hash_map_print(struct cc_hash_map *self, char *end_string)
 static struct cc_map_i map_interface = {
 	.get = (cc_map_get_fn_t)cc_hash_map_get,
 	.set = (cc_map_set_fn_t)cc_hash_map_set,
-	.set_new = (cc_map_set_fn_t)cc_hash_map_set_new,
+	.set_new = (cc_map_set_new_fn_t)cc_hash_map_set_new,
 	.del = (cc_map_del_fn_t)cc_hash_map_del,
 };
 

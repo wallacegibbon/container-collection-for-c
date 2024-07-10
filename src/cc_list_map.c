@@ -71,17 +71,25 @@ int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value)
 	return 0;
 }
 
-int cc_list_map_set(struct cc_list_map *self, void *key, void *value)
+/// Be careful! When `old_value` is NULL, the old value of `key` will be ignored, which may cause memory leak.
+int cc_list_map_set(struct cc_list_map *self, void *key, void *value, void **old_value)
 {
 	struct cc_map_item *item;
 
 	if (!cc_list_map_get_item(self, key, &item, NULL)) {
+		if (old_value != NULL)
+			*old_value = item->value;
+
 		item->value = value;
 		return 0;
 	}
 
 	if (cc_list_map_insert_new(self, key, value))
 		return 1;
+
+	/// When inserting new data to the map, `*old_value` should be NULL.
+	if (old_value != NULL)
+		*old_value = NULL;
 
 	return 0;
 }
@@ -121,7 +129,7 @@ int cc_list_map_print(struct cc_list_map *self, char *end_string)
 static struct cc_map_i map_interface = {
 	.get = (cc_map_get_fn_t)cc_list_map_get,
 	.set = (cc_map_set_fn_t)cc_list_map_set,
-	.set_new = (cc_map_set_fn_t)cc_list_map_set_new,
+	.set_new = (cc_map_set_new_fn_t)cc_list_map_set_new,
 	.del = (cc_map_del_fn_t)cc_list_map_del,
 };
 

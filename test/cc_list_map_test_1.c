@@ -12,9 +12,9 @@ int main(void)
 
 	assert(!cc_list_map_new(&map, NULL));
 
-	assert(!cc_list_map_set(map, (void *)1, (void *)'a'));
-	assert(!cc_map_set(map, (void *)2, (void *)'b'));
-	assert(!cc_map_set(map, (void *)9, (void *)'c'));
+	assert(!cc_list_map_set(map, (void *)1, (void *)'a', NULL));
+	assert(!cc_map_set(map, (void *)2, (void *)'b', NULL));
+	assert(!cc_map_set(map, (void *)9, (void *)'c', NULL));
 
 	assert(!cc_list_map_print(map, "\n"));
 

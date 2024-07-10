@@ -20,7 +20,7 @@ int cc_list_map_new(struct cc_list_map **self, cc_cmp_fn_t cmp);
 int cc_list_map_delete(struct cc_list_map *self);
 
 int cc_list_map_get(struct cc_list_map *self, void *key, void **result);
-int cc_list_map_set(struct cc_list_map *self, void *key, void *value);
+int cc_list_map_set(struct cc_list_map *self, void *key, void *value, void **old_value);
 int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value);
 int cc_list_map_del(struct cc_list_map *self, void *key, void **result);
 

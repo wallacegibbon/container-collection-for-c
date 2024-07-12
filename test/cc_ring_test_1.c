@@ -8,10 +8,12 @@ int main(void)
 
 	assert(!cc_ring_new(&ring, 8, sizeof(char)));
 	assert(cc_ring_space(ring) == 8);
+	assert(cc_ring_elem_nums(ring) == 0);
 	assert(cc_ring_shift(ring, &tmp) == CC_RING_EMPTY);
 
 	for (i = 0; i < 8; i++) {
 		assert(!cc_ring_append(ring, &i));
+		assert(cc_ring_elem_nums(ring) == (size_t)i + 1);
 		assert(cc_ring_space(ring) == (size_t)(8 - i - 1));
 	}
 
@@ -26,9 +28,11 @@ int main(void)
 
 	for (i = 0; i < 8; i++) {
 		assert(!cc_ring_shift(ring, &tmp));
+		assert(cc_ring_elem_nums(ring) == (size_t)(8 - i - 1));
 		assert(cc_ring_space(ring) == (size_t)i + 1);
 	}
 
+	assert(cc_ring_elem_nums(ring) == 0);
 	assert(cc_ring_space(ring) == 8);
 	/// this should fail since ring is empty
 	assert(cc_ring_shift(ring, &tmp));

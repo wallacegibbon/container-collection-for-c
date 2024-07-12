@@ -1,5 +1,4 @@
 #include "cc_ring.h"
-#include "cc_array.h"
 #include <stdlib.h>
 
 static inline size_t next_index(struct cc_ring *self, size_t index)
@@ -9,6 +8,14 @@ static inline size_t next_index(struct cc_ring *self, size_t index)
 		return next_index;
 	else
 		return 0;
+}
+
+size_t cc_ring_elem_nums(struct cc_ring *self)
+{
+	if (self->write_index >= self->read_index)
+		return self->write_index - self->read_index;
+	else
+		return self->data->elem_nums + self->write_index - self->read_index;
 }
 
 size_t cc_ring_space(struct cc_ring *self)

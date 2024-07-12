@@ -1,5 +1,4 @@
 #include "cc_stack.h"
-#include "cc_array.h"
 #include <stdlib.h>
 
 int cc_stack_push(struct cc_stack *self, void *item)

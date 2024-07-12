@@ -24,9 +24,12 @@ int cc_ring_delete(struct cc_ring *self);
 #endif
 
 int cc_ring_init(struct cc_ring *self, struct cc_array *data);
-size_t cc_ring_space(struct cc_ring *self);
+
 int cc_ring_append(struct cc_ring *self, void *item);
 int cc_ring_shift(struct cc_ring *self, void *item);
 int cc_ring_peek(struct cc_ring *self, void *item);
+
+size_t cc_ring_elem_nums(struct cc_ring *self);
+size_t cc_ring_space(struct cc_ring *self);
 
 #endif

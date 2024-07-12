@@ -27,5 +27,6 @@ int cc_ring_init(struct cc_ring *self, struct cc_array *data);
 size_t cc_ring_space(struct cc_ring *self);
 int cc_ring_append(struct cc_ring *self, void *item);
 int cc_ring_shift(struct cc_ring *self, void *item);
+int cc_ring_peek(struct cc_ring *self, void *item);
 
 #endif

@@ -20,6 +20,14 @@ int cc_stack_pop(struct cc_stack *self, void *item)
 	return cc_array_get_unsafe(self->data, self->top, item);
 }
 
+int cc_stack_peek(struct cc_stack *self, void *item)
+{
+	if (self->top == 0)
+		return CC_STACK_EMPTY;
+
+	return cc_array_get_unsafe(self->data, self->top - 1, item);
+}
+
 int cc_stack_init(struct cc_stack *self, struct cc_array *data)
 {
 	self->data = data;

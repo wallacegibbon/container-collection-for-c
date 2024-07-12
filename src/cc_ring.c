@@ -36,7 +36,7 @@ int cc_ring_append(struct cc_ring *self, void *item)
 	return 0;
 }
 
-int cc_ring_shift(struct cc_ring *self, void *item)
+int cc_ring_peek(struct cc_ring *self, void *item)
 {
 	if (self->read_index == self->write_index)
 		return CC_RING_EMPTY;
@@ -44,8 +44,18 @@ int cc_ring_shift(struct cc_ring *self, void *item)
 	if (cc_array_get_unsafe(self->data, self->read_index, item))
 		return 2;
 
-	self->read_index = next_index(self, self->read_index);
+	return 0;
+}
 
+int cc_ring_shift(struct cc_ring *self, void *item)
+{
+	int code;
+
+	code = cc_ring_peek(self, item);
+	if (code)
+		return code;
+
+	self->read_index = next_index(self, self->read_index);
 	return 0;
 }
 

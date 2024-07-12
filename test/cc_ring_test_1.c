@@ -19,6 +19,11 @@ int main(void)
 	/// this should fail since ring is full
 	assert(cc_ring_append(ring, &i) == CC_RING_FULL);
 
+	assert(!cc_ring_peek(ring, &i));
+	assert(i == 0);
+	assert(!cc_ring_peek(ring, &i));
+	assert(i == 0);
+
 	for (i = 0; i < 8; i++) {
 		assert(!cc_ring_shift(ring, &tmp));
 		assert(cc_ring_space(ring) == (size_t)i + 1);

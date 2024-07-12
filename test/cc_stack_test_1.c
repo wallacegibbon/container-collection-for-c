@@ -1,6 +1,5 @@
 #include "cc_stack.h"
 #include <assert.h>
-#include <stdio.h>
 
 int main(void)
 {
@@ -17,6 +16,11 @@ int main(void)
 
 	for (i = 0; i < 10; i++)
 		assert(!cc_stack_push(p_stack, &i));
+
+	assert(!cc_stack_peek(p_stack, &i));
+	assert(i == 9);
+	assert(!cc_stack_peek(p_stack, &i));
+	assert(i == 9);
 
 	for (i = 9; i >= 0; i--) {
 		assert(!cc_stack_pop(p_stack, &tmp));

@@ -25,5 +25,6 @@ int cc_stack_delete(struct cc_stack *self);
 int cc_stack_init(struct cc_stack *self, struct cc_array *data);
 int cc_stack_push(struct cc_stack *self, void *item);
 int cc_stack_pop(struct cc_stack *self, void *item);
+int cc_stack_peek(struct cc_stack *self, void *item);
 
 #endif

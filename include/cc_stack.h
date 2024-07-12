@@ -5,6 +5,11 @@
 #include "cc_common.h"
 #include <stddef.h>
 
+enum {
+	CC_STACK_EMPTY = 0xFFE0,
+	CC_STACK_FULL = 0xFFE1,
+};
+
 struct cc_stack {
 	struct cc_array *data;
 	size_t top;

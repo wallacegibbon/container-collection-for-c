@@ -5,7 +5,7 @@
 int cc_stack_push(struct cc_stack *self, void *item)
 {
 	if (cc_array_set(self->data, self->top, item))
-		return 1;
+		return CC_STACK_FULL;
 
 	self->top++;
 	return 0;
@@ -14,7 +14,7 @@ int cc_stack_push(struct cc_stack *self, void *item)
 int cc_stack_pop(struct cc_stack *self, void *item)
 {
 	if (self->top == 0)
-		return 1;
+		return CC_STACK_EMPTY;
 
 	self->top--;
 	return cc_array_get_unsafe(self->data, self->top, item);

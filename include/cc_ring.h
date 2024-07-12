@@ -5,6 +5,11 @@
 #include "cc_common.h"
 #include <stddef.h>
 
+enum {
+	CC_RING_EMPTY = 0xFFF0,
+	CC_RING_FULL = 0xFFF1,
+};
+
 struct cc_ring {
 	struct cc_array *data;
 	size_t read_index;

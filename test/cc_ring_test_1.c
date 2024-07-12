@@ -8,6 +8,7 @@ int main(void)
 
 	assert(!cc_ring_new(&ring, 8, sizeof(char)));
 	assert(cc_ring_space(ring) == 8);
+	assert(cc_ring_shift(ring, &tmp) == CC_RING_EMPTY);
 
 	for (i = 0; i < 8; i++) {
 		assert(!cc_ring_append(ring, &i));
@@ -16,7 +17,7 @@ int main(void)
 
 	assert(cc_ring_space(ring) == 0);
 	/// this should fail since ring is full
-	assert(cc_ring_append(ring, &i));
+	assert(cc_ring_append(ring, &i) == CC_RING_FULL);
 
 	for (i = 0; i < 8; i++) {
 		assert(!cc_ring_shift(ring, &tmp));

@@ -3,31 +3,40 @@
 
 int main(void)
 {
-	struct cc_array array;
-	struct cc_stack stack, *p_stack;
-	// unsigned char buffer[10];
+	struct cc_stack *stack;
 	char i, tmp;
 
-	assert(!cc_stack_new(&p_stack, 10, sizeof(char)));
+	assert(!cc_stack_new(&stack, 8, sizeof(char)));
+	assert(cc_stack_space(stack) == 8);
+	assert(cc_stack_elem_nums(stack) == 0);
+	assert(cc_stack_pop(stack, &tmp) == CC_STACK_EMPTY);
 
-	// assert(!cc_array_init(&array, buffer, 10, 1));
-	// assert(!cc_stack_init(&stack, &array));
-	// p_stack = &stack;
-
-	for (i = 0; i < 10; i++)
-		assert(!cc_stack_push(p_stack, &i));
-
-	assert(!cc_stack_peek(p_stack, &i));
-	assert(i == 9);
-	assert(!cc_stack_peek(p_stack, &i));
-	assert(i == 9);
-
-	for (i = 9; i >= 0; i--) {
-		assert(!cc_stack_pop(p_stack, &tmp));
-		assert(tmp == i);
+	for (i = 0; i < 8; i++) {
+		assert(!cc_stack_push(stack, &i));
+		assert(cc_stack_elem_nums(stack) == (size_t)(i + 1));
+		assert(cc_stack_space(stack) == (size_t)(8 - i - 1));
 	}
 
-	assert(!cc_stack_delete(p_stack));
+	assert(cc_stack_space(stack) == 0);
+	assert(cc_stack_push(stack, &i) == CC_STACK_FULL);
+
+	assert(!cc_stack_peek(stack, &i));
+	assert(i == 7);
+	assert(!cc_stack_peek(stack, &i));
+	assert(i == 7);
+
+	for (i = 0; i < 8; i++) {
+		assert(!cc_stack_pop(stack, &tmp));
+		assert(tmp == 8 - i - 1);
+		assert(cc_stack_elem_nums(stack) == (size_t)(8 - i - 1));
+		assert(cc_stack_space(stack) == (size_t)(i + 1));
+	}
+
+	assert(cc_stack_elem_nums(stack) == 0);
+	assert(cc_stack_space(stack) == 8);
+	assert(cc_stack_pop(stack, &tmp) == CC_STACK_EMPTY);
+
+	assert(!cc_stack_delete(stack));
 
 	return 0;
 }

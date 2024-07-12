@@ -27,6 +27,16 @@ int cc_stack_peek(struct cc_stack *self, void *item)
 	return cc_array_get_unsafe(self->data, self->top - 1, item);
 }
 
+size_t cc_stack_elem_nums(struct cc_stack *self)
+{
+	return self->top;
+}
+
+size_t cc_stack_space(struct cc_stack *self)
+{
+	return self->data->elem_nums - self->top;
+}
+
 int cc_stack_init(struct cc_stack *self, struct cc_array *data)
 {
 	self->data = data;

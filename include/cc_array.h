@@ -5,6 +5,10 @@
 #include "cc_iter.h"
 #include <stddef.h>
 
+enum {
+	CC_ARRAY_OUT_OF_RANGE = 0xFFD0,
+};
+
 ///-----------------------------------------------------------------------------
 /// Generic array for data of different length
 ///-----------------------------------------------------------------------------

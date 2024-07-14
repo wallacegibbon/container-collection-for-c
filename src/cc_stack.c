@@ -3,7 +3,7 @@
 
 int cc_stack_push(struct cc_stack *self, void *item)
 {
-	if (cc_array_set(self->data, self->top, item))
+	if (cc_array_set(self->data, self->top, item) == CC_ARRAY_OUT_OF_RANGE)
 		return CC_STACK_FULL;
 
 	self->top++;
@@ -70,7 +70,7 @@ int cc_stack_new(struct cc_stack **self, size_t elem_nums, size_t elem_size)
 	return 0;
 
 fail3:
-	code = cc_array_delete(data);
+	cc_array_delete(data);
 fail2:
 	free(tmp);
 fail1:

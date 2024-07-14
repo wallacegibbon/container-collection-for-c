@@ -97,7 +97,7 @@ int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size)
 	return 0;
 
 fail3:
-	code = cc_array_delete(data);
+	cc_array_delete(data);
 fail2:
 	free(tmp);
 fail1:

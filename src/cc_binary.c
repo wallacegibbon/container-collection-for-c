@@ -222,7 +222,7 @@ int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root, enu
 	return 0;
 
 fail3:
-	code = cc_list_delete(tmp->queue);
+	cc_list_delete(tmp->queue);
 fail2:
 	free(tmp);
 fail1:

@@ -53,7 +53,7 @@ int cc_array_get(struct cc_array *self, size_t index, void *result)
 	if (result == NULL)
 		return 1;
 	if (index >= self->elem_nums)
-		return 2;
+		return CC_ARRAY_OUT_OF_RANGE;
 
 	cc_array_get_(self, index, result);
 	return 0;
@@ -64,7 +64,7 @@ int cc_array_get_ref(struct cc_array *self, size_t index, void **ref)
 	if (try_reset_double_p(ref))
 		return 1;
 	if (index >= self->elem_nums)
-		return 2;
+		return CC_ARRAY_OUT_OF_RANGE;
 
 	cc_array_get_ref_(self, index, ref);
 	return 0;
@@ -79,7 +79,7 @@ int cc_array_set_unsafe(struct cc_array *self, size_t index, void *value)
 int cc_array_set(struct cc_array *self, size_t index, void *value)
 {
 	if (index >= self->elem_nums)
-		return 1;
+		return CC_ARRAY_OUT_OF_RANGE;
 
 	cc_array_set_(self, index, value);
 	return 0;
@@ -92,7 +92,7 @@ int cc_array_reverse(struct cc_array *self, size_t start, size_t end)
 	if (start == end)
 		return 1;
 	if (start >= self->elem_nums)
-		return 2;
+		return CC_ARRAY_OUT_OF_RANGE;
 	if (end > self->elem_nums)
 		end = self->elem_nums;
 

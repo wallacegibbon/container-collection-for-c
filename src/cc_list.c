@@ -63,6 +63,11 @@ int cc_list_remove(struct cc_list *self, size_t index, void **result)
 	return 0;
 }
 
+size_t cc_list_size(struct cc_list *self)
+{
+	return self->root.size;
+}
+
 int cc_list_append(struct cc_list *self, void *value)
 {
 	struct cc_list_node *node;

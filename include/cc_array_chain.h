@@ -2,7 +2,7 @@
 #define __CC_ARRAY_CHAIN_H
 
 #ifdef NO_MALLOC
-#error "You can NOT use `cc_array_buffer` without support for the `malloc` function."
+#error "You can NOT use `cc_array_chain` without support for the `malloc` function."
 #endif
 
 #include "cc_array.h"

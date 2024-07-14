@@ -123,16 +123,11 @@ int cc_list_init(struct cc_list *self)
 int cc_list_new(struct cc_list **self)
 {
 	struct cc_list *tmp;
-	int code = 0;
 
 	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL) {
-		code = 1;
+	if (tmp == NULL)
 		goto fail1;
-	}
-
-	code = cc_list_init(tmp);
-	if (code)
+	if (cc_list_init(tmp))
 		goto fail2;
 
 	*self = tmp;
@@ -141,7 +136,7 @@ int cc_list_new(struct cc_list **self)
 fail2:
 	free(tmp);
 fail1:
-	return code;
+	return 1;
 }
 
 static inline int free_and_next(struct cc_list_node **p_current)

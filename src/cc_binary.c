@@ -193,25 +193,17 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
 int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root, enum cc_traverse_direction direction)
 {
 	struct cc_binary_iter *tmp;
-	int code = 0;
 
-	if (root == NULL) {
-		code = 1;
+	if (root == NULL)
 		goto fail1;
-	}
 
 	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL) {
-		code = 2;
+	if (tmp == NULL)
 		goto fail1;
-	}
 
-	code = cc_list_new(&tmp->queue);
-	if (code)
+	if (cc_list_new(&tmp->queue))
 		goto fail2;
-
-	code = cc_list_append(tmp->queue, root);
-	if (code)
+	if (cc_list_append(tmp->queue, root))
 		goto fail3;
 
 	tmp->iterator = &iterator_interface;
@@ -226,7 +218,7 @@ fail3:
 fail2:
 	free(tmp);
 fail1:
-	return code;
+	return 1;
 }
 
 int cc_binary_iter_delete(struct cc_binary_iter *self)

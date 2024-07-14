@@ -104,32 +104,24 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t c
 	struct cc_hash_map *tmp;
 	struct cc_list_map **item;
 	struct cc_array_iter iter;
-	int code = 0;
 
-	if (bucket_size == 0) {
-		code = 1;
+	if (bucket_size == 0)
 		goto fail1;
-	}
 
 	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL) {
-		code = 2;
+	if (tmp == NULL)
 		goto fail1;
-	}
 
 	tmp->interface = &map_interface;
 
-	code = cc_array_new(&tmp->data, bucket_size, sizeof(struct cc_list_map *));
-	if (code)
+	if (cc_array_new(&tmp->data, bucket_size, sizeof(struct cc_list_map *)))
 		goto fail2;
 
 	tmp->bucket_size = bucket_size;
 
 	/// The elements of the array should be initialized as NULLs.
-	code = cc_array_iter_init(&iter, tmp->data);
-	if (code)
+	if (cc_array_iter_init(&iter, tmp->data))
 		goto fail2;
-
 	while (!cc_iter_next(&iter, &item, NULL))
 		*item = NULL;
 
@@ -142,7 +134,7 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t c
 fail2:
 	free(tmp);
 fail1:
-	return code;
+	return 1;
 }
 
 int cc_hash_map_delete(struct cc_hash_map *self)

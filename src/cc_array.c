@@ -17,13 +17,12 @@ static inline void cc_array_set_(struct cc_array *self, size_t index, void *valu
 	memcpy(self->buffer + index * self->elem_size, value, self->elem_size);
 }
 
-int cc_array_swap(struct cc_array *self, size_t i, size_t j)
+void cc_array_swap(struct cc_array *self, size_t i, size_t j)
 {
 	unsigned char tmp[self->elem_size];
 	cc_array_get_(self, i, tmp);
 	memcpy(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size, self->elem_size);
 	cc_array_set_(self, j, tmp);
-	return 0;
 }
 
 int cc_array_cmp(struct cc_array *self, cc_cmp_fn_t cmp, size_t i, size_t j)
@@ -36,16 +35,14 @@ int cc_array_is_valid_index(struct cc_array *self, size_t index)
 	return index < self->elem_nums;
 }
 
-int cc_array_get_unsafe(struct cc_array *self, size_t index, void *result)
+void cc_array_get_unsafe(struct cc_array *self, size_t index, void *result)
 {
 	cc_array_get_(self, index, result);
-	return 0;
 }
 
-int cc_array_get_ref_unsafe(struct cc_array *self, size_t index, void **ref)
+void cc_array_get_ref_unsafe(struct cc_array *self, size_t index, void **ref)
 {
 	cc_array_get_ref_(self, index, ref);
-	return 0;
 }
 
 int cc_array_get(struct cc_array *self, size_t index, void *result)
@@ -70,10 +67,9 @@ int cc_array_get_ref(struct cc_array *self, size_t index, void **ref)
 	return 0;
 }
 
-int cc_array_set_unsafe(struct cc_array *self, size_t index, void *value)
+void cc_array_set_unsafe(struct cc_array *self, size_t index, void *value)
 {
 	cc_array_set_(self, index, value);
-	return 0;
 }
 
 int cc_array_set(struct cc_array *self, size_t index, void *value)
@@ -117,22 +113,16 @@ int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size)
 {
 	struct cc_array *tmp;
 	unsigned char *buffer;
-	int code;
 
 	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL) {
-		code = 1;
+	if (tmp == NULL)
 		goto fail1;
-	}
 
 	buffer = malloc(elem_nums * elem_size);
-	if (buffer == NULL) {
-		code = 2;
+	if (buffer == NULL)
 		goto fail2;
-	}
 
-	code = cc_array_init(tmp, buffer, elem_nums, elem_size);
-	if (code)
+	if (cc_array_init(tmp, buffer, elem_nums, elem_size))
 		goto fail3;
 
 	*self = tmp;
@@ -143,7 +133,13 @@ fail3:
 fail2:
 	free(tmp);
 fail1:
-	return code;
+	return 1;
+}
+
+int cc_array_delete_contain_only(struct cc_array *self)
+{
+	free(self);
+	return 0;
 }
 
 int cc_array_delete(struct cc_array *self)

@@ -31,11 +31,8 @@ int cc_ring_append(struct cc_ring *self, void *item)
 	if (write_index_next == self->read_index)
 		return CC_RING_FULL;
 
-	if (cc_array_set_unsafe(self->data, self->write_index, item))
-		return 2;
-
+	cc_array_set_unsafe(self->data, self->write_index, item);
 	self->write_index = write_index_next;
-
 	return 0;
 }
 
@@ -44,19 +41,14 @@ int cc_ring_peek(struct cc_ring *self, void *item)
 	if (self->read_index == self->write_index)
 		return CC_RING_EMPTY;
 
-	if (cc_array_get_unsafe(self->data, self->read_index, item))
-		return 2;
-
+	cc_array_get_unsafe(self->data, self->read_index, item);
 	return 0;
 }
 
 int cc_ring_shift(struct cc_ring *self, void *item)
 {
-	int code;
-
-	code = cc_ring_peek(self, item);
-	if (code)
-		return code;
+	if (cc_ring_peek(self, item) == CC_RING_EMPTY)
+		return CC_RING_EMPTY;
 
 	self->read_index = next_index(self, self->read_index);
 	return 0;
@@ -76,21 +68,15 @@ int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size)
 {
 	struct cc_ring *tmp;
 	struct cc_array *data;
-	int code = 0;
 
 	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL) {
-		code = 1;
+	if (tmp == NULL)
 		goto fail1;
-	}
 
 	/// 1 element will be wasted, so pass `elem_nums + 1` to `cc_array_new`.
-	code = cc_array_new(&data, elem_nums + 1, elem_size);
-	if (code)
+	if (cc_array_new(&data, elem_nums + 1, elem_size))
 		goto fail2;
-
-	code = cc_ring_init(tmp, data);
-	if (code)
+	if (cc_ring_init(tmp, data))
 		goto fail3;
 
 	*self = tmp;
@@ -101,7 +87,7 @@ fail3:
 fail2:
 	free(tmp);
 fail1:
-	return code;
+	return 1;
 }
 
 int cc_ring_delete(struct cc_ring *self)

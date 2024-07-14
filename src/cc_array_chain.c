@@ -49,18 +49,11 @@ int cc_array_chain_to_array(struct cc_array_chain *self, struct cc_array **resul
 	struct cc_list_iter iter;
 	struct cc_array *r, **tmp;
 	size_t i, size;
-	int code;
 
-	code = cc_array_new(&r, self->total_nums + nums_to_reserve, self->node_elem_size);
-	if (code) {
-		code = 1;
+	if (cc_array_new(&r, self->total_nums + nums_to_reserve, self->node_elem_size))
 		goto fail1;
-	}
-
-	code = cc_list_iter_init(&iter, self->node_chain, 0);
-	if (code)
+	if (cc_list_iter_init(&iter, self->node_chain, 0))
 		goto fail2;
-
 	while (!cc_iter_next(&iter, &tmp, &i))
 		memcpy(r->buffer + self->node_elem_nums * i, (*tmp)->buffer, cc_array_chain_node_size(self, i));
 
@@ -70,22 +63,17 @@ int cc_array_chain_to_array(struct cc_array_chain *self, struct cc_array **resul
 fail2:
 	cc_array_delete(r);
 fail1:
-	return code;
+	return 1;
 }
 
 int cc_array_chain_new(struct cc_array_chain **self, int node_elem_nums, int node_elem_size)
 {
 	struct cc_array_chain *tmp;
-	int code;
 
 	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL) {
-		code = 1;
+	if (tmp == NULL)
 		goto fail1;
-	}
-
-	code = cc_list_new(&tmp->node_chain);
-	if (code)
+	if (cc_list_new(&tmp->node_chain))
 		goto fail2;
 
 	tmp->node_elem_nums = node_elem_nums;
@@ -103,7 +91,7 @@ fail3:
 fail2:
 	free(tmp);
 fail1:
-	return code;
+	return 1;
 }
 
 int cc_array_chain_delete(struct cc_array_chain *self)
@@ -128,21 +116,18 @@ int cc_array_chain_delete(struct cc_array_chain *self)
 int cc_array_chain_node_new(struct cc_array_chain *self)
 {
 	struct cc_array *arr;
-	int code = 0;
 
-	code = cc_array_new(&arr, self->node_elem_nums, self->node_elem_size);
-	if (code)
+	if (cc_array_new(&arr, self->node_elem_nums, self->node_elem_size))
 		goto fail1;
-
-	code = cc_list_append(self->node_chain, arr);
-	if (code)
+	if (cc_list_append(self->node_chain, arr))
 		goto fail2;
 
 	self->cursor = arr;
 	self->cursor_index = 0;
 	return 0;
+
 fail2:
 	cc_array_delete(arr);
 fail1:
-	return code;
+	return 1;
 }

@@ -16,7 +16,8 @@ int cc_stack_pop(struct cc_stack *self, void *item)
 		return CC_STACK_EMPTY;
 
 	self->top--;
-	return cc_array_get_unsafe(self->data, self->top, item);
+	cc_array_get_unsafe(self->data, self->top, item);
+	return 0;
 }
 
 int cc_stack_peek(struct cc_stack *self, void *item)
@@ -24,7 +25,8 @@ int cc_stack_peek(struct cc_stack *self, void *item)
 	if (self->top == 0)
 		return CC_STACK_EMPTY;
 
-	return cc_array_get_unsafe(self->data, self->top - 1, item);
+	cc_array_get_unsafe(self->data, self->top - 1, item);
+	return 0;
 }
 
 size_t cc_stack_elem_nums(struct cc_stack *self)
@@ -50,20 +52,13 @@ int cc_stack_new(struct cc_stack **self, size_t elem_nums, size_t elem_size)
 {
 	struct cc_stack *tmp;
 	struct cc_array *data;
-	int code = 0;
 
 	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL) {
-		code = 1;
+	if (tmp == NULL)
 		goto fail1;
-	}
-
-	code = cc_array_new(&data, elem_nums, elem_size);
-	if (code)
+	if (cc_array_new(&data, elem_nums, elem_size))
 		goto fail2;
-
-	code = cc_stack_init(tmp, data);
-	if (code)
+	if (cc_stack_init(tmp, data))
 		goto fail3;
 
 	*self = tmp;
@@ -74,7 +69,7 @@ fail3:
 fail2:
 	free(tmp);
 fail1:
-	return code;
+	return 1;
 }
 
 int cc_stack_delete(struct cc_stack *self)

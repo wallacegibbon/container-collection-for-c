@@ -108,24 +108,17 @@ int parser_parse(struct parser *self, struct cc_binary **result)
 int parser_new(struct parser **self, char *input)
 {
 	struct parser *tmp;
-	int code = 0;
 
-	if (input == NULL) {
-		code = 1;
+	if (input == NULL)
 		goto fail1;
-	}
 
 	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL) {
-		code = 2;
+	if (tmp == NULL)
 		goto fail1;
-	}
 
 	tmp->input = input;
-	if (cc_binary_new(&tmp->root, NULL, NULL)) {
-		code = 3;
+	if (cc_binary_new(&tmp->root, NULL, NULL))
 		goto fail2;
-	}
 
 	*self = tmp;
 	return 0;
@@ -133,7 +126,7 @@ int parser_new(struct parser **self, char *input)
 fail2:
 	free(tmp);
 fail1:
-	return code;
+	return 1;
 }
 
 /// Delete the parser along with the result cc_binary tree.

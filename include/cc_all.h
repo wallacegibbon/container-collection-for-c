@@ -6,6 +6,8 @@
 #include "cc_common.h"
 #include "cc_iter.h"
 #include "cc_array.h"
+#include "cc_array_chain.h"
+#include "cc_string_builder.h"
 #include "cc_ring.h"
 #include "cc_stack.h"
 #include "cc_list.h"

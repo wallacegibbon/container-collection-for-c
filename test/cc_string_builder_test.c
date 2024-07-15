@@ -10,6 +10,10 @@ int main(void)
 
 	assert(!cc_string_builder_new(&builder));
 
+	assert(!cc_string_builder_to_string(builder, &tmp));
+	assert(strcmp(tmp, "") == 0);
+	free(tmp);
+
 	assert(!cc_string_builder_append(builder, "abc", 3));
 	assert(!cc_string_builder_append(builder, "def", 3));
 	assert(!cc_string_builder_append(builder, "ghi", 3));
@@ -19,10 +23,9 @@ int main(void)
 
 	// cc_debug_print(">> \"%s\"\n", tmp);
 	assert(strcmp(tmp, "abcdefghijkl") == 0);
+	free(tmp);
 
 	assert(!cc_string_builder_delete(builder));
-
-	free(tmp);
 
 	return 0;
 }

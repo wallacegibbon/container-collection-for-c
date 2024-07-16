@@ -16,8 +16,8 @@ int main(void)
 
 	assert(!cc_string_builder_append(builder, "abc", 3));
 	assert(!cc_string_builder_append(builder, "def", 3));
-	assert(!cc_string_builder_append(builder, "ghi", 3));
-	assert(!cc_string_builder_append(builder, "jkl", 3));
+	assert(!cc_string_builder_append_str(builder, "ghi"));
+	assert(!cc_string_builder_append_str(builder, "jkl"));
 
 	assert(!cc_string_builder_to_string(builder, &tmp));
 
@@ -26,6 +26,10 @@ int main(void)
 	free(tmp);
 
 	assert(!cc_string_builder_delete(builder));
+
+	assert(!cc_string_concat(&tmp, 3, "abc", "def", "ghi", "jkl"));
+	assert(strcmp(tmp, "abcdefghi") == 0);
+	free(tmp);
 
 	return 0;
 }

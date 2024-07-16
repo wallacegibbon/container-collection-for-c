@@ -1,7 +1,9 @@
 #include "cc_string_builder.h"
 #include "cc_array.h"
 #include "cc_array_chain.h"
+#include <stdarg.h>
 #include <stdlib.h>
+#include <string.h>
 
 int cc_string_builder_to_string(struct cc_string_builder *self, char **result)
 {
@@ -24,6 +26,15 @@ fail2:
 	cc_array_delete(arr);
 fail1:
 	return 1;
+}
+
+int cc_string_builder_append_str(struct cc_string_builder *self, char *s)
+{
+	while (*s) {
+		if (cc_array_chain_add_elem(self->chain, s++))
+			return 1;
+	}
+	return 0;
 }
 
 int cc_string_builder_append(struct cc_string_builder *self, char *s, size_t size)
@@ -59,4 +70,32 @@ int cc_string_builder_delete(struct cc_string_builder *self)
 
 	free(self);
 	return 0;
+}
+
+int cc_string_concat(char **result, int n, ...)
+{
+	struct cc_string_builder *string_builder;
+	char *tmp;
+	va_list args;
+
+	if (cc_string_builder_new(&string_builder))
+		goto fail1;
+
+	va_start(args, n);
+	while (n--) {
+		if (cc_string_builder_append_str(string_builder, va_arg(args, char *)))
+			goto fail2;
+	}
+	va_end(args);
+
+	if (cc_string_builder_to_string(string_builder, result))
+		goto fail2;
+
+	cc_string_builder_delete(string_builder);
+	return 0;
+
+fail2:
+	cc_string_builder_delete(string_builder);
+fail1:
+	return 1;
 }

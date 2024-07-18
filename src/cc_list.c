@@ -2,6 +2,155 @@
 #include "cc_common.h"
 #include <stdlib.h>
 
+////////////////////////////////////////////////////////////////////////////////
+/// List Cursor functions
+////////////////////////////////////////////////////////////////////////////////
+int cc_list_cursor_n_next(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
+{
+	struct cc_list_node *n;
+	for (n = self->current; n->next != &self->list->root && offset > 0; offset--)
+		n = n->next;
+
+	if (offset > 0)
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
+
+	*result = n;
+	return 0;
+}
+
+int cc_list_cursor_n_prev(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
+{
+	struct cc_list_node *n;
+	for (n = self->current; n->prev != &self->list->root && offset > 0; offset--)
+		n = n->prev;
+
+	if (offset > 0)
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
+
+	*result = n;
+	return 0;
+}
+
+/// Caution: Please make sure that `result` can hold `count` numbers of pointers.
+int cc_list_cursor_get_n(struct cc_list_cursor *self, int offset, int count, void **result)
+{
+	struct cc_list_node *start;
+	int code, i;
+
+	if (self->current == NULL)
+		return 1;
+	if (offset >= 0)
+		code = cc_list_cursor_n_next(self, offset, &start);
+	else
+		code = cc_list_cursor_n_prev(self, -offset, &start);
+
+	if (code == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE)
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
+
+	for (i = 0; i < count && start != &self->list->root; i++, start = start->next)
+		result[i] = start->data;
+
+	if (i < count)
+		return CC_LIST_CURSOR_GET_OUT_OF_RANGE;
+
+	return 0;
+}
+
+int cc_list_cursor_move_n(struct cc_list_cursor *self, int offset)
+{
+	struct cc_list_node *new_pos;
+	int code;
+
+	if (offset >= 0)
+		code = cc_list_cursor_n_next(self, offset, &new_pos);
+	else
+		code = cc_list_cursor_n_prev(self, -offset, &new_pos);
+	if (code == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE)
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
+
+	self->current = new_pos;
+	return 0;
+}
+
+int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list)
+{
+	struct cc_list_cursor *tmp;
+
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL)
+		goto fail1;
+
+	tmp->list = list;
+	if (list->root.next == &list->root)
+		tmp->current = NULL;
+	else
+		tmp->current = list->root.next;
+
+	*self = tmp;
+	return 0;
+fail2:
+	free(tmp);
+fail1:
+	return 1;
+}
+
+int cc_list_cursor_delete(struct cc_list_cursor *self)
+{
+	free(self);
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// List Iterator functions
+////////////////////////////////////////////////////////////////////////////////
+static struct cc_iter_i iterator_interface = {
+	.next = (cc_iter_next_fn_t)cc_list_iter_next,
+};
+
+static inline void cc_list_iter_step(struct cc_list_iter *self)
+{
+	if (self->direction == 0)
+		self->cursor = self->cursor->next;
+	else
+		self->cursor = self->cursor->prev;
+}
+
+int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index)
+{
+	if (try_reset_double_p(item))
+		return 1;
+	if (self->cursor == &self->list->root)
+		return 2;
+
+	*item = &self->cursor->data;
+
+	if (index != NULL)
+		*index = self->index;
+
+	self->index++;
+
+	cc_list_iter_step(self);
+	return 0;
+}
+
+int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direction)
+{
+	if (list == NULL)
+		return 1;
+
+	self->iterator = &iterator_interface;
+	self->list = list;
+	self->index = 0;
+	self->direction = direction;
+	self->cursor = &self->list->root;
+
+	cc_list_iter_step(self);
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// List basic functions
+////////////////////////////////////////////////////////////////////////////////
 static int prev_node_of(struct cc_list *self, struct cc_list_node **result, size_t index)
 {
 	struct cc_list_node *node;
@@ -173,50 +322,5 @@ int cc_list_print(struct cc_list *self, int direction)
 		cc_debug_print("(%d)%llu, ", index, *tmp);
 
 	cc_debug_print("\n\n");
-	return 0;
-}
-
-static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn_t)cc_list_iter_next,
-};
-
-static inline void cc_list_iter_step(struct cc_list_iter *self)
-{
-	if (self->direction == 0)
-		self->cursor = self->cursor->next;
-	else
-		self->cursor = self->cursor->prev;
-}
-
-int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index)
-{
-	if (try_reset_double_p(item))
-		return 1;
-	if (self->cursor == &self->list->root)
-		return 2;
-
-	*item = &self->cursor->data;
-
-	if (index != NULL)
-		*index = self->index;
-
-	self->index++;
-
-	cc_list_iter_step(self);
-	return 0;
-}
-
-int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direction)
-{
-	if (list == NULL)
-		return 1;
-
-	self->iterator = &iterator_interface;
-	self->list = list;
-	self->index = 0;
-	self->direction = direction;
-	self->cursor = &self->list->root;
-
-	cc_list_iter_step(self);
 	return 0;
 }

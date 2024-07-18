@@ -7,17 +7,23 @@
 
 #include "cc_iter.h"
 
-/// The `cc_list_node` is used both for real nodes and the root node.
-/// For root node, the `data` field is used as `size` to keep the number of elements in the list.
+////////////////////////////////////////////////////////////////////////////////
+/// The List Node
+////////////////////////////////////////////////////////////////////////////////
 struct cc_list_node {
 	struct cc_list_node *prev;
 	struct cc_list_node *next;
 	union {
+		/// For data nodes, we use the `data` to hold a value or a pointer to value.
 		void *data;
+		/// For root node, we use `size` to keep the number of elements in the list.
 		size_t size;
 	};
 };
 
+////////////////////////////////////////////////////////////////////////////////
+/// The List Container
+////////////////////////////////////////////////////////////////////////////////
 struct cc_list {
 	struct cc_list_node root;
 };
@@ -34,6 +40,28 @@ size_t cc_list_size(struct cc_list *self);
 
 int cc_list_print(struct cc_list *self, int direction);
 
+////////////////////////////////////////////////////////////////////////////////
+/// The List Cursor
+////////////////////////////////////////////////////////////////////////////////
+enum {
+	CC_LIST_CURSOR_MOVE_OUT_OF_RANGE = 0xFF10,
+	CC_LIST_CURSOR_GET_OUT_OF_RANGE = 0xFF11,
+};
+
+struct cc_list_cursor {
+	struct cc_list *list;
+	struct cc_list_node *current;
+};
+
+int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list);
+int cc_list_cursor_delete(struct cc_list_cursor *self);
+
+int cc_list_cursor_get_n(struct cc_list_cursor *self, int offset, int count, void **result);
+int cc_list_cursor_move_n(struct cc_list_cursor *self, int offset);
+
+////////////////////////////////////////////////////////////////////////////////
+/// The List Iterator
+////////////////////////////////////////////////////////////////////////////////
 struct cc_list_iter {
 	struct cc_iter_i *iterator;
 	struct cc_list *list;

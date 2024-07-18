@@ -28,17 +28,26 @@ fail1:
 	return 1;
 }
 
+/// When `s` is NULL, ignore and return success directly
 int cc_string_builder_append_str(struct cc_string_builder *self, char *s)
 {
+	if (s == NULL)
+		return 0;
+
 	while (*s) {
 		if (cc_array_chain_add_elem(self->chain, s++))
 			return 1;
 	}
+
 	return 0;
 }
 
+/// When `s` is NULL, ignore and return success directly
 int cc_string_builder_append(struct cc_string_builder *self, char *s, size_t size)
 {
+	if (s == NULL)
+		return 0;
+
 	return cc_array_chain_append(self->chain, s, size);
 }
 

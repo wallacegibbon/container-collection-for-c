@@ -16,8 +16,10 @@ int main(void)
 
 	assert(!cc_string_builder_append(builder, "abc", 3));
 	assert(!cc_string_builder_append(builder, "def", 3));
+	assert(!cc_string_builder_append(builder, NULL, 3));
 	assert(!cc_string_builder_append_str(builder, "ghi"));
 	assert(!cc_string_builder_append_str(builder, "jkl"));
+	assert(!cc_string_builder_append_str(builder, NULL));
 
 	assert(!cc_string_builder_to_string(builder, &tmp));
 

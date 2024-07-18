@@ -14,7 +14,7 @@ int main(void)
 	for (i = 0; i < 16; i++)
 		assert(!cc_list_append(list, (void *)i));
 
-	assert(!cc_list_cursor_new(&cursor, list));
+	assert(!cc_list_cursor_new(&cursor, list, NULL));
 
 	assert(!cc_list_cursor_get(cursor, 0, 1, (void **)buffer));
 
@@ -48,6 +48,34 @@ int main(void)
 	assert(buffer[0] == 2);
 	assert(buffer[1] == 3);
 	assert(buffer[2] == 4);
+
+	assert(cc_list_cursor_remove(cursor, -1, 2) == CC_LIST_CURSOR_REMOVING_CURSOR);
+	assert(cc_list_cursor_remove(cursor, -3, 2));
+	/// Before removing, `-2` is a valid range start
+	assert(!cc_list_cursor_get(cursor, -2, 3, (void **)buffer));
+
+	assert(!cc_list_cursor_remove(cursor, -1, 1));
+	/// After removing, `-2` is a NOT valid range start
+	assert(cc_list_cursor_get(cursor, -2, 3, (void **)buffer) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
+
+	assert(!cc_list_cursor_get(cursor, -1, 3, (void **)buffer));
+	assert(buffer[0] == 0);
+	assert(buffer[1] == 2);
+	assert(buffer[2] == 3);
+
+	assert(cc_list_cursor_remove(cursor, 0, 2) == CC_LIST_CURSOR_REMOVING_CURSOR);
+	assert(!cc_list_cursor_remove(cursor, 1, 2));
+	assert(!cc_list_cursor_get(cursor, -1, 3, (void **)buffer));
+	assert(buffer[0] == 0);
+	assert(buffer[1] == 2);
+	assert(buffer[2] == 5);
+
+	assert(!cc_list_cursor_insert_after(cursor, 0, (void *)99));
+	assert(!cc_list_cursor_get(cursor, -1, 4, (void **)buffer));
+	assert(buffer[0] == 0);
+	assert(buffer[1] == 2);
+	assert(buffer[2] == 99);
+	assert(buffer[3] == 5);
 
 	assert(!cc_list_cursor_delete(cursor));
 	assert(!cc_list_delete(list));

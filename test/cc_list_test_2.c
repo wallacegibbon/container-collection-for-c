@@ -1,7 +1,5 @@
 #include "cc_list.h"
 #include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 /// Example of using `cc_list` as a stack.
 

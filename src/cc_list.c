@@ -5,7 +5,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// List Cursor functions
 ////////////////////////////////////////////////////////////////////////////////
-int cc_list_cursor_n_next(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
+int cc_list_cursor_relative_next(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
 {
 	struct cc_list_node *n;
 	for (n = self->current; n->next != &self->list->root && offset > 0; offset--)
@@ -18,7 +18,7 @@ int cc_list_cursor_n_next(struct cc_list_cursor *self, int offset, struct cc_lis
 	return 0;
 }
 
-int cc_list_cursor_n_prev(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
+int cc_list_cursor_relative_prev(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
 {
 	struct cc_list_node *n;
 	for (n = self->current; n->prev != &self->list->root && offset > 0; offset--)
@@ -31,21 +31,25 @@ int cc_list_cursor_n_prev(struct cc_list_cursor *self, int offset, struct cc_lis
 	return 0;
 }
 
+int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
+{
+	if (self->current == NULL)
+		return 1;
+	if (offset >= 0)
+		return cc_list_cursor_relative_next(self, offset, result);
+	else
+		return cc_list_cursor_relative_prev(self, -offset, result);
+}
+
 /// Caution: Please make sure that `result` can hold `count` numbers of pointers.
-int cc_list_cursor_get_n(struct cc_list_cursor *self, int offset, int count, void **result)
+int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count, void **result)
 {
 	struct cc_list_node *start;
 	int code, i;
 
-	if (self->current == NULL)
-		return 1;
-	if (offset >= 0)
-		code = cc_list_cursor_n_next(self, offset, &start);
-	else
-		code = cc_list_cursor_n_prev(self, -offset, &start);
-
-	if (code == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE)
-		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
+	code = cc_list_cursor_relative_pos(self, offset, &start);
+	if (code)
+		return code;
 
 	for (i = 0; i < count && start != &self->list->root; i++, start = start->next)
 		result[i] = start->data;
@@ -56,17 +60,14 @@ int cc_list_cursor_get_n(struct cc_list_cursor *self, int offset, int count, voi
 	return 0;
 }
 
-int cc_list_cursor_move_n(struct cc_list_cursor *self, int offset)
+int cc_list_cursor_move(struct cc_list_cursor *self, int offset)
 {
 	struct cc_list_node *new_pos;
 	int code;
 
-	if (offset >= 0)
-		code = cc_list_cursor_n_next(self, offset, &new_pos);
-	else
-		code = cc_list_cursor_n_prev(self, -offset, &new_pos);
-	if (code == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE)
-		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
+	code = cc_list_cursor_relative_pos(self, offset, &new_pos);
+	if (code)
+		return code;
 
 	self->current = new_pos;
 	return 0;

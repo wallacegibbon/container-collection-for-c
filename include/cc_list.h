@@ -56,8 +56,9 @@ struct cc_list_cursor {
 int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list);
 int cc_list_cursor_delete(struct cc_list_cursor *self);
 
-int cc_list_cursor_get_n(struct cc_list_cursor *self, int offset, int count, void **result);
-int cc_list_cursor_move_n(struct cc_list_cursor *self, int offset);
+int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset, struct cc_list_node **result);
+int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count, void **result);
+int cc_list_cursor_move(struct cc_list_cursor *self, int offset);
 
 ////////////////////////////////////////////////////////////////////////////////
 /// The List Iterator

@@ -7,36 +7,35 @@
 ////////////////////////////////////////////////////////////////////////////////
 int cc_list_cursor_relative_next(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
 {
-	struct cc_list_node *n;
+	struct cc_list_node *node;
 	/// The `last` element can be the root node, so it's `n != &self->list->root` here
-	for (n = self->current; n != &self->list->root && offset > 0; offset--)
-		n = n->next;
+	for (node = self->current; node != &self->list->root && offset > 0; offset--)
+		node = node->next;
 
 	if (offset > 0)
 		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
 
-	*result = n;
+	*result = node;
 	return 0;
 }
 
 int cc_list_cursor_relative_prev(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
 {
-	struct cc_list_node *n;
+	struct cc_list_node *node;
 	/// The `first` element can NOT be the root node, so it's `n->prev != &self->list->root` here
-	for (n = self->current; n->prev != &self->list->root && offset > 0; offset--)
-		n = n->prev;
+	for (node = self->current; node->prev != &self->list->root && offset > 0; offset--)
+		node = node->prev;
 
 	if (offset > 0)
 		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
 
-	*result = n;
+	*result = node;
 	return 0;
 }
 
+/// This function can only return 0 or CC_LIST_CURSOR_MOVE_OUT_OF_RANGE
 int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
 {
-	if (self->current == NULL)
-		return 1;
 	if (offset >= 0)
 		return cc_list_cursor_relative_next(self, offset, result);
 	else
@@ -46,30 +45,38 @@ int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset, struct 
 int cc_list_cursor_insert_after(struct cc_list_cursor *self, int offset, void *data)
 {
 	struct cc_list_node *node;
+
 	if (cc_list_cursor_relative_pos(self, offset, &node))
-		return 1;
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
+
+	/// Calling `_next` to reach the root node is valid (so that you can use ranges),
+	/// but inserting is invalid in this case.
+	if (node == &self->list->root)
+		return CC_LIST_CURSOR_INSERT_OUT_OF_RANGE;
+
 	if (cc_list_node_insert_after(node, data))
-		return 2;
+		return 1;
+
 	return 0;
 }
 
 int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count)
 {
-	struct cc_list_node *n1, *n2, *tmp;
+	struct cc_list_node *node1, *node2;
 
 	if (offset <= 0 && offset + count > 0)
-		return CC_LIST_CURSOR_REMOVING_CURSOR;
-	if (cc_list_cursor_relative_pos(self, offset, &n1))
-		return 3;
-	if (cc_list_cursor_relative_pos(self, offset + count, &n2))
-		return 4;
+		return CC_LIST_CURSOR_REMOVING_CURRENT;
+	if (cc_list_cursor_relative_pos(self, offset, &node1))
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
+	if (cc_list_cursor_relative_pos(self, offset + count, &node2))
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
 
 	/// fix the chain before removing nodes
-	n1->prev->next = n2;
-	n2->prev = n1->prev;
+	node1->prev->next = node2;
+	node2->prev = node1->prev;
 
-	while (n1 != n2) {
-		if (cc_list_node_delete_and_next(&n1, self->remove_fn))
+	while (node1 != node2) {
+		if (cc_list_node_delete_and_next(&node1, self->remove_fn))
 			return 5;
 	}
 
@@ -79,15 +86,19 @@ int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count)
 /// Caution: Please make sure that `result` can hold `count` numbers of pointers.
 int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count, void **result)
 {
-	struct cc_list_node *start;
-	int code, i;
+	struct cc_list_node *node;
+	int i;
 
-	code = cc_list_cursor_relative_pos(self, offset, &start);
-	if (code)
-		return code;
+	if (cc_list_cursor_relative_pos(self, offset, &node))
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
 
-	for (i = 0; i < count && start != &self->list->root; i++, start = start->next)
-		result[i] = start->data;
+	/// Calling `_next` to reach the root node is valid (so that you can use ranges),
+	/// but getting is invalid in this case.
+	if (node == &self->list->root)
+		return CC_LIST_CURSOR_GET_OUT_OF_RANGE;
+
+	for (i = 0; i < count && node != &self->list->root; i++, node = node->next)
+		result[i] = node->data;
 
 	if (i < count)
 		return CC_LIST_CURSOR_GET_OUT_OF_RANGE;
@@ -98,11 +109,9 @@ int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count, void 
 int cc_list_cursor_move(struct cc_list_cursor *self, int offset)
 {
 	struct cc_list_node *new_pos;
-	int code;
 
-	code = cc_list_cursor_relative_pos(self, offset, &new_pos);
-	if (code)
-		return code;
+	if (cc_list_cursor_relative_pos(self, offset, &new_pos))
+		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
 
 	self->current = new_pos;
 	return 0;

@@ -53,7 +53,8 @@ int cc_list_print(struct cc_list *self, int direction);
 enum cc_list_cursor_error {
 	CC_LIST_CURSOR_MOVE_OUT_OF_RANGE = 0xFF10,
 	CC_LIST_CURSOR_GET_OUT_OF_RANGE = 0xFF11,
-	CC_LIST_CURSOR_REMOVING_CURSOR = 0xFF12,
+	CC_LIST_CURSOR_INSERT_OUT_OF_RANGE = 0xFF13,
+	CC_LIST_CURSOR_REMOVING_CURRENT = 0xFF19,
 };
 
 struct cc_list_cursor {

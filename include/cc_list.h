@@ -62,6 +62,8 @@ struct cc_list_cursor {
 	cc_list_node_data_remove_fn_t remove_fn;
 };
 
+int cc_list_cursor_init(struct cc_list_cursor *tmp, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn);
+
 int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn);
 int cc_list_cursor_delete(struct cc_list_cursor *self);
 

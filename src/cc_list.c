@@ -8,7 +8,8 @@
 int cc_list_cursor_relative_next(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
 {
 	struct cc_list_node *n;
-	for (n = self->current; n->next != &self->list->root && offset > 0; offset--)
+	/// The `last` element can be the root node, so it's `n != &self->list->root` here
+	for (n = self->current; n != &self->list->root && offset > 0; offset--)
 		n = n->next;
 
 	if (offset > 0)
@@ -21,6 +22,7 @@ int cc_list_cursor_relative_next(struct cc_list_cursor *self, int offset, struct
 int cc_list_cursor_relative_prev(struct cc_list_cursor *self, int offset, struct cc_list_node **result)
 {
 	struct cc_list_node *n;
+	/// The `first` element can NOT be the root node, so it's `n->prev != &self->list->root` here
 	for (n = self->current; n->prev != &self->list->root && offset > 0; offset--)
 		n = n->prev;
 
@@ -106,6 +108,18 @@ int cc_list_cursor_move(struct cc_list_cursor *self, int offset)
 	return 0;
 }
 
+int cc_list_cursor_init(struct cc_list_cursor *tmp, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn)
+{
+	tmp->remove_fn = remove_fn;
+	tmp->list = list;
+	if (list->root.next == &list->root)
+		tmp->current = NULL;
+	else
+		tmp->current = list->root.next;
+
+	return 0;
+}
+
 int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn)
 {
 	struct cc_list_cursor *tmp;
@@ -113,13 +127,8 @@ int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list, cc_li
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
-
-	tmp->remove_fn = remove_fn;
-	tmp->list = list;
-	if (list->root.next == &list->root)
-		tmp->current = NULL;
-	else
-		tmp->current = list->root.next;
+	if (cc_list_cursor_init(tmp, list, remove_fn))
+		goto fail2;
 
 	*self = tmp;
 	return 0;

@@ -19,7 +19,7 @@ int main(void)
 	assert(!cc_list_cursor_get(cursor, 0, 1, (void **)buffer));
 
 	assert(cc_list_cursor_get(cursor, -1, 1, (void **)buffer) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
-	assert(cc_list_cursor_get(cursor, 16, 1, (void **)buffer) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
+	assert(cc_list_cursor_get(cursor, 16, 1, (void **)buffer) == CC_LIST_CURSOR_GET_OUT_OF_RANGE);
 
 	assert(!cc_list_cursor_get(cursor, 15, 1, (void **)buffer));
 	assert(cc_list_cursor_get(cursor, 15, 2, (void **)buffer) == CC_LIST_CURSOR_GET_OUT_OF_RANGE);
@@ -48,6 +48,9 @@ int main(void)
 	assert(buffer[0] == 2);
 	assert(buffer[1] == 3);
 	assert(buffer[2] == 4);
+
+	assert(cc_list_cursor_remove(cursor, 14, 1));
+	assert(!cc_list_cursor_remove(cursor, 13, 1));
 
 	assert(cc_list_cursor_remove(cursor, -1, 2) == CC_LIST_CURSOR_REMOVING_CURSOR);
 	assert(cc_list_cursor_remove(cursor, -3, 2));

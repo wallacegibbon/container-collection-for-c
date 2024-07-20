@@ -21,7 +21,7 @@ int main(void)
 	assert(!cc_array_set(r, r->elem_nums - 1, &zero));
 
 	// cc_debug_print(">> %s\n", r->buffer);
-	assert(!strcmp((char *)r->buffer, "hello, world. A quick brown fox jumps over the lazy dog."));
+	assert(!strcmp((char *)r->data, "hello, world. A quick brown fox jumps over the lazy dog."));
 
 	assert(!cc_array_chain_delete(chain));
 

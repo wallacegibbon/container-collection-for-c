@@ -55,7 +55,7 @@ int cc_array_chain_to_array(struct cc_array_chain *self, struct cc_array **resul
 	if (cc_list_iter_init(&iter, self->node_chain, 0))
 		goto fail2;
 	while (!cc_iter_next(&iter, &tmp, &i))
-		memcpy(r->buffer + self->node_elem_nums * i, (*tmp)->buffer, cc_array_chain_node_size(self, i));
+		memcpy(r->data + self->node_elem_nums * i, (*tmp)->data, cc_array_chain_node_size(self, i));
 
 	*result = r;
 	return 0;

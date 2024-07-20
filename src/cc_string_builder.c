@@ -15,9 +15,9 @@ int cc_string_builder_to_string(struct cc_string_builder *self, char **result)
 	if (cc_array_set(arr, arr->elem_nums - 1, &zero))
 		goto fail2;
 
-	*result = (char *)arr->buffer;
+	*result = (char *)arr->data;
 
-	if (cc_array_delete_contain_only(arr))
+	if (cc_array_delete_keep_data(arr))
 		goto fail2;
 
 	return 0;

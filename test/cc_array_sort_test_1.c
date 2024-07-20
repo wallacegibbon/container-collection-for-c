@@ -41,7 +41,7 @@ int main(void)
 	assert(!cc_array_sort_quick(&array, (cc_cmp_fn_t)cmp_char));
 
 	// assert(!strncmp((const char *)array.buffer, "  Abcikqru", 10));
-	assert(!strncmp((const char *)array.buffer, "urqkicbA  ", 10));
+	assert(!strncmp((const char *)array.data, "urqkicbA  ", 10));
 
 	char_array_display(&array, "\nafter sort: ");
 

@@ -6,14 +6,14 @@ int main(void)
 {
 	struct cc_array array;
 	struct cc_array_iter iter;
-	unsigned char buffer[10 * sizeof(float)];
+	unsigned char data[10 * sizeof(float)];
 	size_t index;
 
 	float i;
 	float tmp;
 	float *iter_tmp;
 
-	assert(!cc_array_init(&array, buffer, 10, sizeof(float)));
+	assert(!cc_array_init(&array, data, 10, sizeof(float)));
 
 	for (i = 0.27; i < 10; i++)
 		assert(!cc_array_set(&array, i, &i));

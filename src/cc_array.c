@@ -4,30 +4,30 @@
 
 static inline void cc_array_get_(struct cc_array *self, size_t index, void *result)
 {
-	memcpy(result, self->buffer + index * self->elem_size, self->elem_size);
+	memcpy(result, self->data + index * self->elem_size, self->elem_size);
 }
 
 static inline void cc_array_get_ref_(struct cc_array *self, size_t index, void **ref)
 {
-	*ref = self->buffer + index * self->elem_size;
+	*ref = self->data + index * self->elem_size;
 }
 
 static inline void cc_array_set_(struct cc_array *self, size_t index, void *value)
 {
-	memcpy(self->buffer + index * self->elem_size, value, self->elem_size);
+	memcpy(self->data + index * self->elem_size, value, self->elem_size);
 }
 
 void cc_array_swap(struct cc_array *self, size_t i, size_t j)
 {
 	unsigned char tmp[self->elem_size];
 	cc_array_get_(self, i, tmp);
-	memcpy(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size, self->elem_size);
+	memcpy(self->data + i * self->elem_size, self->data + j * self->elem_size, self->elem_size);
 	cc_array_set_(self, j, tmp);
 }
 
 int cc_array_cmp(struct cc_array *self, cc_cmp_fn_t cmp, size_t i, size_t j)
 {
-	return cmp(self->buffer + i * self->elem_size, self->buffer + j * self->elem_size);
+	return cmp(self->data + i * self->elem_size, self->data + j * self->elem_size);
 }
 
 int cc_array_is_valid_index(struct cc_array *self, size_t index)
@@ -99,11 +99,11 @@ int cc_array_reverse(struct cc_array *self, size_t start, size_t end)
 	return 0;
 }
 
-int cc_array_init(struct cc_array *self, unsigned char *buffer, size_t elem_nums, size_t elem_size)
+int cc_array_init(struct cc_array *self, unsigned char *data, size_t elem_nums, size_t elem_size)
 {
 	self->elem_nums = elem_nums;
 	self->elem_size = elem_size;
-	self->buffer = buffer;
+	self->data = data;
 	return 0;
 }
 
@@ -112,31 +112,31 @@ int cc_array_init(struct cc_array *self, unsigned char *buffer, size_t elem_nums
 int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size)
 {
 	struct cc_array *tmp;
-	unsigned char *buffer;
+	unsigned char *data;
 
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 
-	buffer = malloc(elem_nums * elem_size);
-	if (buffer == NULL)
+	data = malloc(elem_nums * elem_size);
+	if (data == NULL)
 		goto fail2;
 
-	if (cc_array_init(tmp, buffer, elem_nums, elem_size))
+	if (cc_array_init(tmp, data, elem_nums, elem_size))
 		goto fail3;
 
 	*self = tmp;
 	return 0;
 
 fail3:
-	free(buffer);
+	free(data);
 fail2:
 	free(tmp);
 fail1:
 	return 1;
 }
 
-int cc_array_delete_contain_only(struct cc_array *self)
+int cc_array_delete_keep_data(struct cc_array *self)
 {
 	free(self);
 	return 0;
@@ -144,7 +144,7 @@ int cc_array_delete_contain_only(struct cc_array *self)
 
 int cc_array_delete(struct cc_array *self)
 {
-	free(self->buffer);
+	free(self->data);
 	free(self);
 	return 0;
 }

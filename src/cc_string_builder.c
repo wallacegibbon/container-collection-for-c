@@ -99,8 +99,9 @@ int cc_string_concat(char **result, int n, ...)
 
 	if (cc_string_builder_to_string(string_builder, result))
 		goto fail2;
+	if (cc_string_builder_delete(string_builder))
+		goto fail1;
 
-	cc_string_builder_delete(string_builder);
 	return 0;
 
 fail2:

@@ -53,16 +53,17 @@ int cc_list_cursor_insert_after(struct cc_list_cursor *self, int offset, void *d
 	/// but inserting is invalid in this case.
 	if (node == &self->list->root)
 		return CC_LIST_CURSOR_INSERT_OUT_OF_RANGE;
-
 	if (cc_list_node_insert_after(node, data))
 		return 1;
 
+	self->list->root.size++;
 	return 0;
 }
 
 int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count)
 {
 	struct cc_list_node *node1, *node2;
+	int i;
 
 	if (offset <= 0 && offset + count > 0)
 		return CC_LIST_CURSOR_REMOVING_CURRENT;
@@ -75,11 +76,11 @@ int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count)
 	node1->prev->next = node2;
 	node2->prev = node1->prev;
 
-	while (node1 != node2) {
+	for (i = 0; node1 != node2; i++) {
 		if (cc_list_node_delete_and_next(&node1, self->remove_fn))
 			return 5;
 	}
-
+	self->list->root.size -= i;
 	return 0;
 }
 
@@ -117,15 +118,27 @@ int cc_list_cursor_move(struct cc_list_cursor *self, int offset)
 	return 0;
 }
 
-int cc_list_cursor_init(struct cc_list_cursor *tmp, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn)
+int cc_list_cursor_at_end(struct cc_list_cursor *self)
 {
-	tmp->remove_fn = remove_fn;
-	tmp->list = list;
-	if (list->root.next == &list->root)
-		tmp->current = NULL;
-	else
-		tmp->current = list->root.next;
+	return self->current == &self->list->root;
+}
 
+int cc_list_cursor_reset(struct cc_list_cursor *self)
+{
+	if (self->current != &self->list->root)
+		return 1;
+	if (self->list->root.next == &self->list->root)
+		return 2;
+
+	self->current = self->list->root.next;
+	return 0;
+}
+
+int cc_list_cursor_init(struct cc_list_cursor *self, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn)
+{
+	self->remove_fn = remove_fn;
+	self->list = list;
+	self->current = &list->root;
 	return 0;
 }
 

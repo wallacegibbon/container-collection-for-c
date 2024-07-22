@@ -14,7 +14,7 @@ int main(void)
 	struct cc_list *list;
 	struct cc_list_iter iter;
 	struct cc_list_cursor *cursor;
-	uintptr_t *buffer[4] = {0};
+	uintptr_t *buffer[16] = {0};
 	uintptr_t i;
 	uintptr_t *tmp, **tmp2;
 
@@ -28,6 +28,7 @@ int main(void)
 	}
 
 	assert(!cc_list_cursor_new(&cursor, list, my_free));
+	assert(!cc_list_cursor_reset(cursor));
 
 	assert(!cc_list_cursor_get(cursor, 0, 1, (void **)buffer));
 

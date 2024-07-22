@@ -51,10 +51,11 @@ int cc_list_print(struct cc_list *self, int direction);
 /// The List Cursor
 ////////////////////////////////////////////////////////////////////////////////
 enum cc_list_cursor_error {
-	CC_LIST_CURSOR_MOVE_OUT_OF_RANGE = 0xFF10,
-	CC_LIST_CURSOR_GET_OUT_OF_RANGE = 0xFF11,
-	CC_LIST_CURSOR_INSERT_OUT_OF_RANGE = 0xFF13,
-	CC_LIST_CURSOR_REMOVING_CURRENT = 0xFF19,
+	CC_LIST_CURSOR_AT_END = 0xFF10,
+	CC_LIST_CURSOR_MOVE_OUT_OF_RANGE = 0xFF20,
+	CC_LIST_CURSOR_GET_OUT_OF_RANGE = 0xFF21,
+	CC_LIST_CURSOR_INSERT_OUT_OF_RANGE = 0xFF23,
+	CC_LIST_CURSOR_REMOVING_CURRENT = 0xFF29,
 };
 
 struct cc_list_cursor {
@@ -75,6 +76,9 @@ int cc_list_cursor_move(struct cc_list_cursor *self, int offset);
 
 int cc_list_cursor_insert_after(struct cc_list_cursor *self, int offset, void *data);
 int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count);
+
+int cc_list_cursor_at_end(struct cc_list_cursor *self);
+int cc_list_cursor_reset(struct cc_list_cursor *self);
 
 ////////////////////////////////////////////////////////////////////////////////
 /// The List Iterator

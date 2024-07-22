@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
 static int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result, size_t *index)
 {
 	struct cc_list_iter iter;
@@ -195,3 +196,4 @@ int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map
 	self->iterator = &iterator_interface;
 	return cc_list_iter_init(&self->inner_iter, map->data, 0);
 }
+*/

@@ -1,34 +1,29 @@
 #ifndef __CC_STACK_H
 #define __CC_STACK_H
 
-#include "cc_array.h"
-#include "cc_common.h"
-#include <stddef.h>
+typedef int (*cc_stack_push_fn_t)(void *self, void *data);
+typedef int (*cc_stack_pop_fn_t)(void *self, void **result);
+typedef int (*cc_stack_peek_fn_t)(void *self, void **result);
 
-enum {
-	CC_STACK_EMPTY = 0xFFE0,
-	CC_STACK_FULL = 0xFFE1,
+struct cc_stack_i {
+	cc_stack_push_fn_t push;
+	cc_stack_pop_fn_t pop;
+	cc_stack_peek_fn_t peek;
 };
 
-struct cc_stack {
-	struct cc_array *data;
-	size_t top;
-};
+static inline int cc_stack_push(void *self, void *data)
+{
+	return (*(struct cc_stack_i **)self)->push(self, data);
+}
 
-#ifndef NO_MALLOC
+static inline int cc_stack_pop(void *self, void **result)
+{
+	return (*(struct cc_stack_i **)self)->pop(self, result);
+}
 
-int cc_stack_new(struct cc_stack **self, size_t elem_nums, size_t elem_size);
-int cc_stack_delete(struct cc_stack *self);
-
-#endif
-
-int cc_stack_init(struct cc_stack *self, struct cc_array *data);
-
-int cc_stack_push(struct cc_stack *self, void *item);
-int cc_stack_pop(struct cc_stack *self, void *item);
-int cc_stack_peek(struct cc_stack *self, void *item);
-
-size_t cc_stack_elem_nums(struct cc_stack *self);
-size_t cc_stack_space(struct cc_stack *self);
+static inline int cc_stack_peek(void *self, void **result)
+{
+	return (*(struct cc_stack_i **)self)->peek(self, result);
+}
 
 #endif

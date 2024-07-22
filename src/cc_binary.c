@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
+/*
 int cc_binary_insert_left(struct cc_binary *self, void *data)
 {
 	struct cc_binary *node;
@@ -230,3 +231,4 @@ int cc_binary_iter_delete(struct cc_binary_iter *self)
 	free(self);
 	return tmp;
 }
+*/

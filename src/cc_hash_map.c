@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
 /// Get the slot (whose type is `struct cc_list_map **`) by key.
 static inline int get_list_map_ref(struct cc_hash_map *self, void *key, struct cc_list_map ***result)
 {
@@ -226,3 +227,4 @@ int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map
 	self->is_empty = 1;
 	return 0;
 }
+*/

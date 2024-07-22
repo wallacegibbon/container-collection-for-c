@@ -71,3 +71,9 @@ int cc_print_n(char *s, int n)
 		cc_debug_print("%s", s);
 	return n;
 }
+
+int cc_default_delete_fn(void *obj)
+{
+	free(obj);
+	return 0;
+}

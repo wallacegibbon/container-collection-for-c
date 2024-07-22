@@ -1,13 +1,8 @@
+#include "cc_common.h"
 #include "cc_list.h"
 #include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
-
-int my_free(void *data)
-{
-	free(data);
-	return 0;
-}
 
 int main(void)
 {
@@ -27,7 +22,7 @@ int main(void)
 		assert(!cc_list_append(list, tmp));
 	}
 
-	assert(!cc_list_cursor_new(&cursor, list, my_free));
+	assert(!cc_list_cursor_new(&cursor, list, cc_default_delete_fn));
 	assert(!cc_list_cursor_reset(cursor));
 
 	assert(!cc_list_cursor_get(cursor, 0, 1, (void **)buffer));

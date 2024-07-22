@@ -1,14 +1,14 @@
-#include "cc_list.h"
+#include "cc_list_stack.h"
 #include <assert.h>
 
 /// Example of using `cc_list` as a stack.
 
 int main(void)
 {
-	struct cc_list *list;
+	struct cc_list_stack *list;
 	uintptr_t tmp;
 
-	assert(!cc_list_new(&list));
+	assert(!cc_list_stack_new(&list, NULL));
 
 	assert(cc_list_remove(list, 0, (void **)&tmp));
 
@@ -29,6 +29,6 @@ int main(void)
 
 	assert(cc_list_remove(list, 0, (void **)&tmp));
 
-	assert(!cc_list_delete(list));
+	assert(!cc_list_stack_delete(list));
 	return 0;
 }

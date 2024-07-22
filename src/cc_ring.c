@@ -1,6 +1,12 @@
 #include "cc_ring.h"
 #include <stdlib.h>
 
+struct cc_queue_i cc_ring_interface = {
+	.enqueue = (cc_queue_enqueue_fn_t)cc_ring_enqueue,
+	.dequeue = (cc_queue_dequeue_fn_t)cc_ring_dequeue,
+	.peek = (cc_queue_peek_fn_t)cc_ring_peek,
+};
+
 static inline size_t next_index(struct cc_ring *self, size_t index)
 {
 	size_t next_index = index + 1;
@@ -23,7 +29,7 @@ size_t cc_ring_space(struct cc_ring *self)
 	return self->data->elem_nums - cc_ring_elem_nums(self) - 1;
 }
 
-int cc_ring_append(struct cc_ring *self, void *item)
+int cc_ring_enqueue(struct cc_ring *self, void *item)
 {
 	size_t write_index_next;
 
@@ -45,7 +51,7 @@ int cc_ring_peek(struct cc_ring *self, void *item)
 	return 0;
 }
 
-int cc_ring_shift(struct cc_ring *self, void *item)
+int cc_ring_dequeue(struct cc_ring *self, void *item)
 {
 	if (cc_ring_peek(self, item) == CC_RING_EMPTY)
 		return CC_RING_EMPTY;
@@ -56,6 +62,7 @@ int cc_ring_shift(struct cc_ring *self, void *item)
 
 int cc_ring_init(struct cc_ring *self, struct cc_array *data)
 {
+	self->interface = &cc_ring_interface;
 	self->data = data;
 	self->read_index = 0;
 	self->write_index = 0;

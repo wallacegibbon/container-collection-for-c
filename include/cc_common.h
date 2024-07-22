@@ -21,6 +21,8 @@ static inline int try_reset_double_p(void *pointer)
 	return 0;
 }
 
+typedef int (*cc_delete_fn_t)(void *obj);
+
 typedef int (*cc_simple_fn_1_t)(void *value);
 typedef int (*cc_cmp_fn_t)(void *left, void *right);
 typedef size_t (*cc_hash_fn_t)(void *obj);
@@ -46,5 +48,8 @@ int cc_exit_info(int code, char *format, ...);
 int cc_debug_print(char *format, ...);
 
 int cc_print_n(char *s, int n);
+
+/// Call `free` and return 0.
+int cc_default_delete_fn(void *obj);
 
 #endif

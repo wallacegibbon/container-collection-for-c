@@ -1,5 +1,4 @@
 #include "cc_list.h"
-#include "cc_common.h"
 #include <stdlib.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -42,18 +41,13 @@ int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset, struct 
 		return cc_list_cursor_relative_prev(self, -offset, result);
 }
 
-int cc_list_cursor_insert_after(struct cc_list_cursor *self, int offset, void *data)
+int cc_list_cursor_insert_before(struct cc_list_cursor *self, int offset, void *data)
 {
 	struct cc_list_node *node;
 
 	if (cc_list_cursor_relative_pos(self, offset, &node))
 		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
-
-	/// Calling `_next` to reach the root node is valid (so that you can use ranges),
-	/// but inserting is invalid in this case.
-	if (node == &self->list->root)
-		return CC_LIST_CURSOR_INSERT_OUT_OF_RANGE;
-	if (cc_list_node_insert_after(node, data))
+	if (cc_list_node_insert_before(node, data))
 		return 1;
 
 	self->list->root.size++;
@@ -78,7 +72,7 @@ int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count)
 
 	for (i = 0; node1 != node2; i++) {
 		if (cc_list_node_delete_and_next(&node1, self->remove_fn))
-			return 5;
+			return 1;
 	}
 	self->list->root.size -= i;
 	return 0;
@@ -92,11 +86,6 @@ int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count, void 
 
 	if (cc_list_cursor_relative_pos(self, offset, &node))
 		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
-
-	/// Calling `_next` to reach the root node is valid (so that you can use ranges),
-	/// but getting is invalid in this case.
-	if (node == &self->list->root)
-		return CC_LIST_CURSOR_GET_OUT_OF_RANGE;
 
 	for (i = 0; i < count && node != &self->list->root; i++, node = node->next)
 		result[i] = node->data;
@@ -134,7 +123,7 @@ int cc_list_cursor_reset(struct cc_list_cursor *self)
 	return 0;
 }
 
-int cc_list_cursor_init(struct cc_list_cursor *self, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn)
+int cc_list_cursor_init(struct cc_list_cursor *self, struct cc_list *list, cc_delete_fn_t remove_fn)
 {
 	self->remove_fn = remove_fn;
 	self->list = list;
@@ -142,7 +131,7 @@ int cc_list_cursor_init(struct cc_list_cursor *self, struct cc_list *list, cc_li
 	return 0;
 }
 
-int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn)
+int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list, cc_delete_fn_t remove_fn)
 {
 	struct cc_list_cursor *tmp;
 
@@ -194,7 +183,6 @@ int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index)
 		*index = self->index;
 
 	self->index++;
-
 	cc_list_iter_step(self);
 	return 0;
 }
@@ -217,6 +205,22 @@ int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list, int direc
 ////////////////////////////////////////////////////////////////////////////////
 /// List Node Functions
 ////////////////////////////////////////////////////////////////////////////////
+int cc_list_node_insert_before(struct cc_list_node *self, void *data)
+{
+	struct cc_list_node *node;
+
+	node = malloc(sizeof(*node));
+	if (node == NULL)
+		return 1;
+
+	node->data = data;
+	node->prev = self->prev;
+	node->next = self;
+	self->prev->next = node;
+	self->prev = node;
+	return 0;
+}
+
 int cc_list_node_insert_after(struct cc_list_node *self, void *data)
 {
 	struct cc_list_node *node;
@@ -230,6 +234,23 @@ int cc_list_node_insert_after(struct cc_list_node *self, void *data)
 	node->prev = self;
 	self->next->prev = node;
 	self->next = node;
+	return 0;
+}
+
+int cc_list_node_remove_before(struct cc_list_node *self, void **result)
+{
+	struct cc_list_node *node;
+
+	/// You have to provide `result`, or the `self->next->data` may leak.
+	if (try_reset_double_p(result))
+		return 1;
+
+	*result = self->prev->data;
+	node = self->prev;
+	self->prev->prev->next = self;
+	self->prev = self->prev->prev;
+
+	free(node);
 	return 0;
 }
 
@@ -250,7 +271,7 @@ int cc_list_node_remove_after(struct cc_list_node *self, void **result)
 	return 0;
 }
 
-int cc_list_node_delete_and_next(struct cc_list_node **pcurrent, cc_list_node_data_remove_fn_t remove_fn)
+int cc_list_node_delete_and_next(struct cc_list_node **pcurrent, cc_delete_fn_t remove_fn)
 {
 	struct cc_list_node *current, *next;
 	current = *pcurrent;
@@ -269,55 +290,6 @@ int cc_list_node_delete_and_next(struct cc_list_node **pcurrent, cc_list_node_da
 ////////////////////////////////////////////////////////////////////////////////
 /// List Functions
 ////////////////////////////////////////////////////////////////////////////////
-static int prev_node_of(struct cc_list *self, struct cc_list_node **result, size_t index)
-{
-	struct cc_list_node *node;
-
-	node = &self->root;
-	while (index--)
-		node = node->next;
-
-	*result = node;
-	return 0;
-}
-
-/// Range of `index`: 0 ~ self->root.size
-int cc_list_insert(struct cc_list *self, size_t index, void *data)
-{
-	struct cc_list_node *entry, *node;
-
-	if (index > self->root.size)
-		return 1;
-	if (prev_node_of(self, &entry, index))
-		return 2;
-	if (cc_list_node_insert_after(entry, data))
-		return 3;
-
-	self->root.size++;
-	return 0;
-}
-
-/// Range of `index`: 0 ~ (self->root.size - 1)
-int cc_list_remove(struct cc_list *self, size_t index, void **result)
-{
-	struct cc_list_node *node, *node_to_remove;
-
-	if (index >= self->root.size)
-		return 1;
-	if (prev_node_of(self, &node, index))
-		return 2;
-	if (cc_list_node_remove_after(node, result))
-		return 3;
-
-	self->root.size--;
-	return 0;
-}
-
-size_t cc_list_size(struct cc_list *self)
-{
-	return self->root.size;
-}
-
 int cc_list_append(struct cc_list *self, void *data)
 {
 	struct cc_list_node *node;
@@ -366,6 +338,11 @@ int cc_list_concat(struct cc_list *left, struct cc_list *right)
 		return 2;
 
 	return 0;
+}
+
+size_t cc_list_size(struct cc_list *self)
+{
+	return self->root.size;
 }
 
 int cc_list_new(struct cc_list **self)

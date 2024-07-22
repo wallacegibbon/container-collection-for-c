@@ -1,14 +1,12 @@
-#include "cc_list.h"
+#include "cc_list_queue.h"
 #include <assert.h>
-
-/// Example of using `cc_list` as a queue.
 
 int main(void)
 {
-	struct cc_list *list;
+	struct cc_list_queue *list;
 	uintptr_t tmp;
 
-	assert(!cc_list_new(&list));
+	assert(!cc_list_queue_new(&list, NULL));
 
 	assert(cc_list_remove(list, 0, (void **)&tmp));
 
@@ -25,6 +23,6 @@ int main(void)
 
 	assert(cc_list_remove(list, 0, (void **)&tmp));
 
-	assert(!cc_list_delete(list));
+	assert(!cc_list_queue_delete(list));
 	return 0;
 }

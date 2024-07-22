@@ -5,13 +5,12 @@
 #error "You can NOT use `cc_list` without support for the `malloc` function."
 #endif
 
+#include "cc_common.h"
 #include "cc_iter.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /// The List Node
 ////////////////////////////////////////////////////////////////////////////////
-typedef int (*cc_list_node_data_remove_fn_t)(void *);
-
 struct cc_list_node {
 	struct cc_list_node *prev;
 	struct cc_list_node *next;
@@ -23,9 +22,12 @@ struct cc_list_node {
 	};
 };
 
+int cc_list_node_insert_before(struct cc_list_node *self, void *data);
 int cc_list_node_insert_after(struct cc_list_node *self, void *data);
+int cc_list_node_remove_before(struct cc_list_node *self, void **result);
 int cc_list_node_remove_after(struct cc_list_node *self, void **result);
-int cc_list_node_delete_and_next(struct cc_list_node **current, cc_list_node_data_remove_fn_t remove_fn);
+
+int cc_list_node_delete_and_next(struct cc_list_node **current, cc_delete_fn_t remove_fn);
 
 ////////////////////////////////////////////////////////////////////////////////
 /// The List Container
@@ -40,33 +42,29 @@ int cc_list_delete(struct cc_list *self);
 int cc_list_append(struct cc_list *self, void *data);
 int cc_list_concat(struct cc_list *left, struct cc_list *right);
 
-int cc_list_insert(struct cc_list *self, size_t index, void *data);
-int cc_list_remove(struct cc_list *self, size_t index, void **result);
-
 size_t cc_list_size(struct cc_list *self);
-
 int cc_list_print(struct cc_list *self, int direction);
 
 ////////////////////////////////////////////////////////////////////////////////
 /// The List Cursor
 ////////////////////////////////////////////////////////////////////////////////
 enum cc_list_cursor_error {
-	CC_LIST_CURSOR_AT_END = 0xFF10,
-	CC_LIST_CURSOR_MOVE_OUT_OF_RANGE = 0xFF20,
-	CC_LIST_CURSOR_GET_OUT_OF_RANGE = 0xFF21,
-	CC_LIST_CURSOR_INSERT_OUT_OF_RANGE = 0xFF23,
-	CC_LIST_CURSOR_REMOVING_CURRENT = 0xFF29,
+	CC_LIST_CURSOR_MOVE_OUT_OF_RANGE = 0xFF10,
+	CC_LIST_CURSOR_GET_OUT_OF_RANGE = 0xFF11,
+	CC_LIST_CURSOR_INSERT_OUT_OF_RANGE = 0xFF12,
+	CC_LIST_CURSOR_REMOVING_CURRENT = 0xFF19,
+	CC_LIST_CURSOR_AT_END = 0xFF90,
 };
 
 struct cc_list_cursor {
 	struct cc_list *list;
 	struct cc_list_node *current;
-	cc_list_node_data_remove_fn_t remove_fn;
+	cc_delete_fn_t remove_fn;
 };
 
-int cc_list_cursor_init(struct cc_list_cursor *tmp, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn);
+int cc_list_cursor_init(struct cc_list_cursor *tmp, struct cc_list *list, cc_delete_fn_t remove_fn);
 
-int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list, cc_list_node_data_remove_fn_t remove_fn);
+int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list, cc_delete_fn_t remove_fn);
 int cc_list_cursor_delete(struct cc_list_cursor *self);
 
 int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset, struct cc_list_node **result);
@@ -74,7 +72,7 @@ int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset, struct 
 int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count, void **result);
 int cc_list_cursor_move(struct cc_list_cursor *self, int offset);
 
-int cc_list_cursor_insert_after(struct cc_list_cursor *self, int offset, void *data);
+int cc_list_cursor_insert_before(struct cc_list_cursor *self, int offset, void *data);
 int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count);
 
 int cc_list_cursor_at_end(struct cc_list_cursor *self);

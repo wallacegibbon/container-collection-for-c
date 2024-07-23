@@ -6,11 +6,6 @@
 #include "cc_queue.h"
 #include <stddef.h>
 
-enum {
-	CC_RING_EMPTY = 0xFFF0,
-	CC_RING_FULL = 0xFFF1,
-};
-
 struct cc_ring {
 	struct cc_queue_i *interface;
 	struct cc_array *data;

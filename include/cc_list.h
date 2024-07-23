@@ -32,6 +32,10 @@ int cc_list_node_delete_and_next(struct cc_list_node **current, cc_delete_fn_t r
 ////////////////////////////////////////////////////////////////////////////////
 /// The List Container
 ////////////////////////////////////////////////////////////////////////////////
+enum cc_list_error {
+	CC_LIST_EMPTY = 0xFE10,
+};
+
 struct cc_list {
 	struct cc_list_node root;
 };
@@ -39,10 +43,19 @@ struct cc_list {
 int cc_list_new(struct cc_list **self);
 int cc_list_delete(struct cc_list *self);
 
-int cc_list_append(struct cc_list *self, void *data);
 int cc_list_concat(struct cc_list *left, struct cc_list *right);
 
+int cc_list_insert_head(struct cc_list *self, void *data);
+int cc_list_insert_tail(struct cc_list *self, void *data);
+int cc_list_remove_head(struct cc_list *self, void **data);
+int cc_list_remove_tail(struct cc_list *self, void **data);
+int cc_list_get_head(struct cc_list *self, void **data);
+int cc_list_get_tail(struct cc_list *self, void **data);
+
+int cc_list_is_empty(struct cc_list *self);
 size_t cc_list_size(struct cc_list *self);
+
+/// For debugging
 int cc_list_print(struct cc_list *self, int direction);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +64,6 @@ int cc_list_print(struct cc_list *self, int direction);
 enum cc_list_cursor_error {
 	CC_LIST_CURSOR_MOVE_OUT_OF_RANGE = 0xFF10,
 	CC_LIST_CURSOR_GET_OUT_OF_RANGE = 0xFF11,
-	CC_LIST_CURSOR_INSERT_OUT_OF_RANGE = 0xFF12,
 	CC_LIST_CURSOR_REMOVING_CURRENT = 0xFF19,
 	CC_LIST_CURSOR_AT_END = 0xFF90,
 };
@@ -76,7 +88,7 @@ int cc_list_cursor_insert_before(struct cc_list_cursor *self, int offset, void *
 int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count);
 
 int cc_list_cursor_at_end(struct cc_list_cursor *self);
-int cc_list_cursor_reset(struct cc_list_cursor *self);
+void cc_list_cursor_reset(struct cc_list_cursor *self);
 
 ////////////////////////////////////////////////////////////////////////////////
 /// The List Iterator

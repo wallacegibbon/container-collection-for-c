@@ -7,31 +7,41 @@ struct cc_queue_i cc_list_queue_interface = {
 	.peek = (cc_queue_peek_fn_t)cc_list_queue_peek,
 };
 
-int cc_list_queue_init(struct cc_list_queue *self, struct cc_list *data, cc_delete_fn_t remove)
+static inline int translate_code(int code)
 {
-	self->interface = &cc_list_queue_interface;
-	self->data = data;
-	if (cc_list_cursor_init(&self->cursor, data, remove))
-		return 1;
-
-	return 0;
+	return (code == CC_LIST_EMPTY) ? CC_QUEUE_EMPTY : code;
 }
 
-int cc_list_queue_new(struct cc_list_queue **self, cc_delete_fn_t remove)
+int cc_list_queue_enqueue(struct cc_list_queue *self, void *data)
+{
+	return cc_list_insert_tail(self->list, data);
+}
+
+int cc_list_queue_dequeue(struct cc_list_queue *self, void **result)
+{
+	return translate_code(cc_list_remove_head(self->list, result));
+}
+
+int cc_list_queue_peek(struct cc_list_queue *self, void **result)
+{
+	return translate_code(cc_list_get_head(self->list, result));
+}
+
+int cc_list_queue_new(struct cc_list_queue **self)
 {
 	struct cc_list_queue *tmp;
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
-	if (cc_list_new(&tmp->data))
+
+	tmp->interface = &cc_list_queue_interface;
+	if (cc_list_new(&tmp->list))
 		goto fail2;
-	if (cc_list_queue_init(tmp, tmp->data, remove))
-		goto fail3;
 
 	*self = tmp;
 	return 0;
 fail3:
-	cc_list_delete(tmp->data);
+	cc_list_delete(tmp->list);
 fail2:
 	free(tmp);
 fail1:
@@ -40,20 +50,9 @@ fail1:
 
 int cc_list_queue_delete(struct cc_list_queue *self)
 {
-	return 0;
-}
+	if (cc_list_delete(self->list))
+		return 1;
 
-int cc_list_queue_enqueue(struct cc_list_queue *self, void *data)
-{
-	return 0;
-}
-
-int cc_list_queue_dequeue(struct cc_list_queue *self, void **result)
-{
-	return 0;
-}
-
-int cc_list_queue_peek(struct cc_list_queue *self, void **result)
-{
+	free(self);
 	return 0;
 }

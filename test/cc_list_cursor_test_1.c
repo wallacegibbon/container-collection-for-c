@@ -13,7 +13,7 @@ int main(void)
 	assert(!cc_list_new(&list));
 
 	for (i = 0; i < 16; i++)
-		assert(!cc_list_append(list, (void *)i));
+		assert(!cc_list_insert_tail(list, (void *)i));
 
 	assert(!cc_list_cursor_new(&cursor, list, NULL));
 
@@ -21,7 +21,7 @@ int main(void)
 	assert(cc_list_cursor_get(cursor, 0, 1, (void **)buffer) == CC_LIST_CURSOR_GET_OUT_OF_RANGE);
 
 	/// cursor is on the first element after reset
-	assert(!cc_list_cursor_reset(cursor));
+	cc_list_cursor_reset(cursor);
 	assert(!cc_list_cursor_get(cursor, 0, 1, (void **)buffer));
 
 	assert(cc_list_cursor_get(cursor, -1, 1, (void **)buffer) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
@@ -67,10 +67,10 @@ int main(void)
 	// cc_debug_print("after 1st remove: list size: %d\n", cc_list_size(cursor->list));
 	assert(cc_list_size(cursor->list) == 15);
 
-	assert(cc_list_cursor_insert_after(cursor, 15, (void *)99) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
-	assert(cc_list_cursor_insert_after(cursor, 14, (void *)99) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
-	assert(cc_list_cursor_insert_after(cursor, 13, (void *)99) == CC_LIST_CURSOR_INSERT_OUT_OF_RANGE);
-	assert(!cc_list_cursor_insert_after(cursor, 12, (void *)99));
+	assert(cc_list_cursor_insert_before(cursor, 16, (void *)99) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
+	assert(cc_list_cursor_insert_before(cursor, 15, (void *)99) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
+	assert(cc_list_cursor_insert_before(cursor, 14, (void *)99) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
+	assert(!cc_list_cursor_insert_before(cursor, 13, (void *)99));
 	assert(cc_list_cursor_get(cursor, 12, 3, (void **)buffer) == CC_LIST_CURSOR_GET_OUT_OF_RANGE);
 	assert(!cc_list_cursor_get(cursor, 12, 2, (void **)buffer));
 	assert(buffer[0] == 14);
@@ -109,7 +109,7 @@ int main(void)
 	assert(cc_list_size(cursor->list) == 13);
 
 	assert(!cc_list_cursor_get(cursor, -1, 3, (void **)buffer));
-	assert(!cc_list_cursor_insert_after(cursor, 0, (void *)99));
+	assert(!cc_list_cursor_insert_before(cursor, 1, (void *)99));
 	assert(!cc_list_cursor_get(cursor, -1, 4, (void **)buffer));
 	assert(buffer[0] == 0);
 	assert(buffer[1] == 2);

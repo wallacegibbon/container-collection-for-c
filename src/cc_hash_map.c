@@ -1,14 +1,25 @@
 #include "cc_hash_map.h"
+#include "cc_array.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
+struct cc_map_i cc_hash_map_interface = {
+	.get = (cc_map_get_fn_t)cc_hash_map_get,
+	.set = (cc_map_set_fn_t)cc_hash_map_set,
+	.set_new = (cc_map_set_new_fn_t)cc_hash_map_set_new,
+	.del = (cc_map_del_fn_t)cc_hash_map_del,
+};
+
+struct cc_iter_i cc_hash_map_iter_interface = {
+	.next = (cc_iter_next_fn_t)cc_hash_map_iter_next,
+};
+
 /// Get the slot (whose type is `struct cc_list_map **`) by key.
-static inline int get_list_map_ref(struct cc_hash_map *self, void *key, struct cc_list_map ***result)
+static inline void get_list_map_ref(struct cc_hash_map *self, void *key, struct cc_list_map ***result)
 {
 	size_t hash_tmp;
 	hash_tmp = self->calc_hash(key) % self->bucket_size;
-	return cc_array_get_ref(self->data, hash_tmp, (void **)result);
+	cc_array_get_ref_unsafe(self->data, hash_tmp, (void **)result);
 }
 
 int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result)
@@ -18,10 +29,9 @@ int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result)
 	if (try_reset_double_p(result))
 		return 1;
 
-	if (get_list_map_ref(self, key, &list_map_ref))
-		return 2;
+	get_list_map_ref(self, key, &list_map_ref);
 	if (*list_map_ref == NULL)
-		return 3;
+		return CC_MAP_KEY_NOT_FOUND;
 
 	return cc_list_map_get(*list_map_ref, key, result);
 }
@@ -30,8 +40,7 @@ int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value)
 {
 	struct cc_list_map **list_map_ref;
 
-	if (get_list_map_ref(self, key, &list_map_ref))
-		return 1;
+	get_list_map_ref(self, key, &list_map_ref);
 	if (*list_map_ref == NULL) {
 		if (cc_list_map_new(list_map_ref, self->cmp))
 			return 2;
@@ -44,8 +53,7 @@ int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value, void **old
 {
 	struct cc_list_map **list_map_ref;
 
-	if (get_list_map_ref(self, key, &list_map_ref))
-		return 1;
+	get_list_map_ref(self, key, &list_map_ref);
 	if (*list_map_ref == NULL) {
 		if (cc_list_map_new(list_map_ref, self->cmp))
 			return 2;
@@ -54,17 +62,16 @@ int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value, void **old
 	return cc_list_map_set(*list_map_ref, key, value, old_value);
 }
 
-int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result)
+int cc_hash_map_del(struct cc_hash_map *self, void *key, struct cc_map_item **result)
 {
 	struct cc_list_map **list_map_ref;
 
 	if (try_reset_double_p(result))
 		return 1;
 
-	if (get_list_map_ref(self, key, &list_map_ref))
-		return 2;
+	get_list_map_ref(self, key, &list_map_ref);
 	if (*list_map_ref == NULL)
-		return 3;
+		return CC_MAP_KEY_NOT_FOUND;
 
 	return cc_list_map_del(*list_map_ref, key, result);
 }
@@ -93,13 +100,6 @@ int cc_hash_map_print(struct cc_hash_map *self, char *end_string)
 	return 0;
 }
 
-static struct cc_map_i map_interface = {
-	.get = (cc_map_get_fn_t)cc_hash_map_get,
-	.set = (cc_map_set_fn_t)cc_hash_map_set,
-	.set_new = (cc_map_set_new_fn_t)cc_hash_map_set_new,
-	.del = (cc_map_del_fn_t)cc_hash_map_del,
-};
-
 int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash)
 {
 	struct cc_hash_map *tmp;
@@ -113,7 +113,7 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t c
 	if (tmp == NULL)
 		goto fail1;
 
-	tmp->interface = &map_interface;
+	tmp->interface = &cc_hash_map_interface;
 
 	if (cc_array_new(&tmp->data, bucket_size, sizeof(struct cc_list_map *)))
 		goto fail2;
@@ -158,10 +158,6 @@ int cc_hash_map_delete(struct cc_hash_map *self)
 	free(self);
 	return 0;
 }
-
-static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn_t)cc_hash_map_iter_next,
-};
 
 /// Initialize the self->inner_list_map_iter
 static int cc_hash_map_iter_step(struct cc_hash_map_iter *self)
@@ -210,7 +206,7 @@ int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map
 	if (cc_array_iter_init(&self->inner_array_iter, map->data))
 		return 2;
 
-	self->iterator = &iterator_interface;
+	self->iterator = &cc_hash_map_iter_interface;
 	self->count = 0;
 	self->is_empty = 0;
 
@@ -227,4 +223,3 @@ int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map
 	self->is_empty = 1;
 	return 0;
 }
-*/

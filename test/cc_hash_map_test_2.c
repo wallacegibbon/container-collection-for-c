@@ -1,6 +1,7 @@
 #include "cc_hash_map.h"
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 char s1[] = {"duplicated_key"};
@@ -10,6 +11,7 @@ char s3[] = {"duplicated_key"};
 int main(void)
 {
 	struct cc_hash_map *map;
+	struct cc_map_item *tmp_item;
 	uintptr_t tmp;
 
 	/// When using `char *`s as keys, you should use `strcmp` as the `cmp` function.
@@ -51,7 +53,8 @@ int main(void)
 	assert(!cc_map_get(map, "strong_bull", (void **)&tmp));
 	assert(tmp == 6);
 
-	assert(!cc_map_del(map, s3, (void **)&tmp));
+	assert(!cc_map_del(map, s3, (void **)&tmp_item));
+	free(tmp_item);
 	assert(!cc_hash_map_print(map, "\n"));
 
 	assert(!cc_hash_map_delete(map));

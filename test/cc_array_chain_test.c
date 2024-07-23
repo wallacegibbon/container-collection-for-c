@@ -20,7 +20,7 @@ int main(void)
 	assert(!cc_array_chain_to_array(chain, &r, 1));
 	assert(!cc_array_set(r, r->elem_nums - 1, &zero));
 
-	// cc_debug_print(">> %s\n", r->buffer);
+	// cc_debug_print(">> %s\n", r->data);
 	assert(!strcmp((char *)r->data, "hello, world. A quick brown fox jumps over the lazy dog."));
 
 	assert(!cc_array_chain_delete(chain));

@@ -1,35 +1,51 @@
 #include "cc_list_map.h"
+#include "cc_list.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
-static int cc_list_map_get_item(struct cc_list_map *self, void *key, struct cc_map_item **result, size_t *index)
-{
-	struct cc_list_iter iter;
-	struct cc_map_item **item;
+struct cc_map_i cc_list_map_interface = {
+	.get = (cc_map_get_fn_t)cc_list_map_get,
+	.set = (cc_map_set_fn_t)cc_list_map_set,
+	.set_new = (cc_map_set_new_fn_t)cc_list_map_set_new,
+	.del = (cc_map_del_fn_t)cc_list_map_del,
+};
 
-	if (try_reset_double_p(result))
-		return 1;
-	if (cc_list_iter_init(&iter, self->data, 0))
-		return 2;
-	while (!cc_iter_next(&iter, &item, index)) {
-		if (self->cmp(key, (*item)->key) == 0) {
-			*result = *item;
+struct cc_iter_i cc_list_map_iter_interface = {
+	.next = (cc_iter_next_fn_t)cc_list_map_iter_next,
+};
+
+static inline int cc_list_map_get_current(struct cc_list_map *self, struct cc_map_item **item)
+{
+	return cc_list_cursor_get(&self->cursor, 0, 1, (void **)item);
+}
+
+/// The caller should make sure that `result` is not NULL.
+static int cc_list_map_move_to_item(struct cc_list_map *self, void *key)
+{
+	struct cc_map_item *tmp;
+
+	cc_list_cursor_reset(&self->cursor);
+
+	for (; !cc_list_map_get_current(self, &tmp); cc_list_cursor_move(&self->cursor, 1)) {
+		if (self->cmp(key, tmp->key) == 0)
 			return 0;
-		}
 	}
 
-	return 3;
+	return CC_MAP_KEY_NOT_FOUND;
 }
 
 int cc_list_map_get(struct cc_list_map *self, void *key, void **result)
 {
 	struct cc_map_item *item;
+	int code;
 
 	if (try_reset_double_p(result))
 		return 1;
-	if (cc_list_map_get_item(self, key, &item, NULL))
-		return 2;
+
+	if (cc_list_map_move_to_item(self, key))
+		return CC_MAP_KEY_NOT_FOUND;
+	if (cc_list_map_get_current(self, &item))
+		return 1;
 
 	*result = item->value;
 	return 0;
@@ -45,7 +61,7 @@ int cc_list_map_insert_new(struct cc_list_map *self, void *key, void *value)
 
 	item->key = key;
 	item->value = value;
-	if (cc_list_insert(self->data, 0, item))
+	if (cc_list_insert_tail(self->data, item))
 		goto fail2;
 
 	return 0;
@@ -60,8 +76,8 @@ int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value)
 {
 	struct cc_map_item *item;
 
-	if (!cc_list_map_get_item(self, key, &item, NULL))
-		return 1;
+	if (!cc_list_map_move_to_item(self, key))
+		return CC_MAP_KEY_ALREADY_EXIST;
 	if (cc_list_map_insert_new(self, key, value))
 		return 2;
 
@@ -73,38 +89,34 @@ int cc_list_map_set(struct cc_list_map *self, void *key, void *value, void **old
 {
 	struct cc_map_item *item;
 
-	if (!cc_list_map_get_item(self, key, &item, NULL)) {
+	if (cc_list_map_move_to_item(self, key)) {
+		if (cc_list_map_insert_new(self, key, value))
+			return 1;
+		if (old_value != NULL)
+			*old_value = NULL;
+	} else {
+		if (cc_list_map_get_current(self, &item))
+			return 2;
+		item->value = value;
 		if (old_value != NULL)
 			*old_value = item->value;
-
-		item->value = value;
-		return 0;
 	}
-
-	if (cc_list_map_insert_new(self, key, value))
-		return 1;
-
-	/// When inserting new data to the map, `*old_value` should be NULL.
-	if (old_value != NULL)
-		*old_value = NULL;
-
 	return 0;
 }
 
-int cc_list_map_del(struct cc_list_map *self, void *key, void **result)
+int cc_list_map_del(struct cc_list_map *self, void *key, struct cc_map_item **result)
 {
-	struct cc_map_item *item;
-	size_t index;
-
 	if (try_reset_double_p(result))
 		return 1;
-	if (cc_list_map_get_item(self, key, &item, &index))
+	if (cc_list_map_move_to_item(self, key))
+		return CC_MAP_KEY_NOT_FOUND;
+	if (cc_list_map_get_current(self, result))
 		return 2;
-	if (cc_list_remove(self->data, index, (void **)&item))
+	if (cc_list_cursor_move(&self->cursor, 1))
 		return 3;
+	if (cc_list_cursor_remove(&self->cursor, -1, 1))
+		return 4;
 
-	*result = item->value;
-	free(item);
 	return 0;
 }
 
@@ -123,13 +135,6 @@ int cc_list_map_print(struct cc_list_map *self, char *end_string)
 	return 0;
 }
 
-static struct cc_map_i map_interface = {
-	.get = (cc_map_get_fn_t)cc_list_map_get,
-	.set = (cc_map_set_fn_t)cc_list_map_set,
-	.set_new = (cc_map_set_new_fn_t)cc_list_map_set_new,
-	.del = (cc_map_del_fn_t)cc_list_map_del,
-};
-
 int cc_list_map_new(struct cc_list_map **self, cc_cmp_fn_t cmp)
 {
 	struct cc_list_map *tmp;
@@ -138,13 +143,14 @@ int cc_list_map_new(struct cc_list_map **self, cc_cmp_fn_t cmp)
 	if (tmp == NULL)
 		goto fail1;
 
-	tmp->interface = &map_interface;
+	tmp->interface = &cc_list_map_interface;
 
 	if (cc_list_new(&tmp->data))
 		goto fail2;
+	if (cc_list_cursor_init(&tmp->cursor, tmp->data, NULL))
+		goto fail2;
 
 	tmp->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
-
 	*self = tmp;
 	return 0;
 
@@ -171,10 +177,6 @@ int cc_list_map_delete(struct cc_list_map *self)
 	return 0;
 }
 
-static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn_t)cc_list_map_iter_next,
-};
-
 int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index)
 {
 	struct cc_map_item **tmp_item;
@@ -193,7 +195,6 @@ int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map
 	if (map == NULL)
 		return 1;
 
-	self->iterator = &iterator_interface;
+	self->iterator = &cc_list_map_iter_interface;
 	return cc_list_iter_init(&self->inner_iter, map->data, 0);
 }
-*/

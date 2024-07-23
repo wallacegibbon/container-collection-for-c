@@ -11,6 +11,11 @@ struct cc_stack_i {
 	cc_stack_peek_fn_t peek;
 };
 
+enum {
+	CC_STACK_EMPTY = 0xFC10,
+	CC_STACK_FULL = 0xFC20,
+};
+
 static inline int cc_stack_push(void *self, void *data)
 {
 	return (*(struct cc_stack_i **)self)->push(self, data);

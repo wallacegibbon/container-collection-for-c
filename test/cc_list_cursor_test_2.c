@@ -19,11 +19,11 @@ int main(void)
 		tmp = malloc(sizeof(*tmp));
 		assert(tmp != NULL);
 		*tmp = i;
-		assert(!cc_list_append(list, tmp));
+		assert(!cc_list_insert_tail(list, tmp));
 	}
 
 	assert(!cc_list_cursor_new(&cursor, list, cc_default_delete_fn));
-	assert(!cc_list_cursor_reset(cursor));
+	cc_list_cursor_reset(cursor);
 
 	assert(!cc_list_cursor_get(cursor, 0, 1, (void **)buffer));
 
@@ -82,7 +82,7 @@ int main(void)
 	tmp = malloc(sizeof(*tmp));
 	assert(tmp != NULL);
 	*tmp = 99;
-	assert(!cc_list_cursor_insert_after(cursor, 0, tmp));
+	assert(!cc_list_cursor_insert_before(cursor, 1, tmp));
 	assert(!cc_list_cursor_get(cursor, -1, 4, (void **)buffer));
 	assert(*buffer[0] == 0);
 	assert(*buffer[1] == 2);

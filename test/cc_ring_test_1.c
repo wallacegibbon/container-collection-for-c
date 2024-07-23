@@ -1,4 +1,3 @@
-#include "cc_queue.h"
 #include "cc_ring.h"
 #include <assert.h>
 
@@ -11,8 +10,8 @@ int main(void)
 	assert(cc_ring_space(ring) == 8);
 	assert(cc_ring_elem_nums(ring) == 0);
 
-	assert(cc_ring_dequeue(ring, &tmp) == CC_RING_EMPTY);
-	assert(cc_queue_dequeue(ring, (void **)&tmp) == CC_RING_EMPTY);
+	assert(cc_ring_dequeue(ring, &tmp) == CC_QUEUE_EMPTY);
+	assert(cc_queue_dequeue(ring, (void **)&tmp) == CC_QUEUE_EMPTY);
 
 	for (i = 0; i < 8; i++) {
 		// assert(!cc_ring_enqueue(ring, &i));
@@ -22,8 +21,8 @@ int main(void)
 	}
 
 	assert(cc_ring_space(ring) == 0);
-	assert(cc_ring_enqueue(ring, &i) == CC_RING_FULL);
-	assert(cc_queue_enqueue(ring, &i) == CC_RING_FULL);
+	assert(cc_ring_enqueue(ring, &i) == CC_QUEUE_FULL);
+	assert(cc_queue_enqueue(ring, &i) == CC_QUEUE_FULL);
 
 	assert(!cc_ring_peek(ring, &i));
 	assert(i == 0);
@@ -42,8 +41,8 @@ int main(void)
 
 	assert(cc_ring_elem_nums(ring) == 0);
 	assert(cc_ring_space(ring) == 8);
-	assert(cc_ring_dequeue(ring, &tmp) == CC_RING_EMPTY);
-	assert(cc_queue_dequeue(ring, (void **)&tmp) == CC_RING_EMPTY);
+	assert(cc_ring_dequeue(ring, &tmp) == CC_QUEUE_EMPTY);
+	assert(cc_queue_dequeue(ring, (void **)&tmp) == CC_QUEUE_EMPTY);
 
 	assert(!cc_ring_delete(ring));
 

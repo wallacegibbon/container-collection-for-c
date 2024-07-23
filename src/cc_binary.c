@@ -4,7 +4,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-/*
 int cc_binary_insert_left(struct cc_binary *self, void *data)
 {
 	struct cc_binary *node;
@@ -136,9 +135,9 @@ static int iter_queue_add(struct cc_binary_iter *self, void *data)
 	if (data == NULL)
 		return 0;
 	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_DEPTH_RIGHT)
-		return cc_list_insert(self->queue, 0, data);
+		return cc_list_insert_head(self->queue, data);
 	else
-		return cc_list_append(self->queue, data);
+		return cc_list_insert_tail(self->queue, data);
 }
 
 static int iter_queue_add_multi(struct cc_binary_iter *self, int n, ...)
@@ -176,7 +175,7 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
 
 	if (try_reset_double_p(item))
 		return 1;
-	if (cc_list_remove(self->queue, 0, (void **)&current))
+	if (cc_list_remove_head(self->queue, (void **)&current))
 		return 2;
 
 	*item = &current->data;
@@ -204,7 +203,7 @@ int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root, enu
 
 	if (cc_list_new(&tmp->queue))
 		goto fail2;
-	if (cc_list_append(tmp->queue, root))
+	if (cc_list_insert_tail(tmp->queue, root))
 		goto fail3;
 
 	tmp->iterator = &iterator_interface;
@@ -231,4 +230,3 @@ int cc_binary_iter_delete(struct cc_binary_iter *self)
 	free(self);
 	return tmp;
 }
-*/

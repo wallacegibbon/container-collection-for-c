@@ -78,7 +78,6 @@ int cc_array_chain_new(struct cc_array_chain **self, int node_elem_nums, int nod
 
 	tmp->node_elem_nums = node_elem_nums;
 	tmp->node_elem_size = node_elem_size;
-
 	tmp->cursor = NULL;
 	tmp->cursor_index = 0;
 	tmp->total_nums = 0;
@@ -119,7 +118,7 @@ int cc_array_chain_node_new(struct cc_array_chain *self)
 
 	if (cc_array_new(&arr, self->node_elem_nums, self->node_elem_size))
 		goto fail1;
-	if (cc_list_append(self->node_chain, arr))
+	if (cc_list_insert_tail(self->node_chain, arr))
 		goto fail2;
 
 	self->cursor = arr;

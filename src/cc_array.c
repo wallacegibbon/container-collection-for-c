@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct cc_iter_i cc_array_iter_interface = {
+	.next = (cc_iter_next_fn_t)cc_array_iter_next,
+};
+
 static inline void cc_array_get_(struct cc_array *self, size_t index, void *result)
 {
 	memcpy(result, self->data + index * self->elem_size, self->elem_size);
@@ -151,10 +155,6 @@ int cc_array_delete(struct cc_array *self)
 
 #endif
 
-static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn_t)cc_array_iter_next,
-};
-
 int cc_array_iter_next(struct cc_array_iter *self, void **item, size_t *index)
 {
 	if (try_reset_double_p(item))
@@ -174,7 +174,7 @@ int cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data)
 	if (data == NULL)
 		return 1;
 
-	self->iterator = &iterator_interface;
+	self->iterator = &cc_array_iter_interface;
 	self->data = data;
 	self->cursor = 0;
 	return 0;

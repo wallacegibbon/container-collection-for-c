@@ -6,11 +6,6 @@
 #include "cc_stack.h"
 #include <stddef.h>
 
-enum {
-	CC_STACK_EMPTY = 0xFFE0,
-	CC_STACK_FULL = 0xFFE1,
-};
-
 struct cc_array_stack {
 	struct cc_stack_i *interface;
 	struct cc_array *data;

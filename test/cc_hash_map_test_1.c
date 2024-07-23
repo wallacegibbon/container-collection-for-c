@@ -1,6 +1,7 @@
 #include "cc_hash_map.h"
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void)
 {
@@ -10,8 +11,8 @@ int main(void)
 	uintptr_t tmp;
 	size_t index;
 
-	assert(!cc_hash_map_new(&map,10, NULL, NULL));
-	// assert(!cc_hash_map_print(map, "\n"));
+	assert(!cc_hash_map_new(&map, 10, NULL, NULL));
+	assert(!cc_hash_map_print(map, "\n"));
 
 	assert(!cc_hash_map_set(map, (void *)11, (void *)101, NULL));
 	assert(!cc_hash_map_set(map, (void *)12, (void *)102, NULL));
@@ -37,8 +38,9 @@ int main(void)
 	assert(!cc_map_get(map, (void *)12, (void **)&tmp));
 	assert(tmp == 102);
 
-	assert(!cc_map_del(map, (void *)19, (void **)&tmp));
-	assert(tmp == 109);
+	assert(!cc_map_del(map, (void *)19, (void **)&item_tmp));
+	assert(item_tmp->value == (void *)109);
+	free(item_tmp);
 
 	assert(!cc_hash_map_print(map, "\n"));
 

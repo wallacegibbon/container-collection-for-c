@@ -24,8 +24,9 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t c
 int cc_hash_map_delete(struct cc_hash_map *self);
 
 int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result);
+int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value);
 int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value, void **old_value);
-int cc_hash_map_del(struct cc_hash_map *self, void *key, void **result);
+int cc_hash_map_del(struct cc_hash_map *self, void *key, struct cc_map_item **result);
 
 int cc_hash_map_print(struct cc_hash_map *self, char *end_string);
 

@@ -18,6 +18,11 @@ struct cc_map_item {
 	void *value;
 };
 
+enum {
+	CC_MAP_KEY_NOT_FOUND = 0xFB10,
+	CC_MAP_KEY_ALREADY_EXIST = 0xFB20,
+};
+
 static inline int cc_map_get(void *self, void *key, void **result)
 {
 	return (*(struct cc_map_i **)self)->get(self, key, result);

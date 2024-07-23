@@ -35,7 +35,7 @@ int cc_ring_enqueue(struct cc_ring *self, void *item)
 
 	write_index_next = next_index(self, self->write_index);
 	if (write_index_next == self->read_index)
-		return CC_RING_FULL;
+		return CC_QUEUE_FULL;
 
 	cc_array_set_unsafe(self->data, self->write_index, item);
 	self->write_index = write_index_next;
@@ -45,7 +45,7 @@ int cc_ring_enqueue(struct cc_ring *self, void *item)
 int cc_ring_peek(struct cc_ring *self, void *item)
 {
 	if (self->read_index == self->write_index)
-		return CC_RING_EMPTY;
+		return CC_QUEUE_EMPTY;
 
 	cc_array_get_unsafe(self->data, self->read_index, item);
 	return 0;
@@ -53,8 +53,8 @@ int cc_ring_peek(struct cc_ring *self, void *item)
 
 int cc_ring_dequeue(struct cc_ring *self, void *item)
 {
-	if (cc_ring_peek(self, item) == CC_RING_EMPTY)
-		return CC_RING_EMPTY;
+	if (cc_ring_peek(self, item) == CC_QUEUE_EMPTY)
+		return CC_QUEUE_EMPTY;
 
 	self->read_index = next_index(self, self->read_index);
 	return 0;

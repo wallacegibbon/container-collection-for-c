@@ -11,6 +11,11 @@ struct cc_queue_i {
 	cc_queue_peek_fn_t peek;
 };
 
+enum {
+	CC_QUEUE_EMPTY = 0xFD10,
+	CC_QUEUE_FULL = 0xFD20,
+};
+
 static inline int cc_queue_enqueue(void *self, void *data)
 {
 	return (*(struct cc_queue_i **)self)->enqueue(self, data);

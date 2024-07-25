@@ -19,9 +19,9 @@ int show_tree_elements(struct cc_binary *tree)
 	return 0;
 }
 
-static int print_1(void *data)
+static void print_1(void *data)
 {
-	return cc_debug_print("%ld", (uintptr_t)data);
+	cc_debug_print("%ld", (uintptr_t)data);
 }
 
 int main(void)

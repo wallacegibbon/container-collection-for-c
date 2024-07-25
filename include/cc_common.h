@@ -23,7 +23,10 @@ static inline int try_reset_double_p(void *pointer)
 
 typedef int (*cc_delete_fn_t)(void *obj);
 
-typedef int (*cc_simple_fn_1_t)(void *value);
+typedef void (*cc_simple_fn_0_t)(void);
+typedef void (*cc_simple_fn_1_t)(void *value);
+typedef int (*cc_simple_fn_2_t)(void *value);
+
 typedef int (*cc_cmp_fn_t)(void *left, void *right);
 typedef size_t (*cc_hash_fn_t)(void *obj);
 
@@ -42,14 +45,11 @@ size_t cc_str_hash_fn_simple(void *obj);
 /// Calculate hash from string in the BKDR (31, 131, 1313, ...) way.
 size_t cc_str_hash_fn_bkdr(void *obj);
 
-int cc_exit_info(int code, char *format, ...);
-
-/// Will call vfprintf followed by fflush on stdout.
-int cc_debug_print(char *format, ...);
-
-int cc_print_n(char *s, int n);
-
 /// Call `free` and return 0.
 int cc_default_delete_fn(void *obj);
+
+void cc_exit_info(int code, char *format, ...);
+void cc_debug_print(char *format, ...);
+void cc_print_n(char *s, int n);
 
 #endif

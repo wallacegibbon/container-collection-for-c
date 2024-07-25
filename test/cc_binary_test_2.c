@@ -41,14 +41,14 @@ int blah_node_new_op(struct blah_node **self, char op_sign)
 	return 0;
 }
 
-int blah_node_print(struct blah_node *node)
+void blah_node_print(struct blah_node *node)
 {
 	if (node == NULL)
-		return 0;
+		return;
 	if (node->type == NUMBER)
-		return cc_debug_print("%d", node->number);
+		cc_debug_print("%d", node->number);
 	else
-		return cc_debug_print("<%c>", node->op_sign);
+		cc_debug_print("<%c>", node->op_sign);
 }
 
 int blah_node_delete(struct blah_node *self)

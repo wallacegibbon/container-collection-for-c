@@ -81,8 +81,9 @@ int cc_hash_map_print_slot(struct cc_list_map *slot, int index)
 	cc_debug_print("[% 9d] ", index);
 	if (slot != NULL)
 		return cc_list_map_print(slot, "\n");
-	else
-		return cc_debug_print("\n");
+
+	cc_debug_print("\n");
+	return 0;
 }
 
 int cc_hash_map_print(struct cc_hash_map *self, char *end_string)

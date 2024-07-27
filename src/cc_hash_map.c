@@ -123,7 +123,7 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t c
 
 	/// The elements of the array should be initialized as NULLs.
 	if (cc_array_iter_init(&iter, tmp->data))
-		goto fail2;
+		goto fail3;
 	while (!cc_iter_next(&iter, &item, NULL))
 		*item = NULL;
 
@@ -133,6 +133,8 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t c
 	*self = tmp;
 	return 0;
 
+fail3:
+	cc_array_delete(tmp->data);
 fail2:
 	free(tmp);
 fail1:

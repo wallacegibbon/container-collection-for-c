@@ -148,12 +148,14 @@ int cc_list_map_new(struct cc_list_map **self, cc_cmp_fn_t cmp)
 	if (cc_list_new(&tmp->data))
 		goto fail2;
 	if (cc_list_cursor_init(&tmp->cursor, tmp->data, NULL))
-		goto fail2;
+		goto fail3;
 
 	tmp->cmp = CC_WITH_DEFAULT(cmp, cc_default_cmp_fn);
 	*self = tmp;
 	return 0;
 
+fail3:
+	cc_list_delete(tmp->data);
 fail2:
 	free(tmp);
 fail1:

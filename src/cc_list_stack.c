@@ -1,5 +1,6 @@
 #include "cc_list_stack.h"
 #include <stdlib.h>
+#include <stdint.h>
 
 struct cc_stack_i cc_list_stack_interface = {
 	.push = (cc_stack_push_fn_t)cc_list_stack_push,

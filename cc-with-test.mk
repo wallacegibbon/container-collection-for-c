@@ -10,6 +10,8 @@ ifeq ($(MEMCHECK), 1)
 C_FLAGS += -fno-inline -fno-omit-frame-pointer
 LD_FLAGS += -static-libgcc
 MEMORY_CHECK_PROG = drmemory --
+else ifeq ($(MEMCHECK), 2)
+MEMORY_CHECK_PROG = valgrind
 endif
 
 TARGET ?= target
@@ -55,6 +57,7 @@ $(BUILD_DIR)/%: %.c $(OBJECTS) | build_dir
 	@$(CC) -o $@ $^ $(C_FLAGS) $(LD_FLAGS)
 	@/bin/echo -e "\t./$@\n"
 	@$(MEMORY_CHECK_PROG) $@
+	@rm $@
 
 -include $(OBJECTS:.o=.d)
 

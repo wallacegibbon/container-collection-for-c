@@ -1,6 +1,7 @@
 #include "cc_hash_map.h"
 #include <assert.h>
 #include <stdio.h>
+#include <stdint.h>
 
 int main(void)
 {

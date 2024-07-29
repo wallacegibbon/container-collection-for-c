@@ -4,10 +4,12 @@
 MAKE_OPT=""
 
 parse_arguments() {
-	if test $1 = "memcheck"; then
+	if test $1 = "memcheck=1"; then
 		MAKE_OPT="MEMCHECK=1"
+	elif test $1 = "memcheck=2"; then
+		MAKE_OPT="MEMCHECK=2"
 	else
-		echo "usage: run-test.sh [memcheck]" 2>&1
+		echo "usage: run-test.sh [memcheck=1|2]" 2>&1
 		exit 1
 	fi
 }

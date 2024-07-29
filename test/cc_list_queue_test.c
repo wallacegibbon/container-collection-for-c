@@ -1,5 +1,6 @@
 #include "cc_list_queue.h"
 #include <assert.h>
+#include <stdint.h>
 
 int main(void)
 {

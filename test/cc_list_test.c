@@ -1,5 +1,6 @@
 #include "cc_list.h"
 #include <assert.h>
+#include <stdint.h>
 
 int main(void)
 {

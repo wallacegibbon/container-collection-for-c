@@ -16,7 +16,7 @@ parse_arguments() {
 
 run_test() {
 	echo [TEST] "$1"...
-	make $MAKE_OPT build/$(basename $1 .c) || exit 1
+	gmake $MAKE_OPT build/$(basename $1 .c) || exit 1
 	echo
 	echo
 }

@@ -1,10 +1,6 @@
 #ifndef __CC_LIST_H
 #define __CC_LIST_H
 
-#ifdef NO_MALLOC
-#error "You can NOT use `cc_list` without support for the `malloc` function."
-#endif
-
 #include "cc_common.h"
 #include "cc_iter.h"
 
@@ -15,7 +11,7 @@ struct cc_list_node {
 	struct cc_list_node *prev;
 	struct cc_list_node *next;
 	union {
-		/// For data nodes, we use the `data` to hold a value or a pointer to value.
+		/// For data node, we use `data` to hold a value or a pointer to value.
 		void *data;
 		/// For root node, we use `size` to keep the number of elements in the list.
 		size_t size;

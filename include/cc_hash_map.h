@@ -1,10 +1,6 @@
 #ifndef __CC_HASH_MAP_H
 #define __CC_HASH_MAP_H
 
-#ifdef NO_MALLOC
-#error "You can NOT use `cc_hash_map` without support for the `malloc` function."
-#endif
-
 #include "cc_array.h"
 #include "cc_common.h"
 #include "cc_iter.h"
@@ -14,7 +10,8 @@
 
 struct cc_hash_map {
 	struct cc_map_i *interface;
-	struct cc_array *data; /// An array of `struct cc_list_map *`
+	/// `data` is an array whose elements are of type `struct cc_list_map *`.
+	struct cc_array *data;
 	size_t bucket_size;
 	cc_cmp_fn_t cmp;
 	cc_hash_fn_t calc_hash;

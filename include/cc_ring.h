@@ -13,12 +13,8 @@ struct cc_ring {
 	size_t write_index;
 };
 
-#ifndef NO_MALLOC
-
 int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size);
 int cc_ring_delete(struct cc_ring *self);
-
-#endif
 
 int cc_ring_init(struct cc_ring *self, struct cc_array *data);
 

@@ -1,10 +1,6 @@
 #ifndef __CC_BINARY_H
 #define __CC_BINARY_H
 
-#ifdef NO_MALLOC
-#error "You can NOT use `cc_binary` without support for the `malloc` function."
-#endif
-
 #include "cc_common.h"
 #include "cc_iter.h"
 #include <stddef.h>

@@ -53,8 +53,6 @@ int cc_array_stack_init(struct cc_array_stack *self, struct cc_array *data)
 	return 0;
 }
 
-#ifndef NO_MALLOC
-
 int cc_array_stack_new(struct cc_array_stack **self, size_t elem_nums, size_t elem_size)
 {
 	struct cc_array_stack *tmp;
@@ -87,5 +85,3 @@ int cc_array_stack_delete(struct cc_array_stack *self)
 	free(self);
 	return 0;
 }
-
-#endif

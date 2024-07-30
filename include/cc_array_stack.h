@@ -12,12 +12,8 @@ struct cc_array_stack {
 	size_t top;
 };
 
-#ifndef NO_MALLOC
-
 int cc_array_stack_new(struct cc_array_stack **self, size_t elem_nums, size_t elem_size);
 int cc_array_stack_delete(struct cc_array_stack *self);
-
-#endif
 
 int cc_array_stack_init(struct cc_array_stack *self, struct cc_array *data);
 

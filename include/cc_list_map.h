@@ -1,10 +1,6 @@
 #ifndef __CC_LIST_MAP_H
 #define __CC_LIST_MAP_H
 
-#ifdef NO_MALLOC
-#error "You can NOT use `cc_list_map` without support for the `malloc` function."
-#endif
-
 #include "cc_common.h"
 #include "cc_iter.h"
 #include "cc_list.h"

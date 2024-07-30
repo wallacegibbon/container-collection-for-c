@@ -111,8 +111,6 @@ int cc_array_init(struct cc_array *self, unsigned char *data, size_t elem_nums, 
 	return 0;
 }
 
-#ifndef NO_MALLOC
-
 int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size)
 {
 	struct cc_array *tmp;
@@ -125,7 +123,6 @@ int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size)
 	data = malloc(elem_nums * elem_size);
 	if (data == NULL)
 		goto fail2;
-
 	if (cc_array_init(tmp, data, elem_nums, elem_size))
 		goto fail3;
 
@@ -152,8 +149,6 @@ int cc_array_delete(struct cc_array *self)
 	free(self);
 	return 0;
 }
-
-#endif
 
 int cc_array_iter_next(struct cc_array_iter *self, void **item, size_t *index)
 {

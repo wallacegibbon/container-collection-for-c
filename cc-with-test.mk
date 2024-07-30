@@ -9,9 +9,9 @@ LD_FLAGS += -Wl,--gc-sections,-Map=$@.map
 ifeq ($(MEMCHECK), 1)
 C_FLAGS += -fno-inline -fno-omit-frame-pointer
 LD_FLAGS += -static-libgcc
-MEMORY_CHECK_PROG = drmemory --
+MEMORY_CHECK_PROG = drmemory -batch -suppress $(HOME)/drmemory-mingw64-suppress.txt -exit_code_if_errors 1 --
 else ifeq ($(MEMCHECK), 2)
-MEMORY_CHECK_PROG = valgrind
+MEMORY_CHECK_PROG = valgrind --leak-check=full --error-exitcode=1
 endif
 
 TARGET ?= target

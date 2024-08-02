@@ -1,4 +1,5 @@
 #include "cc_list.h"
+#include "cc_iter.h"
 #include <stdlib.h>
 
 struct cc_iter_i cc_list_iter_interface = {
@@ -284,6 +285,35 @@ int cc_list_node_delete_and_next(struct cc_list_node **pcurrent, cc_delete_fn_t 
 ////////////////////////////////////////////////////////////////////////////////
 /// List Functions
 ////////////////////////////////////////////////////////////////////////////////
+int cc_list_to_cc_array(struct cc_list *self, struct cc_array **result)
+{
+	struct cc_list_iter iter;
+	struct cc_array *arr;
+	void **tmp;
+	size_t i;
+
+	tmp = malloc(sizeof(*tmp));
+	if (tmp == NULL)
+		goto fail1;
+	if (cc_array_new(&arr, self->root.size, sizeof(void *)))
+		goto fail2;
+	if (cc_list_iter_init(&iter, self, 0))
+		goto fail3;
+	while (!cc_iter_next(&iter, &tmp, &i)) {
+		if (cc_array_set(arr, i, tmp))
+			goto fail3;
+	}
+
+	*result = arr;
+	return 0;
+fail3:
+	cc_array_delete(arr);
+fail2:
+	free(tmp);
+fail1:
+	return 1;
+}
+
 static inline void cc_list_reset(struct cc_list *self)
 {
 	self->root.prev = &self->root;

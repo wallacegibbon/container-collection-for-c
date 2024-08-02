@@ -1,6 +1,7 @@
 #ifndef __CC_LIST_H
 #define __CC_LIST_H
 
+#include "cc_array.h"
 #include "cc_common.h"
 #include "cc_iter.h"
 
@@ -50,6 +51,8 @@ int cc_list_get_tail(struct cc_list *self, void **data);
 
 int cc_list_is_empty(struct cc_list *self);
 size_t cc_list_size(struct cc_list *self);
+
+int cc_list_to_cc_array(struct cc_list *self, struct cc_array **result);
 
 /// For debugging
 int cc_list_print(struct cc_list *self, int direction);

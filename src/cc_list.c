@@ -292,24 +292,19 @@ int cc_list_to_cc_array(struct cc_list *self, struct cc_array **result)
 	void **tmp;
 	size_t i;
 
-	tmp = malloc(sizeof(*tmp));
-	if (tmp == NULL)
-		goto fail1;
 	if (cc_array_new(&arr, self->root.size, sizeof(void *)))
-		goto fail2;
+		goto fail1;
 	if (cc_list_iter_init(&iter, self, 0))
-		goto fail3;
+		goto fail2;
 	while (!cc_iter_next(&iter, &tmp, &i)) {
 		if (cc_array_set(arr, i, tmp))
-			goto fail3;
+			goto fail2;
 	}
 
 	*result = arr;
 	return 0;
-fail3:
-	cc_array_delete(arr);
 fail2:
-	free(tmp);
+	cc_array_delete(arr);
 fail1:
 	return 1;
 }

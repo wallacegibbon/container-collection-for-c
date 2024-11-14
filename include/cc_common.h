@@ -1,7 +1,8 @@
 #ifndef __CC_COMMON_H
 #define __CC_COMMON_H
 
-#define CC_WITH_DEFAULT(VAR, DEFAULT_VAL) ((VAR) == NULL ? (DEFAULT_VAL) : (VAR))
+#define CC_WITH_DEFAULT(VAR, DEFAULT_VAL)                                      \
+	((VAR) == NULL ? (DEFAULT_VAL) : (VAR))
 
 #include <stddef.h>
 

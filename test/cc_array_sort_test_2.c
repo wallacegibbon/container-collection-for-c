@@ -10,7 +10,9 @@ struct blah {
 };
 
 /// define a global array to simplify the initializing of the testing generic_sequence.
-static const struct blah people[] = {{"Harry", 10}, {"Albus", 109}, {"Severus", 50}};
+static const struct blah people[] = { { "Harry", 10 },
+				      { "Albus", 109 },
+				      { "Severus", 50 } };
 
 static void blah_display(struct blah *self)
 {

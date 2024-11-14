@@ -3,7 +3,8 @@
 ///-----------------------------------------------------------------------------
 /// Quick sort (https://en.wikipedia.org/wiki/Quicksort)
 ///-----------------------------------------------------------------------------
-static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp, size_t start, size_t end)
+static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp,
+			      size_t start, size_t end)
 {
 	size_t left, right, middle;
 
@@ -12,9 +13,11 @@ static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp, size_t sta
 	left = start;
 
 	while (left < right) {
-		while (cc_array_cmp(self, cmp, left, middle) <= 0 && left < right)
+		while (cc_array_cmp(self, cmp, left, middle) <= 0 &&
+		       left < right)
 			left++;
-		while (cc_array_cmp(self, cmp, right, middle) > 0 && left < right)
+		while (cc_array_cmp(self, cmp, right, middle) > 0 &&
+		       left < right)
 			right--;
 
 		if (left != right)
@@ -27,7 +30,8 @@ static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp, size_t sta
 	return left + 1;
 }
 
-static void cc_array_sort_quick_recur(struct cc_array *self, cc_cmp_fn_t cmp, size_t start, size_t end)
+static void cc_array_sort_quick_recur(struct cc_array *self, cc_cmp_fn_t cmp,
+				      size_t start, size_t end)
 {
 	size_t middle;
 	if (start >= end - 1)

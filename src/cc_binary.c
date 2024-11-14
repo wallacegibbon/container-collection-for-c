@@ -107,7 +107,8 @@ int cc_binary_delete(struct cc_binary *self)
 	return 0;
 }
 
-int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1_t print_fn)
+int cc_binary_print(struct cc_binary *current, int depth,
+		    cc_simple_fn_1_t print_fn)
 {
 	int tmp = 0;
 
@@ -134,7 +135,8 @@ static int iter_queue_add(struct cc_binary_iter *self, void *data)
 {
 	if (data == NULL)
 		return 0;
-	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_DEPTH_RIGHT)
+	if (self->direction == CC_TRAVERSE_DEPTH_LEFT ||
+	    self->direction == CC_TRAVERSE_DEPTH_RIGHT)
 		return cc_list_insert_head(self->queue, data);
 	else
 		return cc_list_insert_tail(self->queue, data);
@@ -152,16 +154,19 @@ static int iter_queue_add_multi(struct cc_binary_iter *self, int n, ...)
 	return 0;
 }
 
-static int iter_queue_add_child(struct cc_binary_iter *self, struct cc_binary *node)
+static int iter_queue_add_child(struct cc_binary_iter *self,
+				struct cc_binary *node)
 {
 	int tmp = 0;
 
 	if (node == NULL)
 		return 0;
 
-	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_BREADTH_RIGHT)
+	if (self->direction == CC_TRAVERSE_DEPTH_LEFT ||
+	    self->direction == CC_TRAVERSE_BREADTH_RIGHT)
 		tmp = iter_queue_add_multi(self, 2, node->right, node->left);
-	else if (self->direction == CC_TRAVERSE_DEPTH_RIGHT || self->direction == CC_TRAVERSE_BREADTH_LEFT)
+	else if (self->direction == CC_TRAVERSE_DEPTH_RIGHT ||
+		 self->direction == CC_TRAVERSE_BREADTH_LEFT)
 		tmp = iter_queue_add_multi(self, 2, node->left, node->right);
 	else
 		tmp = 2;
@@ -190,7 +195,8 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
 	return 0;
 }
 
-int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root, enum cc_traverse_direction direction)
+int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root,
+		       enum cc_traverse_direction direction)
 {
 	struct cc_binary_iter *tmp;
 

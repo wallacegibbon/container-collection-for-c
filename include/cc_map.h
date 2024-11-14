@@ -2,7 +2,8 @@
 #define __CC_MAP_H
 
 typedef int (*cc_map_get_fn_t)(void *self, void *key, void **result);
-typedef int (*cc_map_set_fn_t)(void *self, void *key, void *value, void **old_value);
+typedef int (*cc_map_set_fn_t)(void *self, void *key, void *value,
+			       void **old_value);
 typedef int (*cc_map_set_new_fn_t)(void *self, void *key, void *value);
 typedef int (*cc_map_del_fn_t)(void *self, void *key, void **result);
 
@@ -28,7 +29,8 @@ static inline int cc_map_get(void *self, void *key, void **result)
 	return (*(struct cc_map_i **)self)->get(self, key, result);
 }
 
-static inline int cc_map_set(void *self, void *key, void *value, void **old_value)
+static inline int cc_map_set(void *self, void *key, void *value,
+			     void **old_value)
 {
 	return (*(struct cc_map_i **)self)->set(self, key, value, old_value);
 }

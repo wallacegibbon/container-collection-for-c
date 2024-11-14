@@ -43,7 +43,8 @@ int cc_string_builder_append_str(struct cc_string_builder *self, char *s)
 }
 
 /// When `s` is NULL, ignore and return success directly
-int cc_string_builder_append(struct cc_string_builder *self, char *s, size_t size)
+int cc_string_builder_append(struct cc_string_builder *self, char *s,
+			     size_t size)
 {
 	if (s == NULL)
 		return 0;
@@ -92,7 +93,8 @@ int cc_string_concat(char **result, int n, ...)
 
 	va_start(args, n);
 	while (n--) {
-		if (cc_string_builder_append_str(string_builder, va_arg(args, char *)))
+		if (cc_string_builder_append_str(string_builder,
+						 va_arg(args, char *)))
 			goto fail2;
 	}
 	va_end(args);

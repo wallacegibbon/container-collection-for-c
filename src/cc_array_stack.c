@@ -53,7 +53,8 @@ int cc_array_stack_init(struct cc_array_stack *self, struct cc_array *data)
 	return 0;
 }
 
-int cc_array_stack_new(struct cc_array_stack **self, size_t elem_nums, size_t elem_size)
+int cc_array_stack_new(struct cc_array_stack **self, size_t elem_nums,
+		       size_t elem_size)
 {
 	struct cc_array_stack *tmp;
 	struct cc_array *data;

@@ -5,9 +5,9 @@
 #include <string.h>
 #include <stdint.h>
 
-char s1[] = {"duplicated_key"};
-char s2[] = {"duplicated_key"};
-char s3[] = {"duplicated_key"};
+char s1[] = { "duplicated_key" };
+char s2[] = { "duplicated_key" };
+char s3[] = { "duplicated_key" };
 
 int main(void)
 {
@@ -17,7 +17,8 @@ int main(void)
 
 	/// When using `char *`s as keys, you should use `strcmp` as the `cmp` function.
 	// assert(!cc_hash_map_new(&map, 20, NULL, cc_str_hash_fn_bkdr));
-	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp, cc_str_hash_fn_bkdr));
+	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp,
+				cc_str_hash_fn_bkdr));
 	// assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp, cc_str_hash_fn_simple));
 	// assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp, NULL));
 

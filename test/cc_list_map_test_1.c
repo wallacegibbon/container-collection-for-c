@@ -37,9 +37,11 @@ int main(void)
 	// assert(!cc_list_map_print(map, "\n"));
 
 	assert(!cc_map_get(map, (void *)1, (void **)&tmp));
-	assert(cc_map_get(map, (void *)2, (void **)&tmp) == CC_MAP_KEY_NOT_FOUND);
+	assert(cc_map_get(map, (void *)2, (void **)&tmp) ==
+	       CC_MAP_KEY_NOT_FOUND);
 	assert(!cc_map_get(map, (void *)9, (void **)&tmp));
-	assert(cc_map_get(map, (void *)8, (void **)&tmp) == CC_MAP_KEY_NOT_FOUND);
+	assert(cc_map_get(map, (void *)8, (void **)&tmp) ==
+	       CC_MAP_KEY_NOT_FOUND);
 
 	assert(!cc_map_del(map, (void *)1, (void **)&item_tmp));
 	assert(item_tmp->value == (void *)'a');
@@ -51,7 +53,8 @@ int main(void)
 	assert(item_tmp->value == (void *)'c');
 	free(item_tmp);
 
-	assert(cc_map_del(map, (void *)9, (void **)&item_tmp) == CC_MAP_KEY_NOT_FOUND);
+	assert(cc_map_del(map, (void *)9, (void **)&item_tmp) ==
+	       CC_MAP_KEY_NOT_FOUND);
 
 	// assert(!cc_list_map_print(map, "\n"));
 

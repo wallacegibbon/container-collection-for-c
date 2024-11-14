@@ -14,7 +14,8 @@ struct cc_iter_i cc_list_map_iter_interface = {
 	.next = (cc_iter_next_fn_t)cc_list_map_iter_next,
 };
 
-static inline int cc_list_map_get_current(struct cc_list_map *self, struct cc_map_item **item)
+static inline int cc_list_map_get_current(struct cc_list_map *self,
+					  struct cc_map_item **item)
 {
 	return cc_list_cursor_get(&self->cursor, 0, 1, (void **)item);
 }
@@ -26,7 +27,8 @@ static int cc_list_map_move_to_item(struct cc_list_map *self, void *key)
 
 	cc_list_cursor_reset(&self->cursor);
 
-	for (; !cc_list_map_get_current(self, &tmp); cc_list_cursor_move(&self->cursor, 1)) {
+	for (; !cc_list_map_get_current(self, &tmp);
+	     cc_list_cursor_move(&self->cursor, 1)) {
 		if (self->cmp(key, tmp->key) == 0)
 			return 0;
 	}
@@ -85,7 +87,8 @@ int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value)
 }
 
 /// Be careful! When `old_value` is NULL, the old value of `key` will be ignored, which may cause memory leak.
-int cc_list_map_set(struct cc_list_map *self, void *key, void *value, void **old_value)
+int cc_list_map_set(struct cc_list_map *self, void *key, void *value,
+		    void **old_value)
 {
 	struct cc_map_item *item;
 
@@ -104,7 +107,8 @@ int cc_list_map_set(struct cc_list_map *self, void *key, void *value, void **old
 	return 0;
 }
 
-int cc_list_map_del(struct cc_list_map *self, void *key, struct cc_map_item **result)
+int cc_list_map_del(struct cc_list_map *self, void *key,
+		    struct cc_map_item **result)
 {
 	if (try_reset_double_p(result))
 		return 1;
@@ -129,7 +133,8 @@ int cc_list_map_print(struct cc_list_map *self, char *end_string)
 	if (cc_list_map_iter_init(&iter, self))
 		return 1;
 	while (!cc_iter_next(&iter, &item, &index))
-		cc_debug_print("(%d){%zu -> %zu} ", index, item->key, item->value);
+		cc_debug_print("(%d){%zu -> %zu} ", index, item->key,
+			       item->value);
 
 	cc_debug_print("%s", end_string);
 	return 0;
@@ -179,7 +184,8 @@ int cc_list_map_delete(struct cc_list_map *self)
 	return 0;
 }
 
-int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index)
+int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item,
+			  size_t *index)
 {
 	struct cc_map_item **tmp_item;
 
@@ -192,7 +198,8 @@ int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *in
 	return 0;
 }
 
-int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map)
+int cc_list_map_iter_init(struct cc_list_map_iter *self,
+			  struct cc_list_map *map)
 {
 	if (map == NULL)
 		return 1;

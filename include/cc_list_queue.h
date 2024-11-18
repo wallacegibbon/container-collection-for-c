@@ -5,8 +5,8 @@
 #include "cc_queue.h"
 
 struct cc_list_queue {
-	struct cc_queue_i *interface;
-	struct cc_list *list;
+    struct cc_queue_i *interface;
+    struct cc_list *list;
 };
 
 int cc_list_queue_new(struct cc_list_queue **self);

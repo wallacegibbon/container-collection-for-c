@@ -7,13 +7,12 @@
 #include <stddef.h>
 
 struct cc_array_stack {
-	struct cc_stack_i *interface;
-	struct cc_array *data;
-	size_t top;
+    struct cc_stack_i *interface;
+    struct cc_array *data;
+    size_t top;
 };
 
-int cc_array_stack_new(struct cc_array_stack **self, size_t elem_nums,
-		       size_t elem_size);
+int cc_array_stack_new(struct cc_array_stack **self, size_t elem_nums, size_t elem_size);
 int cc_array_stack_delete(struct cc_array_stack *self);
 
 int cc_array_stack_init(struct cc_array_stack *self, struct cc_array *data);

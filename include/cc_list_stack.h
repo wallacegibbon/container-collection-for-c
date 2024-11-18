@@ -5,8 +5,8 @@
 #include "cc_stack.h"
 
 struct cc_list_stack {
-	struct cc_stack_i *interface;
-	struct cc_list *list;
+    struct cc_stack_i *interface;
+    struct cc_list *list;
 };
 
 int cc_list_stack_new(struct cc_list_stack **self);

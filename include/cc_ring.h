@@ -7,10 +7,10 @@
 #include <stddef.h>
 
 struct cc_ring {
-	struct cc_queue_i *interface;
-	struct cc_array *data;
-	size_t read_index;
-	size_t write_index;
+    struct cc_queue_i *interface;
+    struct cc_array *data;
+    size_t read_index;
+    size_t write_index;
 };
 
 int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size);

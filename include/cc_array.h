@@ -6,24 +6,23 @@
 #include <stddef.h>
 
 enum {
-	CC_ARRAY_OUT_OF_RANGE = 0xFFD0,
+    CC_ARRAY_OUT_OF_RANGE = 0xFFD0,
 };
 
 ///-----------------------------------------------------------------------------
 /// Generic array for data of different length
 ///-----------------------------------------------------------------------------
 struct cc_array {
-	unsigned char *data;
-	size_t elem_nums;
-	size_t elem_size;
+    unsigned char *data;
+    size_t elem_nums;
+    size_t elem_size;
 };
 
 int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size);
 int cc_array_delete(struct cc_array *self);
 int cc_array_delete_keep_data(struct cc_array *self);
 
-int cc_array_init(struct cc_array *self, unsigned char *data, size_t elem_nums,
-		  size_t elem_size);
+int cc_array_init(struct cc_array *self, unsigned char *data, size_t elem_nums, size_t elem_size);
 
 /// These `_unsafe` functions do not check the boundaries of arrays.
 
@@ -45,9 +44,9 @@ void cc_array_swap(struct cc_array *self, size_t i, size_t j);
 /// The iterator for the generic array
 ///-----------------------------------------------------------------------------
 struct cc_array_iter {
-	struct cc_iter_i *iterator;
-	struct cc_array *data;
-	size_t cursor;
+    struct cc_iter_i *iterator;
+    struct cc_array *data;
+    size_t cursor;
 };
 
 int cc_array_iter_init(struct cc_array_iter *self, struct cc_array *data);

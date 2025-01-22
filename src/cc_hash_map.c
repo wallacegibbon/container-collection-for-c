@@ -211,7 +211,7 @@ cc_hash_map_iter_next (struct cc_hash_map_iter *self, void **item,
     {
       if (!cc_iter_next (&self->inner_list_map_iter, item, NULL))
 	{
-	  /// Iter returning non-zero, succeed.
+	  /// Succeed getting the item.
 	  break;
 	}
 

@@ -29,7 +29,9 @@ int main(void)
 		assert(list->root.size == i + 1);
 	}
 
-	// cc_list_print(list, 1);
+	/*
+	cc_list_print(list, 1);
+	*/
 
 	assert(!cc_list_to_cc_array(list, &arr));
 	assert(!cc_array_iter_init(&iter, arr));

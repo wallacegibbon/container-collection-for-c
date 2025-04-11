@@ -10,7 +10,7 @@ struct cc_iter_i cc_list_iter_interface = {
  * List Cursor Functions
  ****************************************************************************/
 int cc_list_cursor_relative_next(struct cc_list_cursor *self, int offset,
-				 struct cc_list_node **result)
+		struct cc_list_node **result)
 {
 	struct cc_list_node *node;
 	/*
@@ -18,7 +18,7 @@ int cc_list_cursor_relative_next(struct cc_list_cursor *self, int offset,
 	 * `n != &self->list->root` here
 	 */
 	for (node = self->current; node != &self->list->root && offset > 0;
-	     offset--)
+			offset--)
 		node = node->next;
 
 	if (offset > 0)
@@ -29,14 +29,16 @@ int cc_list_cursor_relative_next(struct cc_list_cursor *self, int offset,
 }
 
 int cc_list_cursor_relative_prev(struct cc_list_cursor *self, int offset,
-				 struct cc_list_node **result)
+		struct cc_list_node **result)
 {
 	struct cc_list_node *node;
-	/* The `first` element can NOT be the root node, so it's
+	/*
+	 * The `first` element can NOT be the root node, so it's
 	 * `n->prev != &self->list->root` here
 	 */
 	for (node = self->current;
-	     node->prev != &self->list->root && offset > 0; offset--)
+			node->prev != &self->list->root && offset > 0;
+			offset--)
 		node = node->prev;
 
 	if (offset > 0)
@@ -48,7 +50,7 @@ int cc_list_cursor_relative_prev(struct cc_list_cursor *self, int offset,
 
 /* This function can only return 0 or CC_LIST_CURSOR_MOVE_OUT_OF_RANGE */
 int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset,
-				struct cc_list_node **result)
+		struct cc_list_node **result)
 {
 	if (offset >= 0)
 		return cc_list_cursor_relative_next(self, offset, result);
@@ -57,7 +59,7 @@ int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset,
 }
 
 int cc_list_cursor_insert_before(struct cc_list_cursor *self, int offset,
-				 void *data)
+		void *data)
 {
 	struct cc_list_node *node;
 
@@ -98,7 +100,7 @@ int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count)
  * Please make sure that `result` can hold `count` numbers of pointers.
  */
 int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count,
-		       void **result)
+		void **result)
 {
 	struct cc_list_node *node;
 	int i;
@@ -107,7 +109,7 @@ int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count,
 		return CC_LIST_CURSOR_MOVE_OUT_OF_RANGE;
 
 	for (i = 0; i < count && node != &self->list->root;
-	     i++, node = node->next)
+			i++, node = node->next)
 		result[i] = node->data;
 
 	if (i < count)
@@ -138,7 +140,7 @@ void cc_list_cursor_reset(struct cc_list_cursor *self)
 }
 
 int cc_list_cursor_init(struct cc_list_cursor *self, struct cc_list *list,
-			cc_delete_fn_t remove_fn)
+		cc_delete_fn_t remove_fn)
 {
 	self->remove_fn = remove_fn;
 	self->list = list;
@@ -147,7 +149,7 @@ int cc_list_cursor_init(struct cc_list_cursor *self, struct cc_list *list,
 }
 
 int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list,
-		       cc_delete_fn_t remove_fn)
+		cc_delete_fn_t remove_fn)
 {
 	struct cc_list_cursor *tmp;
 
@@ -200,7 +202,7 @@ int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index)
 }
 
 int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list,
-		      int direction)
+		int direction)
 {
 	if (list == NULL)
 		return 1;
@@ -285,7 +287,7 @@ int cc_list_node_remove_after(struct cc_list_node *self, void **result)
 }
 
 int cc_list_node_delete_and_next(struct cc_list_node **pcurrent,
-				 cc_delete_fn_t remove_fn)
+		cc_delete_fn_t remove_fn)
 {
 	struct cc_list_node *current, *next;
 	current = *pcurrent;

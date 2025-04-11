@@ -9,8 +9,10 @@ struct blah {
 	int age;
 };
 
-/// define a global array to simplify the initializing of the testing
-/// generic_sequence.
+/*
+ * define a global array to simplify the initializing of the testing
+ * generic_sequence.
+ */
 static const struct blah people[] = {
 	{"Harry", 10}, {"Albus", 109}, {"Severus", 50}};
 
@@ -32,13 +34,17 @@ static void blah_array_display(struct cc_array *blahs, const char *prefix)
 
 static int cmp_name(struct blah *left, struct blah *right)
 {
-	// return strcmp(left->name, right->name);
+	/*
+	return strcmp(left->name, right->name);
+	*/
 	return -strcmp(left->name, right->name);
 }
 
 static int cmp_age(struct blah *left, struct blah *right)
 {
-	// return left->age - right->age;
+	/*
+	return left->age - right->age;
+	*/
 	return -(left->age - right->age);
 }
 
@@ -51,7 +57,7 @@ int main(void)
 
 	assert(!cc_array_init(&array, buffer, 3, sizeof(struct blah)));
 
-	/// Pushing values to generic sequence
+	/* Pushing values to generic sequence */
 	for (i = 0; i < 3; i++)
 		assert(!cc_array_set(&array, i, (void *)&people[i]));
 

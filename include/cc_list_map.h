@@ -18,10 +18,12 @@ int cc_list_map_delete(struct cc_list_map *self);
 
 int cc_list_map_get(struct cc_list_map *self, void *key, void **result);
 int cc_list_map_set(struct cc_list_map *self, void *key, void *value,
-		    void **old_value);
+		void **old_value);
+
 int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value);
+
 int cc_list_map_del(struct cc_list_map *self, void *key,
-		    struct cc_map_item **result);
+		struct cc_map_item **result);
 
 int cc_list_map_print(struct cc_list_map *self, char *end_string);
 
@@ -31,8 +33,9 @@ struct cc_list_map_iter {
 };
 
 int cc_list_map_iter_init(struct cc_list_map_iter *self,
-			  struct cc_list_map *map);
+		struct cc_list_map *map);
+
 int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item,
-			  size_t *index);
+		size_t *index);
 
 #endif

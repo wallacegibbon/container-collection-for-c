@@ -8,7 +8,9 @@ static const char *sample = "A quick brown fox jumps over the lazy dog.";
 
 static int cmp_char(char *left, char *right)
 {
-	// return *left - *right;
+	/*
+	return *left - *right;
+	*/
 	return -(*left - *right);
 }
 
@@ -36,11 +38,15 @@ int main(void)
 
 	char_array_display(&array, "\nbefore sort: ");
 
-	/// sort the sequence
-	// assert(!cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
+	/* sort the sequence */
+	/*
+	assert(!cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
+	*/
 	assert(!cc_array_sort_quick(&array, (cc_cmp_fn_t)cmp_char));
 
-	// assert(!strncmp((const char *)array.buffer, "  Abcikqru", 10));
+	/*
+	assert(!strncmp((const char *)array.buffer, "  Abcikqru", 10));
+	*/
 	assert(!strncmp((const char *)array.data, "urqkicbA  ", 10));
 
 	char_array_display(&array, "\nafter sort: ");

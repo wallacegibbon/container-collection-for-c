@@ -23,7 +23,9 @@ int main(void)
 
 	assert(!cc_string_builder_to_string(builder, &tmp));
 
-	// cc_debug_print(">> \"%s\"\n", tmp);
+	/*
+	cc_debug_print(">> \"%s\"\n", tmp);
+	*/
 	assert(strcmp(tmp, "abcdefghijkl") == 0);
 	free(tmp);
 

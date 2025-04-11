@@ -7,19 +7,19 @@ struct cc_iter_i cc_array_iter_interface = {
 };
 
 static inline void cc_array_get_(struct cc_array *self, size_t index,
-				 void *result)
+		void *result)
 {
 	memcpy(result, self->data + index * self->elem_size, self->elem_size);
 }
 
 static inline void cc_array_get_ref_(struct cc_array *self, size_t index,
-				     void **ref)
+		void **ref)
 {
 	*ref = self->data + index * self->elem_size;
 }
 
 static inline void cc_array_set_(struct cc_array *self, size_t index,
-				 void *value)
+		void *value)
 {
 	memcpy(self->data + index * self->elem_size, value, self->elem_size);
 }
@@ -29,14 +29,14 @@ void cc_array_swap(struct cc_array *self, size_t i, size_t j)
 	unsigned char tmp[self->elem_size];
 	cc_array_get_(self, i, tmp);
 	memcpy(self->data + i * self->elem_size,
-	       self->data + j * self->elem_size, self->elem_size);
+			self->data + j * self->elem_size, self->elem_size);
 	cc_array_set_(self, j, tmp);
 }
 
 int cc_array_cmp(struct cc_array *self, cc_cmp_fn_t cmp, size_t i, size_t j)
 {
 	return cmp(self->data + i * self->elem_size,
-		   self->data + j * self->elem_size);
+			self->data + j * self->elem_size);
 }
 
 int cc_array_is_valid_index(struct cc_array *self, size_t index)
@@ -109,7 +109,7 @@ int cc_array_reverse(struct cc_array *self, size_t start, size_t end)
 }
 
 int cc_array_init(struct cc_array *self, unsigned char *data, size_t elem_nums,
-		  size_t elem_size)
+		size_t elem_size)
 {
 	self->elem_nums = elem_nums;
 	self->elem_size = elem_size;

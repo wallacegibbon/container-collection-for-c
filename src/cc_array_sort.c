@@ -4,44 +4,42 @@
  * Quick sort (https://en.wikipedia.org/wiki/Quicksort)
  ****************************************************************************/
 static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp,
-			      size_t start, size_t end)
+		size_t start, size_t end)
 {
-	size_t left, right, middle;
+	size_t l, r, m;
 
-	middle = end - 1;
-	right = end - 2;
-	left = start;
+	m = end - 1;
+	r = end - 2;
+	l = start;
 
-	while (left < right) {
-		while (cc_array_cmp(self, cmp, left, middle) <= 0 &&
-		       left < right)
-			left++;
-		while (cc_array_cmp(self, cmp, right, middle) > 0 &&
-		       left < right)
-			right--;
+	while (l < r) {
+		while (cc_array_cmp(self, cmp, l, m) <= 0 && l < r)
+			l++;
+		while (cc_array_cmp(self, cmp, r, m) > 0 && l < r)
+			r--;
 
-		if (left != right)
-			cc_array_swap(self, left, right);
+		if (l != r)
+			cc_array_swap(self, l, r);
 	}
 
-	if (cc_array_cmp(self, cmp, left, middle) > 0)
-		cc_array_swap(self, left, middle);
+	if (cc_array_cmp(self, cmp, l, m) > 0)
+		cc_array_swap(self, l, m);
 
-	return left + 1;
+	return l + 1;
 }
 
 static void cc_array_sort_quick_recur(struct cc_array *self, cc_cmp_fn_t cmp,
-				      size_t start, size_t end)
+		size_t start, size_t end)
 {
-	size_t middle;
+	size_t m;
 
 	if (start >= end - 1)
 		return;
 
-	middle = cc_array_divide(self, cmp, start, end);
+	m = cc_array_divide(self, cmp, start, end);
 
-	cc_array_sort_quick_recur(self, cmp, start, middle);
-	cc_array_sort_quick_recur(self, cmp, middle, end);
+	cc_array_sort_quick_recur(self, cmp, start, m);
+	cc_array_sort_quick_recur(self, cmp, m, end);
 }
 
 int cc_array_sort_quick(struct cc_array *self, cc_cmp_fn_t cmp)
@@ -63,9 +61,11 @@ int cc_array_sort_bubble(struct cc_array *self, cc_cmp_fn_t cmp)
 	if (cmp == NULL)
 		return 1;
 
-	for (i = 0; i < self->elem_nums - 1; i++)
-		for (j = 0, k = 1; j < self->elem_nums - 1 - i; j++, k++)
+	for (i = 0; i < self->elem_nums - 1; i++) {
+		for (j = 0, k = 1; j < self->elem_nums - 1 - i; j++, k++) {
 			if (cc_array_cmp(self, cmp, j, k) > 0)
 				cc_array_swap(self, j, k);
+		}
+	}
 	return 0;
 }

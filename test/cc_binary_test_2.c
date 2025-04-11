@@ -3,9 +3,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
-// clang-format off
+/* clang-format off */
 enum blah_node_type {NUMBER, OP};
-// clang-format on
+/* clang-format on */
 
 struct blah_node {
 	enum blah_node_type type;
@@ -129,7 +129,7 @@ fail1:
 	return 1;
 }
 
-/// Delete the parser along with the result cc_binary tree.
+/* Delete the parser along with the result cc_binary tree. */
 int parser_delete(struct parser *self)
 {
 	struct cc_binary_iter *iter;

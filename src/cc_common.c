@@ -30,9 +30,10 @@ size_t cc_str_hash_fn_bkdr(void *obj)
 {
 	char *s = obj;
 	size_t hash = 0;
-	while (*s)
+	while (*s) {
 		/* 31, 131, 1313, 13131, ... */
 		hash = hash * 131 + *s++;
+	}
 
 	return hash;
 }

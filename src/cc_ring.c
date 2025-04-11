@@ -21,8 +21,8 @@ size_t cc_ring_elem_nums(struct cc_ring *self)
 	if (self->write_index >= self->read_index)
 		return self->write_index - self->read_index;
 	else
-		return self->data->elem_nums + self->write_index -
-		       self->read_index;
+		return self->data->elem_nums + self->write_index
+				- self->read_index;
 }
 
 size_t cc_ring_space(struct cc_ring *self)

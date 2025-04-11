@@ -18,7 +18,9 @@ int main(void)
 		assert(list->root.size == i + 1);
 	}
 
-	// cc_list_print(list, 1);
+	/*
+	cc_list_print(list, 1);
+	*/
 
 	assert(!cc_list_get_head(list, (void **)&i));
 	assert(i == 0);

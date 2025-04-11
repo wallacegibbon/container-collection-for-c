@@ -16,7 +16,7 @@ struct cc_iter_i cc_hash_map_iter_interface = {
 
 /* Get the slot (whose type is `struct cc_list_map **`) by key. */
 static inline void get_list_map_ref(struct cc_hash_map *self, void *key,
-				    struct cc_list_map ***result)
+		struct cc_list_map ***result)
 {
 	size_t hash_tmp;
 	hash_tmp = self->calc_hash(key) % self->bucket_size;
@@ -51,7 +51,7 @@ int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value)
 }
 
 int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value,
-		    void **old_value)
+		void **old_value)
 {
 	struct cc_list_map **list_map_ref;
 
@@ -65,7 +65,7 @@ int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value,
 }
 
 int cc_hash_map_del(struct cc_hash_map *self, void *key,
-		    struct cc_map_item **result)
+		struct cc_map_item **result)
 {
 	struct cc_list_map **list_map_ref;
 
@@ -105,7 +105,7 @@ int cc_hash_map_print(struct cc_hash_map *self, char *end_string)
 }
 
 int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size,
-		    cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash)
+		cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash)
 {
 	struct cc_hash_map *tmp;
 	struct cc_list_map **item;
@@ -120,7 +120,8 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size,
 
 	tmp->interface = &cc_hash_map_interface;
 
-	if (cc_array_new(&tmp->data, bucket_size, sizeof(struct cc_list_map *)))
+	if (cc_array_new(&tmp->data, bucket_size,
+			sizeof(struct cc_list_map *)))
 		goto fail2;
 
 	tmp->bucket_size = bucket_size;
@@ -172,8 +173,8 @@ static int cc_hash_map_iter_step(struct cc_hash_map_iter *self)
 	struct cc_list_map **cursor;
 
 	while (1) {
-		if (cc_iter_next(&self->inner_array_iter, (void **)&cursor,
-				 NULL))
+		if (cc_iter_next(&self->inner_array_iter,
+				(void **)&cursor, NULL))
 			return -1;
 		if (*cursor != NULL)
 			break;
@@ -183,7 +184,7 @@ static int cc_hash_map_iter_step(struct cc_hash_map_iter *self)
 }
 
 int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item,
-			  size_t *index)
+		size_t *index)
 {
 	if (try_reset_double_p(item))
 		return 1;
@@ -213,7 +214,7 @@ int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item,
 }
 
 int cc_hash_map_iter_init(struct cc_hash_map_iter *self,
-			  struct cc_hash_map *map)
+		struct cc_hash_map *map)
 {
 	int tmp;
 

@@ -5,18 +5,18 @@
 #include "cc_common.h"
 #include "cc_iter.h"
 
-////////////////////////////////////////////////////////////////////////////////
-/// The List Node
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************
+	The List Node
+ *****************************************************************************/
 struct cc_list_node {
 	struct cc_list_node *prev;
 	struct cc_list_node *next;
+	/*
+	 * For data node, we use `data` to hold a value or a pointer to value.
+	 * For root node, we use `size` to keep the number of elements.
+	 */
 	union {
-		/// For data node, we use `data` to hold a value or a pointer to
-		/// value.
 		void *data;
-		/// For root node, we use `size` to keep the number of elements
-		/// in the list.
 		size_t size;
 	};
 };
@@ -27,11 +27,11 @@ int cc_list_node_remove_before(struct cc_list_node *self, void **result);
 int cc_list_node_remove_after(struct cc_list_node *self, void **result);
 
 int cc_list_node_delete_and_next(struct cc_list_node **current,
-				 cc_delete_fn_t remove_fn);
+		cc_delete_fn_t remove_fn);
 
-////////////////////////////////////////////////////////////////////////////////
-/// The List Container
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************
+	The List Container
+ *****************************************************************************/
 enum cc_list_error {
 	CC_LIST_EMPTY = 0xFE10,
 };
@@ -57,12 +57,12 @@ size_t cc_list_size(struct cc_list *self);
 
 int cc_list_to_cc_array(struct cc_list *self, struct cc_array **result);
 
-/// For debugging
+/* For debugging */
 int cc_list_print(struct cc_list *self, int direction);
 
-////////////////////////////////////////////////////////////////////////////////
-/// The List Cursor
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************
+	The List Cursor
+ *****************************************************************************/
 enum cc_list_cursor_error {
 	CC_LIST_CURSOR_MOVE_OUT_OF_RANGE = 0xFF10,
 	CC_LIST_CURSOR_GET_OUT_OF_RANGE = 0xFF11,
@@ -77,29 +77,32 @@ struct cc_list_cursor {
 };
 
 int cc_list_cursor_init(struct cc_list_cursor *tmp, struct cc_list *list,
-			cc_delete_fn_t remove_fn);
+		cc_delete_fn_t remove_fn);
 
 int cc_list_cursor_new(struct cc_list_cursor **self, struct cc_list *list,
-		       cc_delete_fn_t remove_fn);
+		cc_delete_fn_t remove_fn);
+
 int cc_list_cursor_delete(struct cc_list_cursor *self);
 
 int cc_list_cursor_relative_pos(struct cc_list_cursor *self, int offset,
-				struct cc_list_node **result);
+		struct cc_list_node **result);
 
 int cc_list_cursor_get(struct cc_list_cursor *self, int offset, int count,
-		       void **result);
+		void **result);
+
 int cc_list_cursor_move(struct cc_list_cursor *self, int offset);
 
 int cc_list_cursor_insert_before(struct cc_list_cursor *self, int offset,
-				 void *data);
+		void *data);
+
 int cc_list_cursor_remove(struct cc_list_cursor *self, int offset, int count);
 
 int cc_list_cursor_at_end(struct cc_list_cursor *self);
 void cc_list_cursor_reset(struct cc_list_cursor *self);
 
-////////////////////////////////////////////////////////////////////////////////
-/// The List Iterator
-////////////////////////////////////////////////////////////////////////////////
+/******************************************************************************
+	The List Iterator
+ *****************************************************************************/
 struct cc_list_iter {
 	struct cc_iter_i *iterator;
 	struct cc_list *list;
@@ -109,7 +112,8 @@ struct cc_list_iter {
 };
 
 int cc_list_iter_init(struct cc_list_iter *self, struct cc_list *list,
-		      int direction);
+		int direction);
+
 int cc_list_iter_next(struct cc_list_iter *self, void **item, size_t *index);
 
 #endif

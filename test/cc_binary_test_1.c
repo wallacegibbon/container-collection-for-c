@@ -11,7 +11,7 @@ int show_tree_elements(struct cc_binary *tree)
 	assert(!cc_binary_iter_new(&iter, tree, CC_TRAVERSE_DEPTH_LEFT));
 
 	while (!cc_iter_next(iter, &tmp, &index))
-		cc_debug_print("(%d)%u, ", index, *tmp);
+			cc_debug_print("(%d)%u, ", index, *tmp);
 
 	cc_debug_print("\n");
 

@@ -15,7 +15,7 @@ struct cc_iter_i cc_list_map_iter_interface = {
 };
 
 static inline int cc_list_map_get_current(struct cc_list_map *self,
-					  struct cc_map_item **item)
+		struct cc_map_item **item)
 {
 	return cc_list_cursor_get(&self->cursor, 0, 1, (void **)item);
 }
@@ -28,7 +28,7 @@ static int cc_list_map_move_to_item(struct cc_list_map *self, void *key)
 	cc_list_cursor_reset(&self->cursor);
 
 	for (; !cc_list_map_get_current(self, &tmp);
-	     cc_list_cursor_move(&self->cursor, 1)) {
+			cc_list_cursor_move(&self->cursor, 1)) {
 		if (self->cmp(key, tmp->key) == 0)
 			return 0;
 	}
@@ -91,7 +91,7 @@ int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value)
  * which may cause memory leak.
  */
 int cc_list_map_set(struct cc_list_map *self, void *key, void *value,
-		    void **old_value)
+		void **old_value)
 {
 	struct cc_map_item *item;
 
@@ -111,7 +111,7 @@ int cc_list_map_set(struct cc_list_map *self, void *key, void *value,
 }
 
 int cc_list_map_del(struct cc_list_map *self, void *key,
-		    struct cc_map_item **result)
+		struct cc_map_item **result)
 {
 	if (try_reset_double_p(result))
 		return 1;
@@ -137,7 +137,7 @@ int cc_list_map_print(struct cc_list_map *self, char *end_string)
 		return 1;
 	while (!cc_iter_next(&iter, &item, &index))
 		cc_debug_print("(%d){%zu -> %zu} ", index, item->key,
-			       item->value);
+				item->value);
 
 	cc_debug_print("%s", end_string);
 	return 0;
@@ -188,7 +188,7 @@ int cc_list_map_delete(struct cc_list_map *self)
 }
 
 int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item,
-			  size_t *index)
+		size_t *index)
 {
 	struct cc_map_item **tmp_item;
 
@@ -202,7 +202,7 @@ int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item,
 }
 
 int cc_list_map_iter_init(struct cc_list_map_iter *self,
-			  struct cc_list_map *map)
+		struct cc_list_map *map)
 {
 	if (map == NULL)
 		return 1;

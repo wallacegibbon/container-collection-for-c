@@ -28,13 +28,13 @@ int main(void)
 	assert(!cc_list_cursor_get(cursor, 0, 1, (void **)buffer));
 
 	assert(cc_list_cursor_get(cursor, -1, 1, (void **)buffer) ==
-	       CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
+			CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
 	assert(cc_list_cursor_get(cursor, 16, 1, (void **)buffer) ==
-	       CC_LIST_CURSOR_GET_OUT_OF_RANGE);
+			CC_LIST_CURSOR_GET_OUT_OF_RANGE);
 
 	assert(!cc_list_cursor_get(cursor, 15, 1, (void **)buffer));
 	assert(cc_list_cursor_get(cursor, 15, 2, (void **)buffer) ==
-	       CC_LIST_CURSOR_GET_OUT_OF_RANGE);
+			CC_LIST_CURSOR_GET_OUT_OF_RANGE);
 
 	assert(!cc_list_cursor_get(cursor, 0, 3, (void **)buffer));
 	assert(*buffer[0] == 0);
@@ -50,7 +50,7 @@ int main(void)
 	assert(!cc_list_cursor_get(cursor, -1, 1, (void **)buffer));
 	assert(!cc_list_cursor_get(cursor, -2, 1, (void **)buffer));
 	assert(cc_list_cursor_get(cursor, -3, 1, (void **)buffer) ==
-	       CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
+			CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
 
 	assert(!cc_list_cursor_get(cursor, -2, 3, (void **)buffer));
 	assert(*buffer[0] == 0);
@@ -63,15 +63,16 @@ int main(void)
 	assert(*buffer[2] == 4);
 
 	assert(cc_list_cursor_remove(cursor, -1, 2) ==
-	       CC_LIST_CURSOR_REMOVING_CURRENT);
+			CC_LIST_CURSOR_REMOVING_CURRENT);
 	assert(cc_list_cursor_remove(cursor, -3, 2));
-	/// Before removing, `-2` is a valid range start
+
+	/* Before removing, `-2` is a valid range start */
 	assert(!cc_list_cursor_get(cursor, -2, 3, (void **)buffer));
 
 	assert(!cc_list_cursor_remove(cursor, -1, 1));
-	/// After removing, `-2` is a NOT valid range start
+	/* After removing, `-2` is a NOT valid range start */
 	assert(cc_list_cursor_get(cursor, -2, 3, (void **)buffer) ==
-	       CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
+			CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
 
 	assert(!cc_list_cursor_get(cursor, -1, 3, (void **)buffer));
 	assert(*buffer[0] == 0);
@@ -79,7 +80,7 @@ int main(void)
 	assert(*buffer[2] == 3);
 
 	assert(cc_list_cursor_remove(cursor, 0, 2) ==
-	       CC_LIST_CURSOR_REMOVING_CURRENT);
+			CC_LIST_CURSOR_REMOVING_CURRENT);
 	assert(!cc_list_cursor_remove(cursor, 1, 2));
 	assert(!cc_list_cursor_get(cursor, -1, 3, (void **)buffer));
 	assert(*buffer[0] == 0);

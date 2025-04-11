@@ -1,17 +1,18 @@
 #! /bin/sh
-# This script works with `cc-with-test.mk`. (But `cc-with-test.mk` is not used directly by this script)
+# This script works with `cc-with-test.mk`.
 
 MAKE_OPT=""
 
 parse_arguments() {
-	if test $1 = "memcheck=1"; then
-		MAKE_OPT="MEMCHECK=1"
-	elif test $1 = "memcheck=2"; then
-		MAKE_OPT="MEMCHECK=2"
-	else
-		echo "usage: run-test.sh [memcheck=1|2]" 2>&1
+	case "$1" in
+	"memcheck=1"|"memcheck")
+		MAKE_OPT="MEMCHECK=1" ;;
+	"memcheck=2")
+		MAKE_OPT="MEMCHECK=2" ;;
+	*)
+		echo "Usage: run-test.sh [memcheck[=1|2]]" 2>&1
 		exit 1
-	fi
+	esac
 }
 
 run_test() {
@@ -30,4 +31,3 @@ for f in test/*.c; do
 done
 
 echo All test done.
-

@@ -9,7 +9,7 @@ int main(void)
 {
 	struct cc_list *list;
 	struct cc_list_cursor *cursor;
-	uintptr_t buffer[16] = {0};
+	uintptr_t buffer[16] = { 0 };
 	uintptr_t i;
 
 	assert(!cc_list_new(&list));

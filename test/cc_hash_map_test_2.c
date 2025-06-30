@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-char s1[] = {"duplicated_key"};
-char s2[] = {"duplicated_key"};
-char s3[] = {"duplicated_key"};
+char s1[] = { "duplicated_key" };
+char s2[] = { "duplicated_key" };
+char s3[] = { "duplicated_key" };
 
 int main(void)
 {

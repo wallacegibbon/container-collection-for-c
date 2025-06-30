@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 /* clang-format off */
-enum blah_node_type {NUMBER, OP};
+enum blah_node_type { NUMBER, OP };
 /* clang-format on */
 
 struct blah_node {

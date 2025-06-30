@@ -9,7 +9,7 @@ int main(void)
 	struct cc_list *list;
 	struct cc_list_iter iter;
 	struct cc_list_cursor *cursor;
-	uintptr_t *buffer[16] = {0};
+	uintptr_t *buffer[16] = { 0 };
 	uintptr_t i;
 	uintptr_t *tmp, **tmp2;
 

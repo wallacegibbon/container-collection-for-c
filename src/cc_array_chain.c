@@ -4,9 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-int cc_array_chain_node_new(struct cc_array_chain *self);
+int cc_array_chain_node_new(cc_ArrayChain *self);
 
-int cc_array_chain_add_elem(struct cc_array_chain *self, void *elem)
+int cc_array_chain_add_elem(cc_ArrayChain *self, void *elem)
 {
 	if (self->cursor == NULL) {
 		if (cc_array_chain_node_new(self))
@@ -25,7 +25,7 @@ int cc_array_chain_add_elem(struct cc_array_chain *self, void *elem)
 	return 0;
 }
 
-int cc_array_chain_append(struct cc_array_chain *self, void *data, size_t nums)
+int cc_array_chain_append(cc_ArrayChain *self, void *data, size_t nums)
 {
 	size_t i;
 	for (i = 0; i < nums; i++) {
@@ -37,7 +37,7 @@ int cc_array_chain_append(struct cc_array_chain *self, void *data, size_t nums)
 }
 
 /* Return the byte size of the chain node. */
-int cc_array_chain_node_size(struct cc_array_chain *self, size_t index)
+int cc_array_chain_node_size(cc_ArrayChain *self, size_t index)
 {
 	size_t n;
 	n = self->total_nums - self->node_elem_nums * index;
@@ -47,11 +47,11 @@ int cc_array_chain_node_size(struct cc_array_chain *self, size_t index)
 		return n * self->node_elem_size;
 }
 
-int cc_array_chain_to_array(struct cc_array_chain *self,
-		struct cc_array **result, int nums_to_reserve)
+int cc_array_chain_to_array(cc_ArrayChain *self, cc_Array **result,
+		int nums_to_reserve)
 {
-	struct cc_list_iter iter;
-	struct cc_array *r, **tmp;
+	cc_ListIter iter;
+	cc_Array *r, **tmp;
 	size_t i, size;
 
 	if (cc_array_new(&r, self->total_nums + nums_to_reserve,
@@ -74,10 +74,10 @@ fail1:
 	return 1;
 }
 
-int cc_array_chain_new(struct cc_array_chain **self, int node_elem_nums,
+int cc_array_chain_new(cc_ArrayChain **self, int node_elem_nums,
 		int node_elem_size)
 {
-	struct cc_array_chain *tmp;
+	cc_ArrayChain *tmp;
 
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
@@ -102,10 +102,10 @@ fail1:
 	return 1;
 }
 
-int cc_array_chain_delete(struct cc_array_chain *self)
+int cc_array_chain_delete(cc_ArrayChain *self)
 {
-	struct cc_list_iter iter;
-	struct cc_array **tmp;
+	cc_ListIter iter;
+	cc_Array **tmp;
 
 	if (cc_list_iter_init(&iter, self->node_chain, 0))
 		return 1;
@@ -122,9 +122,9 @@ int cc_array_chain_delete(struct cc_array_chain *self)
 	return 0;
 }
 
-int cc_array_chain_node_new(struct cc_array_chain *self)
+int cc_array_chain_node_new(cc_ArrayChain *self)
 {
-	struct cc_array *arr;
+	cc_Array *arr;
 
 	if (cc_array_new(&arr, self->node_elem_nums, self->node_elem_size))
 		goto fail1;

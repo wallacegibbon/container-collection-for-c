@@ -3,15 +3,17 @@
 
 #include <stddef.h>
 
-typedef int (*cc_iter_next_fn_t)(void *self, void **item, size_t *index);
+typedef int (*cc_IterNextFn)(void *self, void **item, size_t *index);
 
-struct cc_iter_i {
-	cc_iter_next_fn_t next;
+typedef struct cc_IterI cc_IterI;
+
+struct cc_IterI {
+	cc_IterNextFn next;
 };
 
 static inline int cc_iter_next(void *self, void *item, size_t *index)
 {
-	return (*(struct cc_iter_i **)self)->next(self, (void **)item, index);
+	return (*(cc_IterI **)self)->next(self, (void **)item, index);
 }
 
 #endif

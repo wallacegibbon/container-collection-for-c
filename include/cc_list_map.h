@@ -6,36 +6,35 @@
 #include "cc_list.h"
 #include "cc_map.h"
 
-struct cc_list_map {
-	struct cc_map_i *interface;
-	struct cc_list *data;
-	struct cc_list_cursor cursor;
-	cc_cmp_fn_t cmp;
+typedef struct cc_ListMap cc_ListMap;
+
+struct cc_ListMap {
+	cc_MapI *interface;
+	cc_List *data;
+	cc_ListCursor cursor;
+	cc_CmpFn cmp;
 };
 
-int cc_list_map_new(struct cc_list_map **self, cc_cmp_fn_t cmp);
-int cc_list_map_delete(struct cc_list_map *self);
+int cc_list_map_new(cc_ListMap **self, cc_CmpFn cmp);
+int cc_list_map_delete(cc_ListMap *self);
 
-int cc_list_map_get(struct cc_list_map *self, void *key, void **result);
-int cc_list_map_set(struct cc_list_map *self, void *key, void *value,
-		void **old_value);
+int cc_list_map_get(cc_ListMap *self, void *key, void **result);
+int cc_list_map_set(cc_ListMap *self, void *key, void *value, void **old_value);
 
-int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value);
+int cc_list_map_set_new(cc_ListMap *self, void *key, void *value);
 
-int cc_list_map_del(struct cc_list_map *self, void *key,
-		struct cc_map_item **result);
+int cc_list_map_del(cc_ListMap *self, void *key, cc_MapItem **result);
 
-int cc_list_map_print(struct cc_list_map *self, char *end_string);
+int cc_list_map_print(cc_ListMap *self, char *end_string);
 
-struct cc_list_map_iter {
-	struct cc_iter_i *iterator;
-	struct cc_list_iter inner_iter;
+typedef struct cc_ListMapIter cc_ListMapIter;
+
+struct cc_ListMapIter {
+	cc_IterI *iterator;
+	cc_ListIter inner_iter;
 };
 
-int cc_list_map_iter_init(struct cc_list_map_iter *self,
-		struct cc_list_map *map);
-
-int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item,
-		size_t *index);
+int cc_list_map_iter_init(cc_ListMapIter *self, cc_ListMap *map);
+int cc_list_map_iter_next(cc_ListMapIter *self, void **item, size_t *index);
 
 #endif

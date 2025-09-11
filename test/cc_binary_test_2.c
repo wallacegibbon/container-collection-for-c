@@ -59,7 +59,7 @@ int blah_node_delete(struct blah_node *self)
 
 struct parser {
 	char *input;
-	struct cc_binary *root;
+	cc_Binary *root;
 };
 
 int parser_step(struct parser *self, int *error)
@@ -92,7 +92,7 @@ fail:
 	return 1;
 }
 
-int parser_parse(struct parser *self, struct cc_binary **result)
+int parser_parse(struct parser *self, cc_Binary **result)
 {
 	int error;
 	if (try_reset_double_p(result))
@@ -132,7 +132,7 @@ fail1:
 /* Delete the parser along with the result cc_binary tree. */
 int parser_delete(struct parser *self)
 {
-	struct cc_binary_iter *iter;
+	cc_BinaryIter *iter;
 	struct blah_node **tmp;
 
 	if (cc_binary_iter_new(&iter, self->root->left, CC_TRAVERSE_DEPTH_LEFT))
@@ -154,7 +154,7 @@ static char *expr1 = "1+2";
 int main(void)
 {
 	struct parser *parser;
-	struct cc_binary *result;
+	cc_Binary *result;
 
 	assert(!parser_new(&parser, expr1));
 

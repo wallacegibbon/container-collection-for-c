@@ -8,46 +8,43 @@
 #include "cc_map.h"
 #include <stddef.h>
 
-struct cc_hash_map {
-	struct cc_map_i *interface;
-	/*
-	 * `data` is an array whose elements are of type `struct cc_list_map *`
-	 */
-	struct cc_array *data;
+typedef struct cc_HashMap cc_HashMap;
+
+struct cc_HashMap {
+	cc_MapI *interface;
+	/* `data` is an array whose elements are of type `cc_ListMap *` */
+	cc_Array *data;
 	size_t bucket_size;
-	cc_cmp_fn_t cmp;
-	cc_hash_fn_t calc_hash;
+	cc_CmpFn cmp;
+	cc_HashFn calc_hash;
 };
 
-int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size,
-		cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash);
+int cc_hash_map_new(cc_HashMap **self, size_t bucket_size, cc_CmpFn cmp,
+		cc_HashFn calc_hash);
 
-int cc_hash_map_delete(struct cc_hash_map *self);
+int cc_hash_map_delete(cc_HashMap *self);
 
-int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result);
+int cc_hash_map_get(cc_HashMap *self, void *key, void **result);
 
-int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value);
+int cc_hash_map_set_new(cc_HashMap *self, void *key, void *value);
 
-int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value,
-		void **old_value);
+int cc_hash_map_set(cc_HashMap *self, void *key, void *value, void **old_value);
 
-int cc_hash_map_del(struct cc_hash_map *self, void *key,
-		struct cc_map_item **result);
+int cc_hash_map_del(cc_HashMap *self, void *key, cc_MapItem **result);
 
-int cc_hash_map_print(struct cc_hash_map *self, char *end_string);
+int cc_hash_map_print(cc_HashMap *self, char *end_string);
 
-struct cc_hash_map_iter {
-	struct cc_iter_i *iterator;
-	struct cc_array_iter inner_array_iter;
-	struct cc_list_map_iter inner_list_map_iter;
+typedef struct cc_HashMapIter cc_HashMapIter;
+
+struct cc_HashMapIter {
+	cc_IterI *iterator;
+	cc_ArrayIter inner_array_iter;
+	cc_ListMapIter inner_list_map_iter;
 	size_t count;
 	unsigned char is_empty;
 };
 
-int cc_hash_map_iter_init(struct cc_hash_map_iter *self,
-		struct cc_hash_map *map);
-
-int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item,
-		size_t *index);
+int cc_hash_map_iter_init(cc_HashMapIter *self, cc_HashMap *map);
+int cc_hash_map_iter_next(cc_HashMapIter *self, void **item, size_t *index);
 
 #endif

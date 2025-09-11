@@ -4,7 +4,7 @@
 
 int main(void)
 {
-	struct cc_list_queue *list;
+	cc_ListQueue *list;
 	uintptr_t tmp;
 
 	assert(!cc_list_queue_new(&list));

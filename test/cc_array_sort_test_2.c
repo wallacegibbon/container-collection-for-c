@@ -22,9 +22,9 @@ static void blah_display(struct blah *self)
 	cc_debug_print("<name %s, age: %d> ", self->name, self->age);
 }
 
-static void blah_array_display(struct cc_array *blahs, const char *prefix)
+static void blah_array_display(cc_Array *blahs, const char *prefix)
 {
-	struct cc_array_iter iter;
+	cc_ArrayIter iter;
 	struct blah *tmp;
 
 	cc_debug_print("%s", prefix);
@@ -51,7 +51,7 @@ static int cmp_age(struct blah *left, struct blah *right)
 
 int main(void)
 {
-	struct cc_array array;
+	cc_Array array;
 	unsigned char buffer[3 * sizeof(struct blah)];
 	int i;
 	struct blah tmp;
@@ -64,14 +64,14 @@ int main(void)
 
 	blah_array_display(&array, "\nbefore sort:\n");
 
-	assert(!cc_array_sort_bubble(&array, (cc_cmp_fn_t)cmp_name));
+	assert(!cc_array_sort_bubble(&array, (cc_CmpFn)cmp_name));
 
 	blah_array_display(&array, "\nafter sort by name:\n");
 
 	assert(!cc_array_get(&array, 0, &tmp));
 	assert(tmp.age == 50);
 
-	assert(!cc_array_sort_bubble(&array, (cc_cmp_fn_t)cmp_age));
+	assert(!cc_array_sort_bubble(&array, (cc_CmpFn)cmp_age));
 
 	blah_array_display(&array, "\nafter sort by age:\n");
 

@@ -6,9 +6,9 @@
 
 int main(void)
 {
-	struct cc_hash_map *map;
-	struct cc_hash_map_iter iter;
-	struct cc_map_item *item_tmp;
+	cc_HashMap *map;
+	cc_HashMapIter iter;
+	cc_MapItem *item_tmp;
 	uintptr_t tmp;
 	size_t index;
 

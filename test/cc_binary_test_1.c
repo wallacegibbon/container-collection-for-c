@@ -3,9 +3,9 @@
 #include <assert.h>
 #include <stdint.h>
 
-int show_tree_elements(struct cc_binary *tree)
+int show_tree_elements(cc_Binary *tree)
 {
-	struct cc_binary_iter *iter;
+	cc_BinaryIter *iter;
 	size_t *tmp, index;
 
 	assert(!cc_binary_iter_new(&iter, tree, CC_TRAVERSE_DEPTH_LEFT));
@@ -23,7 +23,7 @@ static void print_1(void *data) { cc_debug_print("%ld", (uintptr_t)data); }
 
 int main(void)
 {
-	struct cc_binary *root;
+	cc_Binary *root;
 
 	assert(!cc_binary_new(&root, NULL, NULL));
 

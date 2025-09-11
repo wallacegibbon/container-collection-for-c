@@ -11,8 +11,8 @@ char s3[] = { "duplicated_key" };
 
 int main(void)
 {
-	struct cc_hash_map *map;
-	struct cc_map_item *tmp_item;
+	cc_HashMap *map;
+	cc_MapItem *tmp_item;
 	uintptr_t tmp;
 
 	/*
@@ -24,13 +24,13 @@ int main(void)
 	assert(!cc_hash_map_new(&map, 20, NULL, cc_str_hash_fn_bkdr));
 	*/
 
-	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp,
+	assert(!cc_hash_map_new(&map, 20, (cc_CmpFn)strcmp,
 					cc_str_hash_fn_bkdr));
 
 	/*
-	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp,
+	assert(!cc_hash_map_new(&map, 20, (cc_CmpFn)strcmp,
 					cc_str_hash_fn_simple));
-	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp, NULL));
+	assert(!cc_hash_map_new(&map, 20, (cc_CmpFn)strcmp, NULL));
 	*/
 
 	assert(map != NULL);

@@ -5,8 +5,8 @@
 
 int main(void)
 {
-	struct cc_array_chain *chain;
-	struct cc_array *r;
+	cc_ArrayChain *chain;
+	cc_Array *r;
 	char zero = '\0';
 
 	assert(!cc_array_chain_new(&chain, 8, sizeof(char)));

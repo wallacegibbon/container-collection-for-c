@@ -9,9 +9,9 @@
 
 int main(void)
 {
-	struct cc_list *list;
-	struct cc_array *arr;
-	struct cc_array_iter iter;
+	cc_List *list;
+	cc_Array *arr;
+	cc_ArrayIter iter;
 	int *tmp_p, **pp;
 	size_t i;
 

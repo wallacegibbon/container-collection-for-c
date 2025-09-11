@@ -4,9 +4,9 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-int cc_binary_insert_left(struct cc_binary *self, void *data)
+int cc_binary_insert_left(cc_Binary *self, void *data)
 {
-	struct cc_binary *node;
+	cc_Binary *node;
 	if (cc_binary_new(&node, self, data))
 		return 1;
 
@@ -18,9 +18,9 @@ int cc_binary_insert_left(struct cc_binary *self, void *data)
 	return 0;
 }
 
-int cc_binary_insert_right(struct cc_binary *self, void *data)
+int cc_binary_insert_right(cc_Binary *self, void *data)
 {
-	struct cc_binary *node;
+	cc_Binary *node;
 	if (cc_binary_new(&node, self, data))
 		return 1;
 
@@ -32,9 +32,9 @@ int cc_binary_insert_right(struct cc_binary *self, void *data)
 	return 0;
 }
 
-int cc_binary_rotate_left(struct cc_binary **start_slot)
+int cc_binary_rotate_left(cc_Binary **start_slot)
 {
-	struct cc_binary *start = *start_slot;
+	cc_Binary *start = *start_slot;
 
 	if (start == NULL)
 		return 0;
@@ -55,9 +55,9 @@ int cc_binary_rotate_left(struct cc_binary **start_slot)
 	return 0;
 }
 
-int cc_binary_rotate_right(struct cc_binary **start_slot)
+int cc_binary_rotate_right(cc_Binary **start_slot)
 {
-	struct cc_binary *start = *start_slot;
+	cc_Binary *start = *start_slot;
 
 	if (start == NULL)
 		return 0;
@@ -78,10 +78,9 @@ int cc_binary_rotate_right(struct cc_binary **start_slot)
 	return 0;
 }
 
-int cc_binary_new(struct cc_binary **self, struct cc_binary *parent,
-		void *data)
+int cc_binary_new(cc_Binary **self, cc_Binary *parent, void *data)
 {
-	struct cc_binary *tmp;
+	cc_Binary *tmp;
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		return 1;
@@ -95,7 +94,7 @@ int cc_binary_new(struct cc_binary **self, struct cc_binary *parent,
 	return 0;
 }
 
-int cc_binary_delete(struct cc_binary *self)
+int cc_binary_delete(cc_Binary *self)
 {
 	if (self == NULL)
 		return 0;
@@ -108,8 +107,7 @@ int cc_binary_delete(struct cc_binary *self)
 	return 0;
 }
 
-int cc_binary_print(struct cc_binary *current, int depth,
-		cc_simple_fn_1_t print_fn)
+int cc_binary_print(cc_Binary *current, int depth, cc_simple_fn_1_t print_fn)
 {
 	int tmp = 0;
 
@@ -128,11 +126,11 @@ int cc_binary_print(struct cc_binary *current, int depth,
 	return tmp;
 }
 
-static struct cc_iter_i iterator_interface = {
-	.next = (cc_iter_next_fn_t)cc_binary_iter_next,
+static cc_IterI iterator_interface = {
+	.next = (cc_IterNextFn)cc_binary_iter_next,
 };
 
-static int iter_queue_add(struct cc_binary_iter *self, void *data)
+static int iter_queue_add(cc_BinaryIter *self, void *data)
 {
 	if (data == NULL)
 		return 0;
@@ -143,20 +141,19 @@ static int iter_queue_add(struct cc_binary_iter *self, void *data)
 		return cc_list_insert_tail(self->queue, data);
 }
 
-static int iter_queue_add_multi(struct cc_binary_iter *self, int n, ...)
+static int iter_queue_add_multi(cc_BinaryIter *self, int n, ...)
 {
 	va_list args;
 	va_start(args, n);
 	while (n-- > 0) {
-		if (iter_queue_add(self, va_arg(args, struct cc_binary *)))
+		if (iter_queue_add(self, va_arg(args, cc_Binary *)))
 			return 1;
 	}
 	va_end(args);
 	return 0;
 }
 
-static int iter_queue_add_child(struct cc_binary_iter *self,
-		struct cc_binary *node)
+static int iter_queue_add_child(cc_BinaryIter *self, cc_Binary *node)
 {
 	int tmp = 0;
 
@@ -175,10 +172,9 @@ static int iter_queue_add_child(struct cc_binary_iter *self,
 	return tmp;
 }
 
-int cc_binary_iter_next(struct cc_binary_iter *self, void **item,
-		size_t *index)
+int cc_binary_iter_next(cc_BinaryIter *self, void **item, size_t *index)
 {
-	struct cc_binary *current;
+	cc_Binary *current;
 
 	if (try_reset_double_p(item))
 		return 1;
@@ -197,10 +193,10 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item,
 	return 0;
 }
 
-int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root,
-		enum cc_traverse_direction direction)
+int cc_binary_iter_new(cc_BinaryIter **self, cc_Binary *root,
+		cc_TraverseDirection direction)
 {
-	struct cc_binary_iter *tmp;
+	cc_BinaryIter *tmp;
 
 	if (root == NULL)
 		goto fail1;
@@ -229,7 +225,7 @@ fail1:
 	return 1;
 }
 
-int cc_binary_iter_delete(struct cc_binary_iter *self)
+int cc_binary_iter_delete(cc_BinaryIter *self)
 {
 	int tmp = 0;
 	if (cc_list_delete(self->queue))

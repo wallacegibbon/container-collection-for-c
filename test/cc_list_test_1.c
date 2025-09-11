@@ -4,7 +4,7 @@
 
 int main(void)
 {
-	struct cc_list *list;
+	cc_List *list;
 	uintptr_t i;
 
 	assert(!cc_list_new(&list));

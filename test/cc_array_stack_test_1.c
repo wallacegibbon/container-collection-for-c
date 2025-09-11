@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	struct cc_array_stack *stack;
+	cc_ArrayStack *stack;
 	char i, tmp;
 
 	assert(!cc_array_stack_new(&stack, 8, sizeof(char)));

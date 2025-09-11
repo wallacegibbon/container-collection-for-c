@@ -1,10 +1,10 @@
 #include "cc_list_queue.h"
 #include <stdlib.h>
 
-struct cc_queue_i cc_list_queue_interface = {
-	.enqueue = (cc_queue_enqueue_fn_t)cc_list_queue_enqueue,
-	.dequeue = (cc_queue_dequeue_fn_t)cc_list_queue_dequeue,
-	.peek = (cc_queue_peek_fn_t)cc_list_queue_peek,
+cc_QueueI cc_list_queue_interface = {
+	.enqueue = (cc_EnqueueFn)cc_list_queue_enqueue,
+	.dequeue = (cc_DequeueFn)cc_list_queue_dequeue,
+	.peek = (cc_QueuePeekFn)cc_list_queue_peek,
 };
 
 static inline int translate_code(int code)
@@ -12,24 +12,24 @@ static inline int translate_code(int code)
 	return (code == CC_LIST_EMPTY) ? CC_QUEUE_EMPTY : code;
 }
 
-int cc_list_queue_enqueue(struct cc_list_queue *self, void *data)
+int cc_list_queue_enqueue(cc_ListQueue *self, void *data)
 {
 	return cc_list_insert_tail(self->list, data);
 }
 
-int cc_list_queue_dequeue(struct cc_list_queue *self, void **result)
+int cc_list_queue_dequeue(cc_ListQueue *self, void **result)
 {
 	return translate_code(cc_list_remove_head(self->list, result));
 }
 
-int cc_list_queue_peek(struct cc_list_queue *self, void **result)
+int cc_list_queue_peek(cc_ListQueue *self, void **result)
 {
 	return translate_code(cc_list_get_head(self->list, result));
 }
 
-int cc_list_queue_new(struct cc_list_queue **self)
+int cc_list_queue_new(cc_ListQueue **self)
 {
-	struct cc_list_queue *tmp;
+	cc_ListQueue *tmp;
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
@@ -48,7 +48,7 @@ fail1:
 	return 1;
 }
 
-int cc_list_queue_delete(struct cc_list_queue *self)
+int cc_list_queue_delete(cc_ListQueue *self)
 {
 	if (cc_list_delete(self->list))
 		return 1;

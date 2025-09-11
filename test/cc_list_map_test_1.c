@@ -6,8 +6,8 @@
 
 int main(void)
 {
-	struct cc_list_map *map;
-	struct cc_map_item *item_tmp;
+	cc_ListMap *map;
+	cc_MapItem *item_tmp;
 	/*
 	 * Caution: The `&tmp` is used as `void *` to accapt data.
 	 * So the size of `tmp` should NOT be smaller than `uintptr_t`,

@@ -9,8 +9,8 @@ struct blah {
 
 int main(void)
 {
-	struct cc_array *array;
-	struct cc_array_iter iter;
+	cc_Array *array;
+	cc_ArrayIter iter;
 	struct blah tmp;
 	struct blah *iter_tmp;
 	int i;

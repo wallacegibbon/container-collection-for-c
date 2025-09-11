@@ -4,24 +4,26 @@
 #include "cc_array.h"
 #include "cc_list.h"
 
-struct cc_array_chain {
-	struct cc_list *node_chain;
-	struct cc_array *cursor;
+typedef struct cc_ArrayChain cc_ArrayChain;
+
+struct cc_ArrayChain {
+	cc_List *node_chain;
+	cc_Array *cursor;
 	size_t cursor_index;
 	size_t total_nums;
 	size_t node_elem_nums;
 	size_t node_elem_size;
 };
 
-int cc_array_chain_new(struct cc_array_chain **self, int node_elem_nums,
+int cc_array_chain_new(cc_ArrayChain **self, int node_elem_nums,
 		int node_elem_size);
 
-int cc_array_chain_delete(struct cc_array_chain *self);
+int cc_array_chain_delete(cc_ArrayChain *self);
 
-int cc_array_chain_add_elem(struct cc_array_chain *self, void *elem);
-int cc_array_chain_append(struct cc_array_chain *self, void *data, size_t nums);
+int cc_array_chain_add_elem(cc_ArrayChain *self, void *elem);
+int cc_array_chain_append(cc_ArrayChain *self, void *data, size_t nums);
 
-int cc_array_chain_to_array(struct cc_array_chain *self,
-		struct cc_array **result, int nums_to_reserve);
+int cc_array_chain_to_array(cc_ArrayChain *self, cc_Array **result,
+		int nums_to_reserve);
 
 #endif

@@ -7,8 +7,8 @@
 
 int main(void)
 {
-	struct cc_list *list;
-	struct cc_list_cursor *cursor;
+	cc_List *list;
+	cc_ListCursor *cursor;
 	uintptr_t buffer[16] = { 0 };
 	uintptr_t i;
 

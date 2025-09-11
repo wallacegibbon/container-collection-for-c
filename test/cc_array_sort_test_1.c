@@ -14,9 +14,9 @@ static int cmp_char(char *left, char *right)
 	return -(*left - *right);
 }
 
-static void char_array_display(struct cc_array *chars, const char *prefix)
+static void char_array_display(cc_Array *chars, const char *prefix)
 {
-	struct cc_array_iter iter;
+	cc_ArrayIter iter;
 	char *tmp;
 
 	cc_debug_print("%s", prefix);
@@ -27,7 +27,7 @@ static void char_array_display(struct cc_array *chars, const char *prefix)
 
 int main(void)
 {
-	struct cc_array array;
+	cc_Array array;
 	unsigned char buffer[10];
 	int i;
 
@@ -40,9 +40,9 @@ int main(void)
 
 	/* sort the sequence */
 	/*
-	assert(!cc_array_sort_bubble(&array, (cc_cmp_fn)cmp_char));
+	assert(!cc_array_sort_bubble(&array, (cc_CmpFn)cmp_char));
 	*/
-	assert(!cc_array_sort_quick(&array, (cc_cmp_fn_t)cmp_char));
+	assert(!cc_array_sort_quick(&array, (cc_CmpFn)cmp_char));
 
 	/*
 	assert(!strncmp((const char *)array.buffer, "  Abcikqru", 10));

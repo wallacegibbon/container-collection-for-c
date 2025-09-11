@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	struct cc_ring *ring;
+	cc_Ring *ring;
 	char i, tmp;
 
 	assert(!cc_ring_new(&ring, 8, sizeof(char)));

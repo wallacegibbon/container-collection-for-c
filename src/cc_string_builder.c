@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-int cc_string_builder_to_string(struct cc_string_builder *self, char **result)
+int cc_str_builder_to_string(cc_StrBuilder *self, char **result)
 {
-	struct cc_array *arr;
+	cc_Array *arr;
 	char zero = '\0';
 
 	if (cc_array_chain_to_array(self->chain, &arr, 1))
@@ -29,7 +29,7 @@ fail1:
 }
 
 /* When `s` is NULL, ignore and return success directly */
-int cc_string_builder_append_str(struct cc_string_builder *self, char *s)
+int cc_str_builder_append_str(cc_StrBuilder *self, char *s)
 {
 	if (s == NULL)
 		return 0;
@@ -43,7 +43,7 @@ int cc_string_builder_append_str(struct cc_string_builder *self, char *s)
 }
 
 /* When `s` is NULL, ignore and return success directly */
-int cc_string_builder_append(struct cc_string_builder *self, char *s,
+int cc_str_builder_append(cc_StrBuilder *self, char *s,
 		size_t size)
 {
 	if (s == NULL)
@@ -52,9 +52,9 @@ int cc_string_builder_append(struct cc_string_builder *self, char *s,
 	return cc_array_chain_append(self->chain, s, size);
 }
 
-int cc_string_builder_new(struct cc_string_builder **self)
+int cc_str_builder_new(cc_StrBuilder **self)
 {
-	struct cc_string_builder *tmp;
+	cc_StrBuilder *tmp;
 
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
@@ -73,7 +73,7 @@ fail1:
 	return 1;
 }
 
-int cc_string_builder_delete(struct cc_string_builder *self)
+int cc_str_builder_delete(cc_StrBuilder *self)
 {
 	if (cc_array_chain_delete(self->chain))
 		return 1;
@@ -84,30 +84,30 @@ int cc_string_builder_delete(struct cc_string_builder *self)
 
 int cc_string_concat(char **result, int n, ...)
 {
-	struct cc_string_builder *string_builder;
+	cc_StrBuilder *string_builder;
 	char *tmp;
 	va_list args;
 
-	if (cc_string_builder_new(&string_builder))
+	if (cc_str_builder_new(&string_builder))
 		goto fail1;
 
 	va_start(args, n);
 	while (n--) {
-		if (cc_string_builder_append_str(
+		if (cc_str_builder_append_str(
 				string_builder, va_arg(args, char *)))
 			goto fail2;
 	}
 	va_end(args);
 
-	if (cc_string_builder_to_string(string_builder, result))
+	if (cc_str_builder_to_string(string_builder, result))
 		goto fail2;
-	if (cc_string_builder_delete(string_builder))
+	if (cc_str_builder_delete(string_builder))
 		goto fail1;
 
 	return 0;
 
 fail2:
-	cc_string_builder_delete(string_builder);
+	cc_str_builder_delete(string_builder);
 fail1:
 	return 1;
 }

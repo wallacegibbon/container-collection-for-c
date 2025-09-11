@@ -4,8 +4,8 @@
 
 int main(void)
 {
-	struct cc_array array;
-	struct cc_array_iter iter;
+	cc_Array array;
+	cc_ArrayIter iter;
 	unsigned char data[10 * sizeof(float)];
 	size_t index;
 

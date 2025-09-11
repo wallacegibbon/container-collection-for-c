@@ -6,7 +6,9 @@
 
 #include <stddef.h>
 
-enum cc_traverse_direction {
+typedef enum cc_TraverseDirection cc_TraverseDirection;
+
+enum cc_TraverseDirection {
 	CC_TRAVERSE_DEPTH_LEFT = 4,
 	CC_TRAVERSE_DEPTH_RIGHT,
 	CC_TRAVERSE_BREADTH_LEFT = 8,
@@ -22,14 +24,14 @@ static inline int try_reset_double_p(void *pointer)
 	return 0;
 }
 
-typedef int (*cc_delete_fn_t)(void *obj);
+typedef int (*cc_DelFn)(void *obj);
 
 typedef void (*cc_simple_fn_0_t)(void);
 typedef void (*cc_simple_fn_1_t)(void *value);
 typedef int (*cc_simple_fn_2_t)(void *value);
 
-typedef int (*cc_cmp_fn_t)(void *left, void *right);
-typedef size_t (*cc_hash_fn_t)(void *obj);
+typedef int (*cc_CmpFn)(void *left, void *right);
+typedef size_t (*cc_HashFn)(void *obj);
 
 /* Simply do: left - right */
 int cc_default_cmp_fn(void *left, void *right);

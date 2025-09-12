@@ -8,27 +8,32 @@ struct cc_StackI cc_list_stack_interface = {
 	.peek = (cc_StackPeekFn)cc_list_stack_peek,
 };
 
-static inline int translate_code(int code)
+static inline int
+translate_code(int code)
 {
 	return (code == CC_LIST_EMPTY) ? CC_STACK_EMPTY : code;
 }
 
-int cc_list_stack_push(cc_ListStack *self, void *data)
+int
+cc_list_stack_push(cc_ListStack *self, void *data)
 {
 	return cc_list_insert_head(self->list, data);
 }
 
-int cc_list_stack_pop(cc_ListStack *self, void **result)
+int
+cc_list_stack_pop(cc_ListStack *self, void **result)
 {
 	return translate_code(cc_list_remove_head(self->list, result));
 }
 
-int cc_list_stack_peek(cc_ListStack *self, void **result)
+int
+cc_list_stack_peek(cc_ListStack *self, void **result)
 {
 	return translate_code(cc_list_get_head(self->list, result));
 }
 
-int cc_list_stack_new(cc_ListStack **self)
+int
+cc_list_stack_new(cc_ListStack **self)
 {
 	cc_ListStack *tmp;
 	tmp = malloc(sizeof(*tmp));
@@ -49,7 +54,8 @@ fail1:
 	return 1;
 }
 
-int cc_list_stack_delete(cc_ListStack *self)
+int
+cc_list_stack_delete(cc_ListStack *self)
 {
 	if (cc_list_delete(self->list))
 		return 1;

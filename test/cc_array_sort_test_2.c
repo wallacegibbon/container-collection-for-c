@@ -17,12 +17,14 @@ static const struct blah people[] = {
 	{ "Harry", 10 }, { "Albus", 109 }, { "Severus", 50 }
 };
 
-static void blah_display(struct blah *self)
+static void
+blah_display(struct blah *self)
 {
 	cc_debug_print("<name %s, age: %d> ", self->name, self->age);
 }
 
-static void blah_array_display(cc_Array *blahs, const char *prefix)
+static void
+blah_array_display(cc_Array *blahs, const char *prefix)
 {
 	cc_ArrayIter iter;
 	struct blah *tmp;
@@ -33,7 +35,8 @@ static void blah_array_display(cc_Array *blahs, const char *prefix)
 		blah_display(tmp);
 }
 
-static int cmp_name(struct blah *left, struct blah *right)
+static int
+cmp_name(struct blah *left, struct blah *right)
 {
 	/*
 	return strcmp(left->name, right->name);
@@ -41,7 +44,8 @@ static int cmp_name(struct blah *left, struct blah *right)
 	return -strcmp(left->name, right->name);
 }
 
-static int cmp_age(struct blah *left, struct blah *right)
+static int
+cmp_age(struct blah *left, struct blah *right)
 {
 	/*
 	return left->age - right->age;
@@ -49,7 +53,8 @@ static int cmp_age(struct blah *left, struct blah *right)
 	return -(left->age - right->age);
 }
 
-int main(void)
+int
+main(void)
 {
 	cc_Array array;
 	unsigned char buffer[3 * sizeof(struct blah)];

@@ -1,7 +1,8 @@
 #include "cc_ring.h"
 #include <assert.h>
 
-int main(void)
+int
+main(void)
 {
 	cc_Ring *ring;
 	char i, tmp;

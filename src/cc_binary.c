@@ -4,7 +4,8 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-int cc_binary_insert_left(cc_Binary *self, void *data)
+int
+cc_binary_insert_left(cc_Binary *self, void *data)
 {
 	cc_Binary *node;
 	if (cc_binary_new(&node, self, data))
@@ -18,7 +19,8 @@ int cc_binary_insert_left(cc_Binary *self, void *data)
 	return 0;
 }
 
-int cc_binary_insert_right(cc_Binary *self, void *data)
+int
+cc_binary_insert_right(cc_Binary *self, void *data)
 {
 	cc_Binary *node;
 	if (cc_binary_new(&node, self, data))
@@ -32,7 +34,8 @@ int cc_binary_insert_right(cc_Binary *self, void *data)
 	return 0;
 }
 
-int cc_binary_rotate_left(cc_Binary **start_slot)
+int
+cc_binary_rotate_left(cc_Binary **start_slot)
 {
 	cc_Binary *start = *start_slot;
 
@@ -55,7 +58,8 @@ int cc_binary_rotate_left(cc_Binary **start_slot)
 	return 0;
 }
 
-int cc_binary_rotate_right(cc_Binary **start_slot)
+int
+cc_binary_rotate_right(cc_Binary **start_slot)
 {
 	cc_Binary *start = *start_slot;
 
@@ -78,7 +82,8 @@ int cc_binary_rotate_right(cc_Binary **start_slot)
 	return 0;
 }
 
-int cc_binary_new(cc_Binary **self, cc_Binary *parent, void *data)
+int
+cc_binary_new(cc_Binary **self, cc_Binary *parent, void *data)
 {
 	cc_Binary *tmp;
 	tmp = malloc(sizeof(*tmp));
@@ -94,7 +99,8 @@ int cc_binary_new(cc_Binary **self, cc_Binary *parent, void *data)
 	return 0;
 }
 
-int cc_binary_delete(cc_Binary *self)
+int
+cc_binary_delete(cc_Binary *self)
 {
 	if (self == NULL)
 		return 0;
@@ -107,7 +113,8 @@ int cc_binary_delete(cc_Binary *self)
 	return 0;
 }
 
-int cc_binary_print(cc_Binary *current, int depth, cc_simple_fn_1_t print_fn)
+int
+cc_binary_print(cc_Binary *current, int depth, cc_simple_fn_1_t print_fn)
 {
 	int tmp = 0;
 
@@ -130,7 +137,8 @@ static cc_IterI iterator_interface = {
 	.next = (cc_IterNextFn)cc_binary_iter_next,
 };
 
-static int iter_queue_add(cc_BinaryIter *self, void *data)
+static int
+iter_queue_add(cc_BinaryIter *self, void *data)
 {
 	if (data == NULL)
 		return 0;
@@ -141,7 +149,8 @@ static int iter_queue_add(cc_BinaryIter *self, void *data)
 		return cc_list_insert_tail(self->queue, data);
 }
 
-static int iter_queue_add_multi(cc_BinaryIter *self, int n, ...)
+static int
+iter_queue_add_multi(cc_BinaryIter *self, int n, ...)
 {
 	va_list args;
 	va_start(args, n);
@@ -153,7 +162,8 @@ static int iter_queue_add_multi(cc_BinaryIter *self, int n, ...)
 	return 0;
 }
 
-static int iter_queue_add_child(cc_BinaryIter *self, cc_Binary *node)
+static int
+iter_queue_add_child(cc_BinaryIter *self, cc_Binary *node)
 {
 	int tmp = 0;
 
@@ -172,7 +182,8 @@ static int iter_queue_add_child(cc_BinaryIter *self, cc_Binary *node)
 	return tmp;
 }
 
-int cc_binary_iter_next(cc_BinaryIter *self, void **item, size_t *index)
+int
+cc_binary_iter_next(cc_BinaryIter *self, void **item, size_t *index)
 {
 	cc_Binary *current;
 
@@ -193,7 +204,8 @@ int cc_binary_iter_next(cc_BinaryIter *self, void **item, size_t *index)
 	return 0;
 }
 
-int cc_binary_iter_new(cc_BinaryIter **self, cc_Binary *root,
+int
+cc_binary_iter_new(cc_BinaryIter **self, cc_Binary *root,
 		cc_TraverseDirection direction)
 {
 	cc_BinaryIter *tmp;
@@ -225,7 +237,8 @@ fail1:
 	return 1;
 }
 
-int cc_binary_iter_delete(cc_BinaryIter *self)
+int
+cc_binary_iter_delete(cc_BinaryIter *self)
 {
 	int tmp = 0;
 	if (cc_list_delete(self->queue))

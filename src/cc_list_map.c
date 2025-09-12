@@ -14,13 +14,15 @@ cc_IterI cc_list_map_iter_interface = {
 	.next = (cc_IterNextFn)cc_list_map_iter_next,
 };
 
-static inline int cc_list_map_get_current(cc_ListMap *self, cc_MapItem **item)
+static inline int
+cc_list_map_get_current(cc_ListMap *self, cc_MapItem **item)
 {
 	return cc_list_cursor_get(&self->cursor, 0, 1, (void **)item);
 }
 
 /* The caller should make sure that `result` is not NULL. */
-static int cc_list_map_move_to_item(cc_ListMap *self, void *key)
+static int
+cc_list_map_move_to_item(cc_ListMap *self, void *key)
 {
 	cc_MapItem *tmp;
 
@@ -35,7 +37,8 @@ static int cc_list_map_move_to_item(cc_ListMap *self, void *key)
 	return CC_MAP_KEY_NOT_FOUND;
 }
 
-int cc_list_map_get(cc_ListMap *self, void *key, void **result)
+int
+cc_list_map_get(cc_ListMap *self, void *key, void **result)
 {
 	cc_MapItem *item;
 	int code;
@@ -52,7 +55,8 @@ int cc_list_map_get(cc_ListMap *self, void *key, void **result)
 	return 0;
 }
 
-int cc_list_map_insert_new(cc_ListMap *self, void *key, void *value)
+int
+cc_list_map_insert_new(cc_ListMap *self, void *key, void *value)
 {
 	cc_MapItem *item;
 
@@ -73,7 +77,8 @@ fail1:
 	return 1;
 }
 
-int cc_list_map_set_new(cc_ListMap *self, void *key, void *value)
+int
+cc_list_map_set_new(cc_ListMap *self, void *key, void *value)
 {
 	cc_MapItem *item;
 
@@ -89,7 +94,8 @@ int cc_list_map_set_new(cc_ListMap *self, void *key, void *value)
  * When `old_value` is NULL, the old value of `key` will be ignored,
  * which may cause memory leak.
  */
-int cc_list_map_set(cc_ListMap *self, void *key, void *value, void **old_value)
+int
+cc_list_map_set(cc_ListMap *self, void *key, void *value, void **old_value)
 {
 	cc_MapItem *item;
 
@@ -108,7 +114,8 @@ int cc_list_map_set(cc_ListMap *self, void *key, void *value, void **old_value)
 	return 0;
 }
 
-int cc_list_map_del(cc_ListMap *self, void *key, cc_MapItem **result)
+int
+cc_list_map_del(cc_ListMap *self, void *key, cc_MapItem **result)
 {
 	if (try_reset_double_p(result))
 		return 1;
@@ -124,7 +131,8 @@ int cc_list_map_del(cc_ListMap *self, void *key, cc_MapItem **result)
 	return 0;
 }
 
-int cc_list_map_print(cc_ListMap *self, char *end_string)
+int
+cc_list_map_print(cc_ListMap *self, char *end_string)
 {
 	cc_ListMapIter iter;
 	cc_MapItem *item;
@@ -140,7 +148,8 @@ int cc_list_map_print(cc_ListMap *self, char *end_string)
 	return 0;
 }
 
-int cc_list_map_new(cc_ListMap **self, cc_CmpFn cmp)
+int
+cc_list_map_new(cc_ListMap **self, cc_CmpFn cmp)
 {
 	cc_ListMap *tmp;
 
@@ -167,7 +176,8 @@ fail1:
 	return 1;
 }
 
-int cc_list_map_delete(cc_ListMap *self)
+int
+cc_list_map_delete(cc_ListMap *self)
 {
 	cc_ListIter iter;
 	cc_MapItem **item;
@@ -184,7 +194,8 @@ int cc_list_map_delete(cc_ListMap *self)
 	return 0;
 }
 
-int cc_list_map_iter_next(cc_ListMapIter *self, void **item, size_t *index)
+int
+cc_list_map_iter_next(cc_ListMapIter *self, void **item, size_t *index)
 {
 	cc_MapItem **tmp_item;
 
@@ -197,7 +208,8 @@ int cc_list_map_iter_next(cc_ListMapIter *self, void **item, size_t *index)
 	return 0;
 }
 
-int cc_list_map_iter_init(cc_ListMapIter *self, cc_ListMap *map)
+int
+cc_list_map_iter_init(cc_ListMapIter *self, cc_ListMap *map)
 {
 	if (map == NULL)
 		return 1;

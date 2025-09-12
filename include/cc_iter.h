@@ -11,7 +11,8 @@ struct cc_IterI {
 	cc_IterNextFn next;
 };
 
-static inline int cc_iter_next(void *self, void *item, size_t *index)
+static inline int
+cc_iter_next(void *self, void *item, size_t *index)
 {
 	return (*(cc_IterI **)self)->next(self, (void **)item, index);
 }

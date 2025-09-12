@@ -9,7 +9,8 @@ char s1[] = { "duplicated_key" };
 char s2[] = { "duplicated_key" };
 char s3[] = { "duplicated_key" };
 
-int main(void)
+int
+main(void)
 {
 	cc_HashMap *map;
 	cc_MapItem *tmp_item;

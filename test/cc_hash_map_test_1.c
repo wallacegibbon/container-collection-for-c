@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(void)
+int
+main(void)
 {
 	cc_HashMap *map;
 	cc_HashMapIter iter;

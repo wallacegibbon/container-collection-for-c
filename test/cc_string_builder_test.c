@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main(void)
+int
+main(void)
 {
 	cc_StrBuilder *builder;
 	char *tmp;

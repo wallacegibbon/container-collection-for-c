@@ -3,7 +3,8 @@
 #include <assert.h>
 #include <stdint.h>
 
-int show_tree_elements(cc_Binary *tree)
+int
+show_tree_elements(cc_Binary *tree)
 {
 	cc_BinaryIter *iter;
 	size_t *tmp, index;
@@ -21,7 +22,8 @@ int show_tree_elements(cc_Binary *tree)
 
 static void print_1(void *data) { cc_debug_print("%ld", (uintptr_t)data); }
 
-int main(void)
+int
+main(void)
 {
 	cc_Binary *root;
 

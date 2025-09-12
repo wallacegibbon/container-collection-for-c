@@ -7,7 +7,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-int main(void)
+int
+main(void)
 {
 	cc_List *list;
 	cc_Array *arr;

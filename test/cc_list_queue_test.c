@@ -2,7 +2,8 @@
 #include <assert.h>
 #include <stdint.h>
 
-int main(void)
+int
+main(void)
 {
 	cc_ListQueue *list;
 	uintptr_t tmp;

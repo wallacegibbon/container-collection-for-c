@@ -5,7 +5,8 @@
 #include <assert.h>
 #include <stdint.h>
 
-int main(void)
+int
+main(void)
 {
 	cc_List *list;
 	cc_ListCursor *cursor;

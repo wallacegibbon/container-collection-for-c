@@ -15,15 +15,15 @@ struct cc_ArrayChain {
 	size_t node_elem_size;
 };
 
-int cc_array_chain_new(cc_ArrayChain **self, int node_elem_nums,
+int	cc_array_chain_new(cc_ArrayChain **self, int node_elem_nums,
 		int node_elem_size);
 
-int cc_array_chain_delete(cc_ArrayChain *self);
+int	cc_array_chain_delete(cc_ArrayChain *self);
 
-int cc_array_chain_add_elem(cc_ArrayChain *self, void *elem);
-int cc_array_chain_append(cc_ArrayChain *self, void *data, size_t nums);
+int	cc_array_chain_add_elem(cc_ArrayChain *self, void *elem);
+int	cc_array_chain_append(cc_ArrayChain *self, void *data, size_t nums);
 
-int cc_array_chain_to_array(cc_ArrayChain *self, cc_Array **result,
+int	cc_array_chain_to_array(cc_ArrayChain *self, cc_Array **result,
 		int nums_to_reserve);
 
 #endif

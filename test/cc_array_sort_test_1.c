@@ -6,7 +6,8 @@
 
 static const char *sample = "A quick brown fox jumps over the lazy dog.";
 
-static int cmp_char(char *left, char *right)
+static int
+cmp_char(char *left, char *right)
 {
 	/*
 	return *left - *right;
@@ -14,7 +15,8 @@ static int cmp_char(char *left, char *right)
 	return -(*left - *right);
 }
 
-static void char_array_display(cc_Array *chars, const char *prefix)
+static void
+char_array_display(cc_Array *chars, const char *prefix)
 {
 	cc_ArrayIter iter;
 	char *tmp;
@@ -25,7 +27,8 @@ static void char_array_display(cc_Array *chars, const char *prefix)
 		cc_debug_print("%c", *tmp);
 }
 
-int main(void)
+int
+main(void)
 {
 	cc_Array array;
 	unsigned char buffer[10];

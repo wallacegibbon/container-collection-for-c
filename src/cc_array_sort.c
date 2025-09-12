@@ -3,8 +3,8 @@
 /*
 Quick sort (https://en.wikipedia.org/wiki/Quicksort)
 */
-static size_t cc_array_divide(cc_Array *self, cc_CmpFn cmp,
-		size_t start, size_t end)
+static size_t
+cc_array_divide(cc_Array *self, cc_CmpFn cmp, size_t start, size_t end)
 {
 	size_t l, r, m;
 
@@ -28,8 +28,9 @@ static size_t cc_array_divide(cc_Array *self, cc_CmpFn cmp,
 	return l + 1;
 }
 
-static void cc_array_sort_quick_recur(cc_Array *self, cc_CmpFn cmp,
-		size_t start, size_t end)
+static void
+cc_array_sort_quick_recur(cc_Array *self, cc_CmpFn cmp, size_t start,
+		size_t end)
 {
 	size_t m;
 
@@ -42,7 +43,8 @@ static void cc_array_sort_quick_recur(cc_Array *self, cc_CmpFn cmp,
 	cc_array_sort_quick_recur(self, cmp, m, end);
 }
 
-int cc_array_sort_quick(cc_Array *self, cc_CmpFn cmp)
+int
+cc_array_sort_quick(cc_Array *self, cc_CmpFn cmp)
 {
 	if (cmp == NULL)
 		return 1;
@@ -54,7 +56,8 @@ int cc_array_sort_quick(cc_Array *self, cc_CmpFn cmp)
 /*
 Bubble sort (https://en.wikipedia.org/wiki/Bubble_sort)
 */
-int cc_array_sort_bubble(cc_Array *self, cc_CmpFn cmp)
+int
+cc_array_sort_bubble(cc_Array *self, cc_CmpFn cmp)
 {
 	size_t i, j, k;
 

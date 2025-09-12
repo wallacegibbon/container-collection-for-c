@@ -18,17 +18,20 @@ enum {
 	CC_QUEUE_FULL = 0xFD20,
 };
 
-static inline int cc_queue_enqueue(void *self, void *data)
+static inline int
+cc_queue_enqueue(void *self, void *data)
 {
 	return (*(cc_QueueI **)self)->enqueue(self, data);
 }
 
-static inline int cc_queue_dequeue(void *self, void **result)
+static inline int
+cc_queue_dequeue(void *self, void **result)
 {
 	return (*(cc_QueueI **)self)->dequeue(self, result);
 }
 
-static inline int cc_queue_peek(void *self, void **result)
+static inline int
+cc_queue_peek(void *self, void **result)
 {
 	return (*(cc_QueueI **)self)->peek(self, result);
 }

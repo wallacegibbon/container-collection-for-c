@@ -1,7 +1,8 @@
 #include "cc_array_stack.h"
 #include <assert.h>
 
-int main(void)
+int
+main(void)
 {
 	cc_ArrayStack *stack;
 	char i, tmp;

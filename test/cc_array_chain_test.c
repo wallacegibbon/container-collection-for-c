@@ -3,7 +3,8 @@
 #include <assert.h>
 #include <string.h>
 
-int main(void)
+int
+main(void)
 {
 	cc_ArrayChain *chain;
 	cc_Array *r;

@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int cc_str_builder_to_string(cc_StrBuilder *self, char **result)
+int
+cc_str_builder_to_string(cc_StrBuilder *self, char **result)
 {
 	cc_Array *arr;
 	char zero = '\0';
@@ -29,7 +30,8 @@ fail1:
 }
 
 /* When `s` is NULL, ignore and return success directly */
-int cc_str_builder_append_str(cc_StrBuilder *self, char *s)
+int
+cc_str_builder_append_str(cc_StrBuilder *self, char *s)
 {
 	if (s == NULL)
 		return 0;
@@ -43,7 +45,8 @@ int cc_str_builder_append_str(cc_StrBuilder *self, char *s)
 }
 
 /* When `s` is NULL, ignore and return success directly */
-int cc_str_builder_append(cc_StrBuilder *self, char *s,
+int
+cc_str_builder_append(cc_StrBuilder *self, char *s,
 		size_t size)
 {
 	if (s == NULL)
@@ -52,7 +55,8 @@ int cc_str_builder_append(cc_StrBuilder *self, char *s,
 	return cc_array_chain_append(self->chain, s, size);
 }
 
-int cc_str_builder_new(cc_StrBuilder **self)
+int
+cc_str_builder_new(cc_StrBuilder **self)
 {
 	cc_StrBuilder *tmp;
 
@@ -73,7 +77,8 @@ fail1:
 	return 1;
 }
 
-int cc_str_builder_delete(cc_StrBuilder *self)
+int
+cc_str_builder_delete(cc_StrBuilder *self)
 {
 	if (cc_array_chain_delete(self->chain))
 		return 1;
@@ -82,7 +87,8 @@ int cc_str_builder_delete(cc_StrBuilder *self)
 	return 0;
 }
 
-int cc_string_concat(char **result, int n, ...)
+int
+cc_string_concat(char **result, int n, ...)
 {
 	cc_StrBuilder *string_builder;
 	char *tmp;

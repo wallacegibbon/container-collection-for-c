@@ -27,23 +27,26 @@ enum {
 	CC_MAP_KEY_ALREADY_EXIST = 0xFB20,
 };
 
-static inline int cc_map_get(void *self, void *key, void **result)
+static inline int
+cc_map_get(void *self, void *key, void **result)
 {
 	return (*(cc_MapI **)self)->get(self, key, result);
 }
 
-static inline int cc_map_set(void *self, void *key, void *value,
-		void **old_value)
+static inline int
+cc_map_set(void *self, void *key, void *value, void **old_value)
 {
 	return (*(cc_MapI **)self)->set(self, key, value, old_value);
 }
 
-static inline int cc_map_set_new(void *self, void *key, void *value)
+static inline int
+cc_map_set_new(void *self, void *key, void *value)
 {
 	return (*(cc_MapI **)self)->set_new(self, key, value);
 }
 
-static inline int cc_map_del(void *self, void *key, void **result)
+static inline int
+cc_map_del(void *self, void *key, void **result)
 {
 	return (*(cc_MapI **)self)->del(self, key, result);
 }

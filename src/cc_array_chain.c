@@ -4,9 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-int cc_array_chain_node_new(cc_ArrayChain *self);
+int	cc_array_chain_node_new(cc_ArrayChain *self);
 
-int cc_array_chain_add_elem(cc_ArrayChain *self, void *elem)
+int
+cc_array_chain_add_elem(cc_ArrayChain *self, void *elem)
 {
 	if (self->cursor == NULL) {
 		if (cc_array_chain_node_new(self))
@@ -25,7 +26,8 @@ int cc_array_chain_add_elem(cc_ArrayChain *self, void *elem)
 	return 0;
 }
 
-int cc_array_chain_append(cc_ArrayChain *self, void *data, size_t nums)
+int
+cc_array_chain_append(cc_ArrayChain *self, void *data, size_t nums)
 {
 	size_t i;
 	for (i = 0; i < nums; i++) {
@@ -37,7 +39,8 @@ int cc_array_chain_append(cc_ArrayChain *self, void *data, size_t nums)
 }
 
 /* Return the byte size of the chain node. */
-int cc_array_chain_node_size(cc_ArrayChain *self, size_t index)
+int
+cc_array_chain_node_size(cc_ArrayChain *self, size_t index)
 {
 	size_t n;
 	n = self->total_nums - self->node_elem_nums * index;
@@ -47,7 +50,8 @@ int cc_array_chain_node_size(cc_ArrayChain *self, size_t index)
 		return n * self->node_elem_size;
 }
 
-int cc_array_chain_to_array(cc_ArrayChain *self, cc_Array **result,
+int
+cc_array_chain_to_array(cc_ArrayChain *self, cc_Array **result,
 		int nums_to_reserve)
 {
 	cc_ListIter iter;
@@ -74,8 +78,8 @@ fail1:
 	return 1;
 }
 
-int cc_array_chain_new(cc_ArrayChain **self, int node_elem_nums,
-		int node_elem_size)
+int
+cc_array_chain_new(cc_ArrayChain **self, int node_elem_nums, int node_elem_size)
 {
 	cc_ArrayChain *tmp;
 
@@ -102,7 +106,8 @@ fail1:
 	return 1;
 }
 
-int cc_array_chain_delete(cc_ArrayChain *self)
+int
+cc_array_chain_delete(cc_ArrayChain *self)
 {
 	cc_ListIter iter;
 	cc_Array **tmp;
@@ -122,7 +127,8 @@ int cc_array_chain_delete(cc_ArrayChain *self)
 	return 0;
 }
 
-int cc_array_chain_node_new(cc_ArrayChain *self)
+int
+cc_array_chain_node_new(cc_ArrayChain *self)
 {
 	cc_Array *arr;
 

@@ -14,13 +14,14 @@ struct cc_ArrayStack {
 	size_t top;
 };
 
-int cc_array_stack_new(cc_ArrayStack **self, size_t elem_nums, size_t elem_size);
-int cc_array_stack_delete(cc_ArrayStack *self);
-int cc_array_stack_init(cc_ArrayStack *self, cc_Array *data);
-int cc_array_stack_push(cc_ArrayStack *self, void *item);
-int cc_array_stack_pop(cc_ArrayStack *self, void *item);
-int cc_array_stack_peek(cc_ArrayStack *self, void *item);
-size_t cc_array_stack_elem_nums(cc_ArrayStack *self);
-size_t cc_array_stack_space(cc_ArrayStack *self);
+int	cc_array_stack_new(cc_ArrayStack **self, size_t elem_nums,
+		size_t elem_size);
+int	cc_array_stack_delete(cc_ArrayStack *self);
+int	cc_array_stack_init(cc_ArrayStack *self, cc_Array *data);
+int	cc_array_stack_push(cc_ArrayStack *self, void *item);
+int	cc_array_stack_pop(cc_ArrayStack *self, void *item);
+int	cc_array_stack_peek(cc_ArrayStack *self, void *item);
+size_t	cc_array_stack_elem_nums(cc_ArrayStack *self);
+size_t	cc_array_stack_space(cc_ArrayStack *self);
 
 #endif

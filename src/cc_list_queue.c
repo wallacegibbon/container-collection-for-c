@@ -7,27 +7,32 @@ cc_QueueI cc_list_queue_interface = {
 	.peek = (cc_QueuePeekFn)cc_list_queue_peek,
 };
 
-static inline int translate_code(int code)
+static inline int
+translate_code(int code)
 {
 	return (code == CC_LIST_EMPTY) ? CC_QUEUE_EMPTY : code;
 }
 
-int cc_list_queue_enqueue(cc_ListQueue *self, void *data)
+int
+cc_list_queue_enqueue(cc_ListQueue *self, void *data)
 {
 	return cc_list_insert_tail(self->list, data);
 }
 
-int cc_list_queue_dequeue(cc_ListQueue *self, void **result)
+int
+cc_list_queue_dequeue(cc_ListQueue *self, void **result)
 {
 	return translate_code(cc_list_remove_head(self->list, result));
 }
 
-int cc_list_queue_peek(cc_ListQueue *self, void **result)
+int
+cc_list_queue_peek(cc_ListQueue *self, void **result)
 {
 	return translate_code(cc_list_get_head(self->list, result));
 }
 
-int cc_list_queue_new(cc_ListQueue **self)
+int
+cc_list_queue_new(cc_ListQueue **self)
 {
 	cc_ListQueue *tmp;
 	tmp = malloc(sizeof(*tmp));
@@ -45,10 +50,12 @@ fail3:
 fail2:
 	free(tmp);
 fail1:
-	return 1;
+	return
+	1;
 }
 
-int cc_list_queue_delete(cc_ListQueue *self)
+int
+cc_list_queue_delete(cc_ListQueue *self)
 {
 	if (cc_list_delete(self->list))
 		return 1;

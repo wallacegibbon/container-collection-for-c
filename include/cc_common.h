@@ -34,25 +34,25 @@ typedef int (*cc_CmpFn)(void *left, void *right);
 typedef size_t (*cc_HashFn)(void *obj);
 
 /* Simply do: left - right */
-int cc_default_cmp_fn(void *left, void *right);
+int	cc_default_cmp_fn(void *left, void *right);
 
 /* Return obj directly */
-size_t cc_default_hash_fn(void *obj);
+size_t	cc_default_hash_fn(void *obj);
 
 /* Address is 4/8 byte aligned. Do some calculations to make it a good hash. */
-size_t cc_address_hash_fn(void *obj);
+size_t	cc_address_hash_fn(void *obj);
 
 /* Calculate hash from string. */
-size_t cc_str_hash_fn_simple(void *obj);
+size_t	cc_str_hash_fn_simple(void *obj);
 
 /* Calculate hash from string in the BKDR (31, 131, 1313, ...) way. */
-size_t cc_str_hash_fn_bkdr(void *obj);
+size_t	cc_str_hash_fn_bkdr(void *obj);
 
 /* Call `free` and return 0. */
-int cc_default_delete_fn(void *obj);
+int	cc_default_delete_fn(void *obj);
 
-void cc_exit_info(int code, char *format, ...);
-void cc_debug_print(char *format, ...);
-void cc_print_n(char *s, int n);
+void	cc_exit_info(int code, char *format, ...);
+void	cc_debug_print(char *format, ...);
+void	cc_print_n(char *s, int n);
 
 #endif

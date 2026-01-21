@@ -7,8 +7,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-int main(void)
-{
+int main(void) {
 	struct cc_list *list;
 	struct cc_array *arr;
 	struct cc_array_iter iter;
@@ -29,17 +28,13 @@ int main(void)
 		assert(list->root.size == i + 1);
 	}
 
-	/*
-	cc_list_print(list, 1);
-	*/
+	//cc_list_print(list, 1);
 
 	assert(!cc_list_to_cc_array(list, &arr));
 	assert(!cc_array_iter_init(&iter, arr));
-	/*
-	while (!cc_iter_next(&iter, &pp, &i))
-		cc_debug_print("<%d, %d> ", i, **pp);
-	cc_debug_print("\n");
-	*/
+	//while (!cc_iter_next(&iter, &pp, &i))
+	//	cc_debug_print("<%d, %d> ", i, **pp);
+	//cc_debug_print("\n");
 
 	assert(!cc_array_delete(arr));
 

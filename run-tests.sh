@@ -3,8 +3,7 @@
 
 MAKE_OPT=""
 
-parse_arguments()
-{
+parse_arguments() {
 	case "$1" in
 	"memcheck=1"|"memcheck")
 		MAKE_OPT="MEMCHECK=1" ;;
@@ -16,8 +15,7 @@ parse_arguments()
 	esac
 }
 
-run_test()
-{
+run_test() {
 	echo [TEST] "$1"...
 	gmake $MAKE_OPT build/$(basename $1 .c) || exit 1
 	echo

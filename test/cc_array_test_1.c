@@ -2,8 +2,7 @@
 #include <assert.h>
 #include <math.h>
 
-int main(void)
-{
+int main(void) {
 	struct cc_array array;
 	struct cc_array_iter iter;
 	unsigned char data[10 * sizeof(float)];

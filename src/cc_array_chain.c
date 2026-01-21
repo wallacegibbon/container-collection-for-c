@@ -6,39 +6,32 @@
 
 int cc_array_chain_node_new(struct cc_array_chain *self);
 
-int cc_array_chain_add_elem(struct cc_array_chain *self, void *elem)
-{
+int cc_array_chain_add_elem(struct cc_array_chain *self, void *elem) {
 	if (self->cursor == NULL) {
 		if (cc_array_chain_node_new(self))
 			return 1;
 	}
-
-	if (cc_array_set(self->cursor, self->cursor_index++, elem) ==
-			CC_ARRAY_OUT_OF_RANGE) {
+	if (cc_array_set(self->cursor, self->cursor_index++, elem) == CC_ARRAY_OUT_OF_RANGE) {
 		if (cc_array_chain_node_new(self))
 			return 2;
 		if (cc_array_set(self->cursor, self->cursor_index++, elem))
 			return 3;
 	}
-
 	self->total_nums++;
 	return 0;
 }
 
-int cc_array_chain_append(struct cc_array_chain *self, void *data, size_t nums)
-{
+int cc_array_chain_append(struct cc_array_chain *self, void *data, size_t nums) {
 	size_t i;
 	for (i = 0; i < nums; i++) {
-		if (cc_array_chain_add_elem(self,
-				(char *)data + i * self->node_elem_size))
+		if (cc_array_chain_add_elem(self, (char *)data + i * self->node_elem_size))
 			return 1;
 	}
 	return 0;
 }
 
-/* Return the byte size of the chain node. */
-int cc_array_chain_node_size(struct cc_array_chain *self, size_t index)
-{
+/// Return the byte size of the chain node.
+int cc_array_chain_node_size(struct cc_array_chain *self, size_t index) {
 	size_t n;
 	n = self->total_nums - self->node_elem_nums * index;
 	if (n > self->node_elem_nums)
@@ -47,23 +40,19 @@ int cc_array_chain_node_size(struct cc_array_chain *self, size_t index)
 		return n * self->node_elem_size;
 }
 
-int cc_array_chain_to_array(struct cc_array_chain *self,
-		struct cc_array **result, int nums_to_reserve)
-{
+int cc_array_chain_to_array(struct cc_array_chain *self, struct cc_array **result, int nums_to_reserve) {
 	struct cc_list_iter iter;
 	struct cc_array *r, **tmp;
 	size_t i, size;
 
-	if (cc_array_new(&r, self->total_nums + nums_to_reserve,
-				self->node_elem_size))
+	if (cc_array_new(&r, self->total_nums + nums_to_reserve, self->node_elem_size))
 		goto fail1;
 
 	if (cc_list_iter_init(&iter, self->node_chain, 0))
 		goto fail2;
 
 	while (!cc_iter_next(&iter, &tmp, &i))
-		memcpy(r->data + self->node_elem_nums * i, (*tmp)->data,
-				cc_array_chain_node_size(self, i));
+		memcpy(r->data + self->node_elem_nums * i, (*tmp)->data, cc_array_chain_node_size(self, i));
 
 	*result = r;
 	return 0;
@@ -74,9 +63,7 @@ fail1:
 	return 1;
 }
 
-int cc_array_chain_new(struct cc_array_chain **self, int node_elem_nums,
-		int node_elem_size)
-{
+int cc_array_chain_new(struct cc_array_chain **self, int node_elem_nums, int node_elem_size) {
 	struct cc_array_chain *tmp;
 
 	tmp = malloc(sizeof(*tmp));
@@ -102,8 +89,7 @@ fail1:
 	return 1;
 }
 
-int cc_array_chain_delete(struct cc_array_chain *self)
-{
+int cc_array_chain_delete(struct cc_array_chain *self) {
 	struct cc_list_iter iter;
 	struct cc_array **tmp;
 
@@ -122,8 +108,7 @@ int cc_array_chain_delete(struct cc_array_chain *self)
 	return 0;
 }
 
-int cc_array_chain_node_new(struct cc_array_chain *self)
-{
+int cc_array_chain_node_new(struct cc_array_chain *self) {
 	struct cc_array *arr;
 
 	if (cc_array_new(&arr, self->node_elem_nums, self->node_elem_size))

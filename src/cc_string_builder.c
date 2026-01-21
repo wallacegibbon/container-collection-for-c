@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int cc_string_builder_to_string(struct cc_string_builder *self, char **result)
-{
+int cc_string_builder_to_string(struct cc_string_builder *self, char **result) {
 	struct cc_array *arr;
 	char zero = '\0';
 
@@ -28,9 +27,8 @@ fail1:
 	return 1;
 }
 
-/* When `s` is NULL, ignore and return success directly */
-int cc_string_builder_append_str(struct cc_string_builder *self, char *s)
-{
+/// When `s` is NULL, ignore and return success directly.
+int cc_string_builder_append_str(struct cc_string_builder *self, char *s) {
 	if (s == NULL)
 		return 0;
 
@@ -42,18 +40,15 @@ int cc_string_builder_append_str(struct cc_string_builder *self, char *s)
 	return 0;
 }
 
-/* When `s` is NULL, ignore and return success directly */
-int cc_string_builder_append(struct cc_string_builder *self, char *s,
-		size_t size)
-{
+/// When `s` is NULL, ignore and return success directly.
+int cc_string_builder_append(struct cc_string_builder *self, char *s, size_t size) {
 	if (s == NULL)
 		return 0;
 
 	return cc_array_chain_append(self->chain, s, size);
 }
 
-int cc_string_builder_new(struct cc_string_builder **self)
-{
+int cc_string_builder_new(struct cc_string_builder **self) {
 	struct cc_string_builder *tmp;
 
 	tmp = malloc(sizeof(*tmp));
@@ -73,8 +68,7 @@ fail1:
 	return 1;
 }
 
-int cc_string_builder_delete(struct cc_string_builder *self)
-{
+int cc_string_builder_delete(struct cc_string_builder *self) {
 	if (cc_array_chain_delete(self->chain))
 		return 1;
 
@@ -82,8 +76,7 @@ int cc_string_builder_delete(struct cc_string_builder *self)
 	return 0;
 }
 
-int cc_string_concat(char **result, int n, ...)
-{
+int cc_string_concat(char **result, int n, ...) {
 	struct cc_string_builder *string_builder;
 	char *tmp;
 	va_list args;
@@ -93,8 +86,7 @@ int cc_string_concat(char **result, int n, ...)
 
 	va_start(args, n);
 	while (n--) {
-		if (cc_string_builder_append_str(
-				string_builder, va_arg(args, char *)))
+		if (cc_string_builder_append_str(string_builder, va_arg(args, char *)))
 			goto fail2;
 	}
 	va_end(args);

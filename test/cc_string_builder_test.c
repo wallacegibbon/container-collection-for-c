@@ -3,8 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main(void)
-{
+int main(void) {
 	struct cc_string_builder *builder;
 	char *tmp;
 
@@ -23,9 +22,7 @@ int main(void)
 
 	assert(!cc_string_builder_to_string(builder, &tmp));
 
-	/*
-	cc_debug_print(">> \"%s\"\n", tmp);
-	*/
+	//cc_debug_print(">> \"%s\"\n", tmp);
 	assert(strcmp(tmp, "abcdefghijkl") == 0);
 	free(tmp);
 

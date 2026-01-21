@@ -7,8 +7,7 @@ struct cc_queue_i cc_ring_interface = {
 	.peek = (cc_queue_peek_fn_t)cc_ring_peek,
 };
 
-static inline size_t next_index(struct cc_ring *self, size_t index)
-{
+static inline size_t next_index(struct cc_ring *self, size_t index) {
 	size_t next_index = index + 1;
 	if (cc_array_is_valid_index(self->data, next_index))
 		return next_index;
@@ -16,22 +15,18 @@ static inline size_t next_index(struct cc_ring *self, size_t index)
 		return 0;
 }
 
-size_t cc_ring_elem_nums(struct cc_ring *self)
-{
+size_t cc_ring_elem_nums(struct cc_ring *self) {
 	if (self->write_index >= self->read_index)
 		return self->write_index - self->read_index;
 	else
-		return self->data->elem_nums + self->write_index
-				- self->read_index;
+		return self->data->elem_nums + self->write_index - self->read_index;
 }
 
-size_t cc_ring_space(struct cc_ring *self)
-{
+size_t cc_ring_space(struct cc_ring *self) {
 	return self->data->elem_nums - cc_ring_elem_nums(self) - 1;
 }
 
-int cc_ring_enqueue(struct cc_ring *self, void *item)
-{
+int cc_ring_enqueue(struct cc_ring *self, void *item) {
 	size_t write_index_next;
 
 	write_index_next = next_index(self, self->write_index);
@@ -43,8 +38,7 @@ int cc_ring_enqueue(struct cc_ring *self, void *item)
 	return 0;
 }
 
-int cc_ring_peek(struct cc_ring *self, void *item)
-{
+int cc_ring_peek(struct cc_ring *self, void *item) {
 	if (self->read_index == self->write_index)
 		return CC_QUEUE_EMPTY;
 
@@ -52,8 +46,7 @@ int cc_ring_peek(struct cc_ring *self, void *item)
 	return 0;
 }
 
-int cc_ring_dequeue(struct cc_ring *self, void *item)
-{
+int cc_ring_dequeue(struct cc_ring *self, void *item) {
 	if (cc_ring_peek(self, item) == CC_QUEUE_EMPTY)
 		return CC_QUEUE_EMPTY;
 
@@ -61,8 +54,7 @@ int cc_ring_dequeue(struct cc_ring *self, void *item)
 	return 0;
 }
 
-int cc_ring_init(struct cc_ring *self, struct cc_array *data)
-{
+int cc_ring_init(struct cc_ring *self, struct cc_array *data) {
 	self->interface = &cc_ring_interface;
 	self->data = data;
 	self->read_index = 0;
@@ -70,8 +62,7 @@ int cc_ring_init(struct cc_ring *self, struct cc_array *data)
 	return 0;
 }
 
-int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size)
-{
+int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size) {
 	struct cc_ring *tmp;
 	struct cc_array *data;
 
@@ -79,10 +70,7 @@ int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size)
 	if (tmp == NULL)
 		goto fail1;
 
-	/*
-	 * There will be 1 element got wasted,
-	 * so pass `elem_nums + 1` to `cc_array_new`.
-	 */
+	/// There will be 1 element got wasted, so pass `elem_nums + 1` to `cc_array_new`.
 	if (cc_array_new(&data, elem_nums + 1, elem_size))
 		goto fail2;
 	if (cc_ring_init(tmp, data))
@@ -99,8 +87,7 @@ fail1:
 	return 1;
 }
 
-int cc_ring_delete(struct cc_ring *self)
-{
+int cc_ring_delete(struct cc_ring *self) {
 	if (cc_array_delete(self->data))
 		return 1;
 

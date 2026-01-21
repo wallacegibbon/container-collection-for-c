@@ -14,17 +14,14 @@ struct cc_iter_i cc_hash_map_iter_interface = {
 	.next = (cc_iter_next_fn_t)cc_hash_map_iter_next,
 };
 
-/* Get the slot (whose type is `struct cc_list_map **`) by key. */
-static inline void get_list_map_ref(struct cc_hash_map *self, void *key,
-		struct cc_list_map ***result)
-{
+/// Get the slot (whose type is `struct cc_list_map **`) by key.
+static inline void get_list_map_ref(struct cc_hash_map *self, void *key, struct cc_list_map ***result) {
 	size_t hash_tmp;
 	hash_tmp = self->calc_hash(key) % self->bucket_size;
 	cc_array_get_ref_unsafe(self->data, hash_tmp, (void **)result);
 }
 
-int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result)
-{
+int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result) {
 	struct cc_list_map **list_map_ref;
 
 	if (try_reset_double_p(result))
@@ -37,8 +34,7 @@ int cc_hash_map_get(struct cc_hash_map *self, void *key, void **result)
 	return cc_list_map_get(*list_map_ref, key, result);
 }
 
-int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value)
-{
+int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value) {
 	struct cc_list_map **list_map_ref;
 
 	get_list_map_ref(self, key, &list_map_ref);
@@ -50,9 +46,7 @@ int cc_hash_map_set_new(struct cc_hash_map *self, void *key, void *value)
 	return cc_list_map_set_new(*list_map_ref, key, value);
 }
 
-int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value,
-		void **old_value)
-{
+int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value, void **old_value) {
 	struct cc_list_map **list_map_ref;
 
 	get_list_map_ref(self, key, &list_map_ref);
@@ -64,9 +58,7 @@ int cc_hash_map_set(struct cc_hash_map *self, void *key, void *value,
 	return cc_list_map_set(*list_map_ref, key, value, old_value);
 }
 
-int cc_hash_map_del(struct cc_hash_map *self, void *key,
-		struct cc_map_item **result)
-{
+int cc_hash_map_del(struct cc_hash_map *self, void *key, struct cc_map_item **result) {
 	struct cc_list_map **list_map_ref;
 
 	if (try_reset_double_p(result))
@@ -79,8 +71,7 @@ int cc_hash_map_del(struct cc_hash_map *self, void *key,
 	return cc_list_map_del(*list_map_ref, key, result);
 }
 
-int cc_hash_map_print_slot(struct cc_list_map *slot, int index)
-{
+int cc_hash_map_print_slot(struct cc_list_map *slot, int index) {
 	cc_debug_print("[% 9d] ", index);
 	if (slot != NULL)
 		return cc_list_map_print(slot, "\n");
@@ -89,8 +80,7 @@ int cc_hash_map_print_slot(struct cc_list_map *slot, int index)
 	return 0;
 }
 
-int cc_hash_map_print(struct cc_hash_map *self, char *end_string)
-{
+int cc_hash_map_print(struct cc_hash_map *self, char *end_string) {
 	struct cc_array_iter iter;
 	struct cc_list_map **item;
 	int i = 0;
@@ -104,9 +94,7 @@ int cc_hash_map_print(struct cc_hash_map *self, char *end_string)
 	return 0;
 }
 
-int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size,
-		cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash)
-{
+int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size, cc_cmp_fn_t cmp, cc_hash_fn_t calc_hash) {
 	struct cc_hash_map *tmp;
 	struct cc_list_map **item;
 	struct cc_array_iter iter;
@@ -120,13 +108,12 @@ int cc_hash_map_new(struct cc_hash_map **self, size_t bucket_size,
 
 	tmp->interface = &cc_hash_map_interface;
 
-	if (cc_array_new(&tmp->data, bucket_size,
-			sizeof(struct cc_list_map *)))
+	if (cc_array_new(&tmp->data, bucket_size, sizeof(struct cc_list_map *)))
 		goto fail2;
 
 	tmp->bucket_size = bucket_size;
 
-	/* The elements of the array should be initialized as NULLs. */
+	/// The elements of the array should be initialized as NULLs.
 	if (cc_array_iter_init(&iter, tmp->data))
 		goto fail3;
 	while (!cc_iter_next(&iter, &item, NULL))
@@ -146,8 +133,7 @@ fail1:
 	return 1;
 }
 
-int cc_hash_map_delete(struct cc_hash_map *self)
-{
+int cc_hash_map_delete(struct cc_hash_map *self) {
 	struct cc_array_iter iter;
 	struct cc_list_map **item;
 
@@ -167,14 +153,12 @@ int cc_hash_map_delete(struct cc_hash_map *self)
 	return 0;
 }
 
-/* Initialize the self->inner_list_map_iter */
-static int cc_hash_map_iter_step(struct cc_hash_map_iter *self)
-{
+/// Initialize the self->inner_list_map_iter
+static int cc_hash_map_iter_step(struct cc_hash_map_iter *self) {
 	struct cc_list_map **cursor;
 
 	while (1) {
-		if (cc_iter_next(&self->inner_array_iter,
-				(void **)&cursor, NULL))
+		if (cc_iter_next(&self->inner_array_iter, (void **)&cursor, NULL))
 			return -1;
 		if (*cursor != NULL)
 			break;
@@ -183,27 +167,19 @@ static int cc_hash_map_iter_step(struct cc_hash_map_iter *self)
 	return cc_list_map_iter_init(&self->inner_list_map_iter, *cursor);
 }
 
-int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item,
-		size_t *index)
-{
+int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index) {
 	if (try_reset_double_p(item))
 		return 1;
 	if (self->is_empty)
 		return 2;
 
 	while (1) {
-		if (!cc_iter_next(&self->inner_list_map_iter, item, NULL)) {
-			/* Succeed getting the item. */
-			break;
-		}
+		if (!cc_iter_next(&self->inner_list_map_iter, item, NULL))
+			break;	// Succeed getting the item.
 
-		/*
-		 * The list in current array slot is empty, move to next slot.
-		 */
-		if (cc_hash_map_iter_step(self)) {
-			/* No more slot to iterate, failed getting item. */
-			return 3;
-		}
+		/// The list in current array slot is empty, move to next slot.
+		if (cc_hash_map_iter_step(self))
+			return 3;	/// No more slot to iterate, failed getting item.
 	}
 
 	if (index != NULL)
@@ -213,9 +189,7 @@ int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item,
 	return 0;
 }
 
-int cc_hash_map_iter_init(struct cc_hash_map_iter *self,
-		struct cc_hash_map *map)
-{
+int cc_hash_map_iter_init(struct cc_hash_map_iter *self, struct cc_hash_map *map) {
 	int tmp;
 
 	if (map == NULL)
@@ -227,19 +201,16 @@ int cc_hash_map_iter_init(struct cc_hash_map_iter *self,
 	self->count = 0;
 	self->is_empty = 0;
 
-	/*
-	 * `hash_map`'s `init` will call `step`, which is dangerous.
-	 * Be careful with code here.
-	 */
+	/// `hash_map`'s `init` will call `step`, which is dangerous.  Be careful with code here.
 	tmp = cc_hash_map_iter_step(self);
 	if (tmp == 0)
 		return 0;
 
-	/* unhandled error when calling `_step` */
+	/// Unhandled error when calling `_step`.
 	if (tmp != -1)
 		return 3;
 
-	/* set the flag so `_next` knows when it should return directly */
+	/// Set the flag so `_next` knows when it should return directly.
 	self->is_empty = 1;
 	return 0;
 }

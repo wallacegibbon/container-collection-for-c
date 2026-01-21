@@ -2,8 +2,7 @@
 #include <assert.h>
 #include <stdint.h>
 
-int main(void)
-{
+int main(void) {
 	struct cc_list_stack *list;
 	uintptr_t tmp;
 

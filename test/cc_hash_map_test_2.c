@@ -9,35 +9,23 @@ char s1[] = { "duplicated_key" };
 char s2[] = { "duplicated_key" };
 char s3[] = { "duplicated_key" };
 
-int main(void)
-{
+int main(void) {
 	struct cc_hash_map *map;
 	struct cc_map_item *tmp_item;
 	uintptr_t tmp;
 
-	/*
-	 * When using `char *`s as keys, you should use `strcmp` as the `cmp`
-	 * function.
-	 */
+	/// When using `char *`s as keys, you should use `strcmp` as the `cmp` function.
 
-	/*
-	assert(!cc_hash_map_new(&map, 20, NULL, cc_str_hash_fn_bkdr));
-	*/
+	//assert(!cc_hash_map_new(&map, 20, NULL, cc_str_hash_fn_bkdr));
 
-	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp,
-					cc_str_hash_fn_bkdr));
+	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp, cc_str_hash_fn_bkdr));
 
-	/*
-	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp,
-					cc_str_hash_fn_simple));
-	assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp, NULL));
-	*/
+	//assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp, cc_str_hash_fn_simple));
+	//assert(!cc_hash_map_new(&map, 20, (cc_cmp_fn_t)strcmp, NULL));
 
 	assert(map != NULL);
 
-	/*
-	assert(!cc_hash_map_print(map, "\n"));
-	*/
+	//assert(!cc_hash_map_print(map, "\n"));
 
 	assert(!cc_map_set(map, "lazy_dog", (void *)1, NULL));
 	assert(!cc_map_set(map, "quick_fox", (void *)2, NULL));

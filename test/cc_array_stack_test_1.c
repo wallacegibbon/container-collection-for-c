@@ -1,8 +1,7 @@
 #include "cc_array_stack.h"
 #include <assert.h>
 
-int main(void)
-{
+int main(void) {
 	struct cc_array_stack *stack;
 	char i, tmp;
 
@@ -14,9 +13,7 @@ int main(void)
 	assert(cc_stack_pop(stack, (void **)&tmp) == CC_STACK_EMPTY);
 
 	for (i = 0; i < 8; i++) {
-		/*
-		assert(!cc_array_stack_push(stack, &i));
-		*/
+		//assert(!cc_array_stack_push(stack, &i));
 		assert(!cc_stack_push(stack, &i));
 		assert(cc_array_stack_elem_nums(stack) == (size_t)(i + 1));
 		assert(cc_array_stack_space(stack) == (size_t)(8 - i - 1));
@@ -34,9 +31,7 @@ int main(void)
 	assert(i == 7);
 
 	for (i = 0; i < 8; i++) {
-		/*
-		assert(!cc_array_stack_pop(stack, &tmp));
-		*/
+		//assert(!cc_array_stack_pop(stack, &tmp));
 		assert(!cc_stack_pop(stack, (void **)&tmp));
 		assert(tmp == 8 - i - 1);
 		assert(cc_array_stack_elem_nums(stack) == (size_t)(8 - i - 1));

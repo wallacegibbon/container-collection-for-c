@@ -1,11 +1,9 @@
 #include "cc_array_sort.h"
 
-/*****************************************************************************
- * Quick sort (https://en.wikipedia.org/wiki/Quicksort)
- ****************************************************************************/
-static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp,
-		size_t start, size_t end)
-{
+////////////////////////////////////////////////////////////////////////////////
+/// Quick sort (https://en.wikipedia.org/wiki/Quicksort)
+////////////////////////////////////////////////////////////////////////////////
+static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp, size_t start, size_t end) {
 	size_t l, r, m;
 
 	m = end - 1;
@@ -28,9 +26,7 @@ static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp,
 	return l + 1;
 }
 
-static void cc_array_sort_quick_recur(struct cc_array *self, cc_cmp_fn_t cmp,
-		size_t start, size_t end)
-{
+static void cc_array_sort_quick_recur(struct cc_array *self, cc_cmp_fn_t cmp, size_t start, size_t end) {
 	size_t m;
 
 	if (start >= end - 1)
@@ -42,8 +38,7 @@ static void cc_array_sort_quick_recur(struct cc_array *self, cc_cmp_fn_t cmp,
 	cc_array_sort_quick_recur(self, cmp, m, end);
 }
 
-int cc_array_sort_quick(struct cc_array *self, cc_cmp_fn_t cmp)
-{
+int cc_array_sort_quick(struct cc_array *self, cc_cmp_fn_t cmp) {
 	if (cmp == NULL)
 		return 1;
 
@@ -51,11 +46,10 @@ int cc_array_sort_quick(struct cc_array *self, cc_cmp_fn_t cmp)
 	return 0;
 }
 
-/*****************************************************************************
- * Bubble sort (https://en.wikipedia.org/wiki/Bubble_sort)
- ****************************************************************************/
-int cc_array_sort_bubble(struct cc_array *self, cc_cmp_fn_t cmp)
-{
+////////////////////////////////////////////////////////////////////////////////
+/// Bubble sort (https://en.wikipedia.org/wiki/Bubble_sort)
+////////////////////////////////////////////////////////////////////////////////
+int cc_array_sort_bubble(struct cc_array *self, cc_cmp_fn_t cmp) {
 	size_t i, j, k;
 
 	if (cmp == NULL)

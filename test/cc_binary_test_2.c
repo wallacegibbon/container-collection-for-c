@@ -3,9 +3,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-/* clang-format off */
 enum blah_node_type { NUMBER, OP };
-/* clang-format on */
 
 struct blah_node {
 	enum blah_node_type type;
@@ -15,8 +13,7 @@ struct blah_node {
 	};
 };
 
-int blah_node_new_number(struct blah_node **self, int number)
-{
+int blah_node_new_number(struct blah_node **self, int number) {
 	struct blah_node *tmp;
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
@@ -28,8 +25,7 @@ int blah_node_new_number(struct blah_node **self, int number)
 	return 0;
 }
 
-int blah_node_new_op(struct blah_node **self, char op_sign)
-{
+int blah_node_new_op(struct blah_node **self, char op_sign) {
 	struct blah_node *tmp;
 	tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
@@ -41,8 +37,7 @@ int blah_node_new_op(struct blah_node **self, char op_sign)
 	return 0;
 }
 
-void blah_node_print(struct blah_node *node)
-{
+void blah_node_print(struct blah_node *node) {
 	if (node == NULL)
 		return;
 	if (node->type == NUMBER)
@@ -51,8 +46,7 @@ void blah_node_print(struct blah_node *node)
 		cc_debug_print("<%c>", node->op_sign);
 }
 
-int blah_node_delete(struct blah_node *self)
-{
+int blah_node_delete(struct blah_node *self) {
 	free(self);
 	return 0;
 }
@@ -62,8 +56,7 @@ struct parser {
 	struct cc_binary *root;
 };
 
-int parser_step(struct parser *self, int *error)
-{
+int parser_step(struct parser *self, int *error) {
 	struct blah_node *new_node;
 	char c;
 
@@ -92,8 +85,7 @@ fail:
 	return 1;
 }
 
-int parser_parse(struct parser *self, struct cc_binary **result)
-{
+int parser_parse(struct parser *self, struct cc_binary **result) {
 	int error;
 	if (try_reset_double_p(result))
 		return 255;
@@ -105,8 +97,7 @@ int parser_parse(struct parser *self, struct cc_binary **result)
 	return error;
 }
 
-int parser_new(struct parser **self, char *input)
-{
+int parser_new(struct parser **self, char *input) {
 	struct parser *tmp;
 
 	if (input == NULL)
@@ -129,9 +120,8 @@ fail1:
 	return 1;
 }
 
-/* Delete the parser along with the result cc_binary tree. */
-int parser_delete(struct parser *self)
-{
+/// Delete the parser along with the result cc_binary tree.
+int parser_delete(struct parser *self) {
 	struct cc_binary_iter *iter;
 	struct blah_node **tmp;
 
@@ -151,8 +141,7 @@ int parser_delete(struct parser *self)
 
 static char *expr1 = "1+2";
 
-int main(void)
-{
+int main(void) {
 	struct parser *parser;
 	struct cc_binary *result;
 

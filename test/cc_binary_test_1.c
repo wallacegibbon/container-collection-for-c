@@ -3,15 +3,14 @@
 #include <assert.h>
 #include <stdint.h>
 
-int show_tree_elements(struct cc_binary *tree)
-{
+int show_tree_elements(struct cc_binary *tree) {
 	struct cc_binary_iter *iter;
 	size_t *tmp, index;
 
 	assert(!cc_binary_iter_new(&iter, tree, CC_TRAVERSE_DEPTH_LEFT));
 
 	while (!cc_iter_next(iter, &tmp, &index))
-			cc_debug_print("(%d)%u, ", index, *tmp);
+		cc_debug_print("(%d)%u, ", index, *tmp);
 
 	cc_debug_print("\n");
 
@@ -19,10 +18,11 @@ int show_tree_elements(struct cc_binary *tree)
 	return 0;
 }
 
-static void print_1(void *data) { cc_debug_print("%ld", (uintptr_t)data); }
+static void print_1(void *data) {
+	cc_debug_print("%ld", (uintptr_t)data);
+}
 
-int main(void)
-{
+int main(void) {
 	struct cc_binary *root;
 
 	assert(!cc_binary_new(&root, NULL, NULL));

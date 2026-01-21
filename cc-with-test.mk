@@ -37,12 +37,12 @@ $(BUILD_DIR)/lib$(TARGET).a: $(OBJECTS)
 	@$(AR) -rcsv $@ $^
 
 install: $(BUILD_DIR)/lib$(TARGET).a
-	@mkdir -p $(INSTALL_DIR)/lib
-	@mkdir -p $(INSTALL_DIR)/include
-	@echo "CP include/* $(INSTALL_DIR)/include/"
-	@cp -r include/* $(INSTALL_DIR)/include/
-	@echo "CP $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/lib/"
-	@cp $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/lib/
+	@mkdir -p $(INSTALL_DIR)/lib/$(TARGET)
+	@mkdir -p $(INSTALL_DIR)/include/$(TARGET)
+	@echo "CP include/* $(INSTALL_DIR)/include/$(TARGET)/"
+	@cp -r include/* $(INSTALL_DIR)/include/$(TARGET)/
+	@echo "CP $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/lib/$(TARGET)/"
+	@cp $(BUILD_DIR)/lib$(TARGET).a $(INSTALL_DIR)/lib/$(TARGET)/
 
 build_dir:
 	@mkdir -p $(BUILD_DIR)
@@ -60,4 +60,3 @@ $(BUILD_DIR)/%: %.c $(OBJECTS) | build_dir
 	@rm $@
 
 -include $(OBJECTS:.o=.d)
-

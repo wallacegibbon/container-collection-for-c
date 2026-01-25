@@ -167,19 +167,19 @@ static int cc_hash_map_iter_step(struct cc_hash_map_iter *self) {
 	return cc_list_map_iter_init(&self->inner_list_map_iter, *cursor);
 }
 
-int cc_hash_map_iter_next(struct cc_hash_map_iter *self, void **item, size_t *index) {
+int cc_hash_map_iter_next(struct cc_hash_map_iter *self, struct cc_map_item **item, size_t *index) {
 	if (try_reset_double_p(item))
 		return 1;
 	if (self->is_empty)
 		return 2;
 
 	while (1) {
+		/// Try to get the item directly from the current list map.
 		if (!cc_iter_next(&self->inner_list_map_iter, item, NULL))
-			break;	// Succeed getting the item.
-
-		/// The list in current array slot is empty, move to next slot.
+			break;
+		/// If the list in current array slot is empty, move to next slot.
 		if (cc_hash_map_iter_step(self))
-			return 3;	/// No more slot to iterate, failed getting item.
+			return 3;
 	}
 
 	if (index != NULL)

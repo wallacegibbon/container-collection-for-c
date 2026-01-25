@@ -169,15 +169,15 @@ int cc_list_map_delete(struct cc_list_map *self) {
 	return 0;
 }
 
-int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index) {
-	struct cc_map_item **tmp_item;
+int cc_list_map_iter_next(struct cc_list_map_iter *self, struct cc_map_item **item, size_t *index) {
+	struct cc_map_item **tmp;
 
 	if (try_reset_double_p(item))
 		return 1;
-	if (cc_list_iter_next(&self->inner_iter, (void **)&tmp_item, index))
+	if (cc_list_iter_next(&self->inner_iter, (void **)&tmp, index))
 		return 2;
 
-	*item = *tmp_item;
+	*item = *tmp;
 	return 0;
 }
 

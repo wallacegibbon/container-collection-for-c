@@ -31,6 +31,6 @@ struct cc_list_map_iter {
 };
 
 int cc_list_map_iter_init(struct cc_list_map_iter *self, struct cc_list_map *map);
-int cc_list_map_iter_next(struct cc_list_map_iter *self, void **item, size_t *index);
+int cc_list_map_iter_next(struct cc_list_map_iter *self, struct cc_map_item **item, size_t *index);
 
 #endif

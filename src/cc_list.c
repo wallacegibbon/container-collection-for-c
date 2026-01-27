@@ -263,7 +263,7 @@ int cc_list_node_delete_and_next(struct cc_list_node **pcurrent, cc_delete_fn_t 
 int cc_list_to_cc_array(struct cc_list *self, struct cc_array **result) {
 	struct cc_list_iter iter;
 	struct cc_array *arr;
-	void **tmp;
+	void *tmp;
 	size_t i;
 
 	if (cc_array_new(&arr, self->root.size, sizeof(void *)))

@@ -50,7 +50,6 @@ int cc_array_chain_to_array(struct cc_array_chain *self, struct cc_array **resul
 
 	if (cc_list_iter_init(&iter, self->node_chain, 0))
 		goto fail2;
-
 	while (!cc_iter_next(&iter, &tmp, &i))
 		memcpy(r->data + self->node_elem_nums * i, (*tmp)->data, cc_array_chain_node_size(self, i));
 
@@ -95,7 +94,6 @@ int cc_array_chain_delete(struct cc_array_chain *self) {
 
 	if (cc_list_iter_init(&iter, self->node_chain, 0))
 		return 1;
-
 	while (!cc_iter_next(&iter, &tmp, NULL)) {
 		if (cc_array_delete(*tmp))
 			return 2;

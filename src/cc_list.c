@@ -215,7 +215,7 @@ int cc_list_node_insert_after(struct cc_list_node *self, void *data) {
 int cc_list_node_remove_before(struct cc_list_node *self, void **result) {
 	struct cc_list_node *node;
 
-	/// You have to provide `result`, or the `self->next->data` may leak.
+	/// You have to provide `result`, or the `self->prev->data` may leak.
 	if (result == NULL)
 		return 1;
 

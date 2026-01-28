@@ -25,8 +25,7 @@ int cc_list_stack_peek(struct cc_list_stack *self, void **result) {
 }
 
 int cc_list_stack_new(struct cc_list_stack **self) {
-	struct cc_list_stack *tmp;
-	tmp = malloc(sizeof(*tmp));
+	struct cc_list_stack *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 

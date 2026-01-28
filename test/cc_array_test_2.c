@@ -9,20 +9,16 @@ struct blah {
 
 int main(void) {
 	struct cc_array *array;
-	struct cc_array_iter iter;
-	struct blah tmp;
-	struct blah *iter_tmp;
-	int i;
-
 	assert(!cc_array_new(&array, 10, sizeof(struct blah)));
 
-	for (i = 0; i < 10; i++) {
-		tmp.index = i;
-		tmp.payload = malloc(10);
+	for (int i = 0; i < 10; i++) {
+		struct blah tmp = { .index = i, .payload = malloc(10) };
 		assert(!cc_array_set(array, i, &tmp));
 	}
 
+	struct cc_array_iter iter;
 	assert(!cc_array_iter_init(&iter, array));
+	struct blah *iter_tmp;
 	while (!cc_iter_next(&iter, (void **)&iter_tmp, NULL))
 		free(iter_tmp->payload);
 

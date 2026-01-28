@@ -5,9 +5,6 @@
 
 int main(void) {
 	struct cc_array_chain *chain;
-	struct cc_array *r;
-	char zero = '\0';
-
 	assert(!cc_array_chain_new(&chain, 8, sizeof(char)));
 
 	assert(!cc_array_chain_append(chain, "hello", 5));
@@ -16,7 +13,9 @@ int main(void) {
 	assert(!cc_array_chain_append(chain, "world. ", 7));
 	assert(!cc_array_chain_append(chain, "A quick brown fox jumps over the lazy dog.", 42));
 
+	struct cc_array *r;
 	assert(!cc_array_chain_to_array(chain, &r, 1));
+	char zero = '\0';
 	assert(!cc_array_set(r, r->elem_nums - 1, &zero));
 
 	//cc_debug_print(">> %s\n", r->data);

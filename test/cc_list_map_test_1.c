@@ -6,14 +6,12 @@
 
 int main(void) {
 	struct cc_list_map *map;
-	struct cc_map_item *item_tmp;
-	/// Caution: The `&tmp` is used as `void *` to accapt data.
-	/// So the size of `tmp` should NOT be smaller than `uintptr_t`, or data nearby would be overwritten.
-	uintptr_t tmp;
-
 	assert(!cc_list_map_new(&map, NULL));
 	//assert(!cc_list_map_print(map, "\n"));
 
+	/// Caution: The `&tmp` is used as `void *` to accapt data.
+	/// So the size of `tmp` should NOT be smaller than `uintptr_t`, or data nearby would be overwritten.
+	uintptr_t tmp;
 	assert(cc_map_get(map, (void *)2, (void **)&tmp) == CC_MAP_KEY_NOT_FOUND);
 
 	assert(!cc_list_map_set(map, (void *)1, (void *)'a', NULL));
@@ -29,6 +27,7 @@ int main(void) {
 	assert(!cc_map_get(map, (void *)2, (void **)&tmp));
 	assert(tmp == 'b');
 
+	struct cc_map_item *item_tmp;
 	assert(!cc_map_del(map, (void *)2, (void **)&item_tmp));
 	assert(item_tmp->value == (void *)'b');
 	free(item_tmp);

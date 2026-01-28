@@ -7,10 +7,10 @@
 
 int cc_string_builder_to_string(struct cc_string_builder *self, char **result) {
 	struct cc_array *arr;
-	char zero = '\0';
-
 	if (cc_array_chain_to_array(self->chain, &arr, 1))
 		goto fail1;
+
+	char zero = '\0';
 	if (cc_array_set(arr, arr->elem_nums - 1, &zero))
 		goto fail2;
 
@@ -49,9 +49,7 @@ int cc_string_builder_append(struct cc_string_builder *self, char *s, size_t siz
 }
 
 int cc_string_builder_new(struct cc_string_builder **self) {
-	struct cc_string_builder *tmp;
-
-	tmp = malloc(sizeof(*tmp));
+	struct cc_string_builder *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 	if (cc_array_chain_new(&tmp->chain, 128, sizeof(char)))
@@ -78,12 +76,10 @@ int cc_string_builder_delete(struct cc_string_builder *self) {
 
 int cc_string_concat(char **result, int n, ...) {
 	struct cc_string_builder *string_builder;
-	char *tmp;
-	va_list args;
-
 	if (cc_string_builder_new(&string_builder))
 		goto fail1;
 
+	va_list args;
 	va_start(args, n);
 	while (n--) {
 		if (cc_string_builder_append_str(string_builder, va_arg(args, char *)))

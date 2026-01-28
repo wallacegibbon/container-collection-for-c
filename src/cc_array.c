@@ -74,8 +74,6 @@ int cc_array_set(struct cc_array *self, size_t index, void *value) {
 }
 
 int cc_array_reverse(struct cc_array *self, size_t start, size_t end) {
-	size_t middle, i;
-
 	if (start == end)
 		return 1;
 	if (start >= self->elem_nums)
@@ -83,8 +81,8 @@ int cc_array_reverse(struct cc_array *self, size_t start, size_t end) {
 	if (end > self->elem_nums)
 		end = self->elem_nums;
 
-	middle = (end - start) / 2;
-	for (i = 0; i < middle; i++)
+	size_t middle = (end - start) / 2;
+	for (size_t i = 0; i < middle; i++)
 		cc_array_swap(self, start + i, end - 1 - i);
 
 	return 0;
@@ -98,14 +96,11 @@ int cc_array_init(struct cc_array *self, unsigned char *data, size_t elem_nums, 
 }
 
 int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size) {
-	struct cc_array *tmp;
-	unsigned char *data;
-
-	tmp = malloc(sizeof(*tmp));
+	struct cc_array *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 
-	data = malloc(elem_nums * elem_size);
+	unsigned char *data = malloc(elem_nums * elem_size);
 	if (data == NULL)
 		goto fail2;
 	if (cc_array_init(tmp, data, elem_nums, elem_size))
@@ -113,7 +108,6 @@ int cc_array_new(struct cc_array **self, size_t elem_nums, size_t elem_size) {
 
 	*self = tmp;
 	return 0;
-
 fail3:
 	free(data);
 fail2:

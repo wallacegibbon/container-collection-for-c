@@ -20,10 +20,9 @@ static inline int cc_list_map_get_current(struct cc_list_map *self, struct cc_ma
 
 /// The caller should make sure that `result` is not NULL.
 static int cc_list_map_move_to_item(struct cc_list_map *self, void *key) {
-	struct cc_map_item *tmp;
-
 	cc_list_cursor_reset(&self->cursor);
 
+	struct cc_map_item *tmp;
 	for (; !cc_list_map_get_current(self, &tmp); cc_list_cursor_move(&self->cursor, 1)) {
 		if (self->cmp(key, tmp->key) == 0)
 			return 0;
@@ -33,14 +32,13 @@ static int cc_list_map_move_to_item(struct cc_list_map *self, void *key) {
 }
 
 int cc_list_map_get(struct cc_list_map *self, void *key, void **result) {
-	struct cc_map_item *item;
-	int code;
-
 	if (try_reset_double_p(result))
 		return 1;
 
 	if (cc_list_map_move_to_item(self, key))
 		return CC_MAP_KEY_NOT_FOUND;
+
+	struct cc_map_item *item;
 	if (cc_list_map_get_current(self, &item))
 		return 1;
 
@@ -49,9 +47,7 @@ int cc_list_map_get(struct cc_list_map *self, void *key, void **result) {
 }
 
 int cc_list_map_insert_new(struct cc_list_map *self, void *key, void *value) {
-	struct cc_map_item *item;
-
-	item = malloc(sizeof(*item));
+	struct cc_map_item *item = malloc(sizeof(*item));
 	if (item == NULL)
 		goto fail1;
 
@@ -69,8 +65,6 @@ fail1:
 }
 
 int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value) {
-	struct cc_map_item *item;
-
 	if (!cc_list_map_move_to_item(self, key))
 		return CC_MAP_KEY_ALREADY_EXIST;
 	if (cc_list_map_insert_new(self, key, value))
@@ -81,14 +75,13 @@ int cc_list_map_set_new(struct cc_list_map *self, void *key, void *value) {
 
 /// CAUTION: When `old_value` is NULL, the old value of `key` will be ignored, which may cause memory leak.
 int cc_list_map_set(struct cc_list_map *self, void *key, void *value, void **old_value) {
-	struct cc_map_item *item;
-
 	if (cc_list_map_move_to_item(self, key)) {
 		if (cc_list_map_insert_new(self, key, value))
 			return 1;
 		if (old_value != NULL)
 			*old_value = NULL;
 	} else {
+		struct cc_map_item *item;
 		if (cc_list_map_get_current(self, &item))
 			return 2;
 		item->value = value;
@@ -115,11 +108,11 @@ int cc_list_map_del(struct cc_list_map *self, void *key, struct cc_map_item **re
 
 int cc_list_map_print(struct cc_list_map *self, char *end_string) {
 	struct cc_list_map_iter iter;
-	struct cc_map_item *item;
-	size_t index;
-
 	if (cc_list_map_iter_init(&iter, self))
 		return 1;
+
+	struct cc_map_item *item;
+	size_t index;
 	while (!cc_iter_next(&iter, &item, &index))
 		cc_debug_print("(%d){%zu -> %zu} ", index, item->key, item->value);
 
@@ -128,9 +121,7 @@ int cc_list_map_print(struct cc_list_map *self, char *end_string) {
 }
 
 int cc_list_map_new(struct cc_list_map **self, cc_cmp_fn_t cmp) {
-	struct cc_list_map *tmp;
-
-	tmp = malloc(sizeof(*tmp));
+	struct cc_list_map *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 
@@ -155,10 +146,10 @@ fail1:
 
 int cc_list_map_delete(struct cc_list_map *self) {
 	struct cc_list_iter iter;
-	struct cc_map_item **item;
-
 	if (cc_list_iter_init(&iter, self->data, 0))
 		return 1;
+
+	struct cc_map_item **item;
 	while (!cc_iter_next(&iter, &item, NULL))
 		free(*item);
 
@@ -170,10 +161,10 @@ int cc_list_map_delete(struct cc_list_map *self) {
 }
 
 int cc_list_map_iter_next(struct cc_list_map_iter *self, struct cc_map_item **item, size_t *index) {
-	struct cc_map_item **tmp;
-
 	if (try_reset_double_p(item))
 		return 1;
+
+	struct cc_map_item **tmp;
 	if (cc_list_iter_next(&self->inner_iter, (void **)&tmp, index))
 		return 2;
 

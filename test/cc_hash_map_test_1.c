@@ -6,11 +6,6 @@
 
 int main(void) {
 	struct cc_hash_map *map;
-	struct cc_hash_map_iter iter;
-	struct cc_map_item *item_tmp;
-	uintptr_t tmp;
-	size_t index;
-
 	assert(!cc_hash_map_new(&map, 10, NULL, NULL));
 	assert(!cc_hash_map_print(map, "\n"));
 
@@ -30,6 +25,7 @@ int main(void) {
 
 	assert(!cc_hash_map_print(map, "\n"));
 
+	uintptr_t tmp;
 	assert(!cc_hash_map_get(map, (void *)11, (void **)&tmp));
 	assert(tmp == 101);
 
@@ -38,13 +34,16 @@ int main(void) {
 	assert(!cc_map_get(map, (void *)12, (void **)&tmp));
 	assert(tmp == 102);
 
+	struct cc_map_item *item_tmp;
 	assert(!cc_map_del(map, (void *)19, (void **)&item_tmp));
 	assert(item_tmp->value == (void *)109);
 	free(item_tmp);
 
 	assert(!cc_hash_map_print(map, "\n"));
 
+	struct cc_hash_map_iter iter;
 	assert(!cc_hash_map_iter_init(&iter, map));
+	size_t index;
 	while (!cc_iter_next(&iter, &item_tmp, &index))
 		cc_debug_print("(%d){%zu -> %zu} ", index, item_tmp->key, item_tmp->value);
 

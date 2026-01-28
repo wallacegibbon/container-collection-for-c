@@ -17,19 +17,16 @@ size_t cc_address_hash_fn(void *obj) {
 }
 
 size_t cc_str_hash_fn_simple(void *obj) {
-	char *s = obj;
 	size_t hash = 0;
-	while (*s)
-		hash += *s++;
-
+	for (char *s = obj, c; (c = *s); s++)
+		hash += c;
 	return hash;
 }
 
 size_t cc_str_hash_fn_bkdr(void *obj) {
-	char *s = obj;
 	size_t hash = 0;
-	while (*s)
-		hash = hash * 131 + *s++; /// 31, 131, 1313, 13131, ...
+	for (char *s = obj, c; (c = *s); s++)
+		hash = hash * 131 + c; /// 31, 131, 1313, 13131, ...
 	return hash;
 }
 

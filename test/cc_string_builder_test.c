@@ -5,10 +5,9 @@
 
 int main(void) {
 	struct cc_string_builder *builder;
-	char *tmp;
-
 	assert(!cc_string_builder_new(&builder));
 
+	char *tmp;
 	assert(!cc_string_builder_to_string(builder, &tmp));
 	assert(strcmp(tmp, "") == 0);
 	free(tmp);

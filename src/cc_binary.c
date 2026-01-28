@@ -32,7 +32,6 @@ int cc_binary_insert_right(struct cc_binary *self, void *data) {
 
 int cc_binary_rotate_left(struct cc_binary **start_slot) {
 	struct cc_binary *start = *start_slot;
-
 	if (start == NULL)
 		return 0;
 	if (start->right == NULL)
@@ -75,8 +74,7 @@ int cc_binary_rotate_right(struct cc_binary **start_slot) {
 }
 
 int cc_binary_new(struct cc_binary **self, struct cc_binary *parent, void *data) {
-	struct cc_binary *tmp;
-	tmp = malloc(sizeof(*tmp));
+	struct cc_binary *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		return 1;
 
@@ -102,8 +100,6 @@ int cc_binary_delete(struct cc_binary *self) {
 }
 
 int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1_t print_fn) {
-	int tmp = 0;
-
 	cc_print_n("\t", depth);
 	if (current == NULL) {
 		cc_debug_print("<NULL>\n");
@@ -113,6 +109,7 @@ int cc_binary_print(struct cc_binary *current, int depth, cc_simple_fn_1_t print
 	print_fn(current->data);
 	cc_debug_print("\n");
 
+	int tmp = 0;
 	tmp |= cc_binary_print(current->right, depth + 1, print_fn);
 	tmp |= cc_binary_print(current->left, depth + 1, print_fn);
 
@@ -144,11 +141,10 @@ static int iter_queue_add_multi(struct cc_binary_iter *self, int n, ...) {
 }
 
 static int iter_queue_add_child(struct cc_binary_iter *self, struct cc_binary *node) {
-	int tmp = 0;
-
 	if (node == NULL)
 		return 0;
 
+	int tmp = 0;
 	if (self->direction == CC_TRAVERSE_DEPTH_LEFT || self->direction == CC_TRAVERSE_BREADTH_RIGHT)
 		tmp = iter_queue_add_multi(self, 2, node->right, node->left);
 	else if (self->direction == CC_TRAVERSE_DEPTH_RIGHT || self->direction == CC_TRAVERSE_BREADTH_LEFT)
@@ -160,10 +156,10 @@ static int iter_queue_add_child(struct cc_binary_iter *self, struct cc_binary *n
 }
 
 int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index) {
-	struct cc_binary *current;
-
 	if (try_reset_double_p(item))
 		return 1;
+
+	struct cc_binary *current;
 	if (cc_list_remove_head(self->queue, (void **)&current))
 		return 2;
 
@@ -180,12 +176,10 @@ int cc_binary_iter_next(struct cc_binary_iter *self, void **item, size_t *index)
 }
 
 int cc_binary_iter_new(struct cc_binary_iter **self, struct cc_binary *root, enum cc_traverse_direction direction) {
-	struct cc_binary_iter *tmp;
-
 	if (root == NULL)
 		goto fail1;
 
-	tmp = malloc(sizeof(*tmp));
+	struct cc_binary_iter *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 

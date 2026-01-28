@@ -12,23 +12,22 @@ static int cmp_char(char *left, char *right) {
 }
 
 static void char_array_display(struct cc_array *chars, const char *prefix) {
-	struct cc_array_iter iter;
-	char *tmp;
-
 	cc_debug_print("%s", prefix);
+
+	struct cc_array_iter iter;
 	assert(!cc_array_iter_init(&iter, chars));
+
+	char *tmp;
 	while (!cc_iter_next(&iter, &tmp, NULL))
 		cc_debug_print("%c", *tmp);
 }
 
 int main(void) {
-	struct cc_array array;
 	unsigned char buffer[10];
-	int i;
-
+	struct cc_array array;
 	assert(!cc_array_init(&array, buffer, 10, 1));
 
-	for (i = 0; i < 10; i++)
+	for (int i = 0; i < 10; i++)
 		assert(!cc_array_set(&array, i, (void *)&sample[i]));
 
 	char_array_display(&array, "\nbefore sort: ");

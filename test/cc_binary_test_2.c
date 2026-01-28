@@ -14,8 +14,7 @@ struct blah_node {
 };
 
 int blah_node_new_number(struct blah_node **self, int number) {
-	struct blah_node *tmp;
-	tmp = malloc(sizeof(*tmp));
+	struct blah_node *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		return 1;
 
@@ -26,8 +25,7 @@ int blah_node_new_number(struct blah_node **self, int number) {
 }
 
 int blah_node_new_op(struct blah_node **self, char op_sign) {
-	struct blah_node *tmp;
-	tmp = malloc(sizeof(*tmp));
+	struct blah_node *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		return 1;
 
@@ -57,14 +55,12 @@ struct parser {
 };
 
 int parser_step(struct parser *self, int *error) {
-	struct blah_node *new_node;
-	char c;
-
 	*error = 0;
-	c = *self->input++;
+	char c = *self->input++;
 	if (c == '\0')
 		return 1;
 
+	struct blah_node *new_node;
 	if (c >= '0' && c <= '9')
 		blah_node_new_number(&new_node, c - '0');
 	else
@@ -86,10 +82,10 @@ fail:
 }
 
 int parser_parse(struct parser *self, struct cc_binary **result) {
-	int error;
 	if (try_reset_double_p(result))
 		return 255;
 
+	int error;
 	while (!parser_step(self, &error) && !error)
 		;
 
@@ -98,12 +94,10 @@ int parser_parse(struct parser *self, struct cc_binary **result) {
 }
 
 int parser_new(struct parser **self, char *input) {
-	struct parser *tmp;
-
 	if (input == NULL)
 		goto fail1;
 
-	tmp = malloc(sizeof(*tmp));
+	struct parser *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 
@@ -123,10 +117,10 @@ fail1:
 /// Delete the parser along with the result cc_binary tree.
 int parser_delete(struct parser *self) {
 	struct cc_binary_iter *iter;
-	struct blah_node **tmp;
-
 	if (cc_binary_iter_new(&iter, self->root->left, CC_TRAVERSE_DEPTH_LEFT))
 		return 1;
+
+	struct blah_node **tmp;
 	while (!cc_iter_next(iter, &tmp, NULL))
 		assert(!blah_node_delete(*tmp));
 
@@ -143,11 +137,10 @@ static char *expr1 = "1+2";
 
 int main(void) {
 	struct parser *parser;
-	struct cc_binary *result;
-
 	assert(!parser_new(&parser, expr1));
 
 	cc_debug_print("parsing expression: \"%s\"\n", expr1);
+	struct cc_binary *result;
 	assert(!parser_parse(parser, &result));
 
 	assert(!cc_binary_rotate_right(&result->left));

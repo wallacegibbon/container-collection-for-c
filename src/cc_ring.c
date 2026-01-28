@@ -27,9 +27,7 @@ size_t cc_ring_space(struct cc_ring *self) {
 }
 
 int cc_ring_enqueue(struct cc_ring *self, void *item) {
-	size_t write_index_next;
-
-	write_index_next = next_index(self, self->write_index);
+	size_t write_index_next = next_index(self, self->write_index);
 	if (write_index_next == self->read_index)
 		return CC_QUEUE_FULL;
 
@@ -63,14 +61,12 @@ int cc_ring_init(struct cc_ring *self, struct cc_array *data) {
 }
 
 int cc_ring_new(struct cc_ring **self, size_t elem_nums, size_t elem_size) {
-	struct cc_ring *tmp;
-	struct cc_array *data;
-
-	tmp = malloc(sizeof(*tmp));
+	struct cc_ring *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 
 	/// There will be 1 element got wasted, so pass `elem_nums + 1` to `cc_array_new`.
+	struct cc_array *data;
 	if (cc_array_new(&data, elem_nums + 1, elem_size))
 		goto fail2;
 	if (cc_ring_init(tmp, data))

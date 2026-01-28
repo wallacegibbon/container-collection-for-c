@@ -4,10 +4,9 @@
 
 int main(void) {
 	struct cc_list_stack *list;
-	uintptr_t tmp;
-
 	assert(!cc_list_stack_new(&list));
 
+	uintptr_t tmp;
 	assert(cc_stack_pop(list, (void **)&tmp) == CC_STACK_EMPTY);
 
 	assert(!cc_stack_push(list, (void *)1));

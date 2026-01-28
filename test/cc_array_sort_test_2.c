@@ -19,11 +19,12 @@ static void blah_display(struct blah *self) {
 }
 
 static void blah_array_display(struct cc_array *blahs, const char *prefix) {
-	struct cc_array_iter iter;
-	struct blah *tmp;
-
 	cc_debug_print("%s", prefix);
+
+	struct cc_array_iter iter;
 	assert(!cc_array_iter_init(&iter, blahs));
+
+	struct blah *tmp;
 	while (!cc_iter_next(&iter, &tmp, NULL))
 		blah_display(tmp);
 }
@@ -39,15 +40,12 @@ static int cmp_age(struct blah *left, struct blah *right) {
 }
 
 int main(void) {
-	struct cc_array array;
 	unsigned char buffer[3 * sizeof(struct blah)];
-	int i;
-	struct blah tmp;
-
+	struct cc_array array;
 	assert(!cc_array_init(&array, buffer, 3, sizeof(struct blah)));
 
 	/* Pushing values to generic sequence */
-	for (i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		assert(!cc_array_set(&array, i, (void *)&people[i]));
 
 	blah_array_display(&array, "\nbefore sort:\n");
@@ -56,6 +54,7 @@ int main(void) {
 
 	blah_array_display(&array, "\nafter sort by name:\n");
 
+	struct blah tmp;
 	assert(!cc_array_get(&array, 0, &tmp));
 	assert(tmp.age == 50);
 

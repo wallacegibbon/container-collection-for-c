@@ -24,8 +24,7 @@ int cc_list_queue_peek(struct cc_list_queue *self, void **result) {
 }
 
 int cc_list_queue_new(struct cc_list_queue **self) {
-	struct cc_list_queue *tmp;
-	tmp = malloc(sizeof(*tmp));
+	struct cc_list_queue *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
 

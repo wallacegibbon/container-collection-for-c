@@ -6,24 +6,20 @@
 
 int main(void) {
 	struct cc_list *list;
-	struct cc_list_iter iter;
-	struct cc_list_cursor *cursor;
-	uintptr_t *buffer[16] = { 0 };
-	uintptr_t i;
-	uintptr_t *tmp, **tmp2;
-
 	assert(!cc_list_new(&list));
 
-	for (i = 0; i < 16; i++) {
-		tmp = malloc(sizeof(*tmp));
+	for (uintptr_t i = 0; i < 16; i++) {
+		uintptr_t *tmp = malloc(sizeof(*tmp));
 		assert(tmp != NULL);
 		*tmp = i;
 		assert(!cc_list_insert_tail(list, tmp));
 	}
 
+	struct cc_list_cursor *cursor;
 	assert(!cc_list_cursor_new(&cursor, list, cc_default_delete_fn));
 	cc_list_cursor_reset(cursor);
 
+	uintptr_t *buffer[16] = { 0 };
 	assert(!cc_list_cursor_get(cursor, 0, 1, (void **)buffer));
 
 	assert(cc_list_cursor_get(cursor, -1, 1, (void **)buffer) == CC_LIST_CURSOR_MOVE_OUT_OF_RANGE);
@@ -79,7 +75,7 @@ int main(void) {
 	assert(*buffer[1] == 2);
 	assert(*buffer[2] == 5);
 
-	tmp = malloc(sizeof(*tmp));
+	uintptr_t *tmp = malloc(sizeof(*tmp));
 	assert(tmp != NULL);
 	*tmp = 99;
 	assert(!cc_list_cursor_insert_before(cursor, 1, tmp));
@@ -89,7 +85,9 @@ int main(void) {
 	assert(*buffer[2] == 99);
 	assert(*buffer[3] == 5);
 
+	struct cc_list_iter iter;
 	assert(!cc_list_iter_init(&iter, list, 0));
+	uintptr_t **tmp2;
 	while (!cc_iter_next(&iter, &tmp2, NULL))
 		free(*tmp2);
 

@@ -4,10 +4,9 @@
 
 int main(void) {
 	struct cc_list_queue *list;
-	uintptr_t tmp;
-
 	assert(!cc_list_queue_new(&list));
 
+	uintptr_t tmp;
 	assert(cc_queue_dequeue(list, (void **)&tmp) == CC_QUEUE_EMPTY);
 
 	assert(!cc_queue_enqueue(list, (void *)1));

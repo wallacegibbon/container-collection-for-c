@@ -48,12 +48,11 @@ int cc_array_stack_init(struct cc_array_stack *self, struct cc_array *data) {
 }
 
 int cc_array_stack_new(struct cc_array_stack **self, size_t elem_nums, size_t elem_size) {
-	struct cc_array_stack *tmp;
-	struct cc_array *data;
-
-	tmp = malloc(sizeof(*tmp));
+	struct cc_array_stack *tmp = malloc(sizeof(*tmp));
 	if (tmp == NULL)
 		goto fail1;
+
+	struct cc_array *data;
 	if (cc_array_new(&data, elem_nums, elem_size))
 		goto fail2;
 	if (cc_array_stack_init(tmp, data))

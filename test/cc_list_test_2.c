@@ -9,18 +9,14 @@
 
 int main(void) {
 	struct cc_list *list;
-	struct cc_array *arr;
-	struct cc_array_iter iter;
-	int *tmp_p, **pp;
-	size_t i;
-
 	assert(!cc_list_new(&list));
 
+	int *tmp_p;
 	assert(cc_list_remove_head(list, (void **)&tmp_p) == CC_LIST_EMPTY);
 	assert(cc_list_remove_tail(list, (void **)&tmp_p) == CC_LIST_EMPTY);
 	assert(cc_list_get_tail(list, (void **)&tmp_p) == CC_LIST_EMPTY);
 
-	for (i = 0; i < 4; i++) {
+	for (size_t i = 0; i < 4; i++) {
 		tmp_p = malloc(sizeof(*tmp_p));
 		assert(tmp_p != NULL);
 		*tmp_p = i * 10 + 1;
@@ -30,8 +26,11 @@ int main(void) {
 
 	//cc_list_print(list, 1);
 
+	struct cc_array *arr;
 	assert(!cc_list_to_cc_array(list, &arr));
+	struct cc_array_iter iter;
 	assert(!cc_array_iter_init(&iter, arr));
+	//int **pp;
 	//while (!cc_iter_next(&iter, &pp, &i))
 	//	cc_debug_print("<%d, %d> ", i, **pp);
 	//cc_debug_print("\n");

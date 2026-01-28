@@ -5,16 +5,15 @@
 
 int main(void) {
 	struct cc_list *list;
-	struct cc_list_cursor *cursor;
-	uintptr_t buffer[16] = { 0 };
-	uintptr_t i;
-
 	assert(!cc_list_new(&list));
 
-	for (i = 0; i < 16; i++)
+	for (uintptr_t i = 0; i < 16; i++)
 		assert(!cc_list_insert_tail(list, (void *)i));
 
+	struct cc_list_cursor *cursor;
 	assert(!cc_list_cursor_new(&cursor, list, NULL));
+
+	uintptr_t buffer[16] = { 0 };
 
 	/// Cursor is at end on start.
 	assert(cc_list_cursor_get(cursor, 0, 1, (void **)buffer) == CC_LIST_CURSOR_GET_OUT_OF_RANGE);

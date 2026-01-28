@@ -4,11 +4,9 @@
 /// Quick sort (https://en.wikipedia.org/wiki/Quicksort)
 ////////////////////////////////////////////////////////////////////////////////
 static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp, size_t start, size_t end) {
-	size_t l, r, m;
-
-	m = end - 1;
-	r = end - 2;
-	l = start;
+	size_t m = end - 1;
+	size_t r = end - 2;
+	size_t l = start;
 
 	while (l < r) {
 		while (cc_array_cmp(self, cmp, l, m) <= 0 && l < r)
@@ -27,12 +25,10 @@ static size_t cc_array_divide(struct cc_array *self, cc_cmp_fn_t cmp, size_t sta
 }
 
 static void cc_array_sort_quick_recur(struct cc_array *self, cc_cmp_fn_t cmp, size_t start, size_t end) {
-	size_t m;
-
 	if (start >= end - 1)
 		return;
 
-	m = cc_array_divide(self, cmp, start, end);
+	size_t m = cc_array_divide(self, cmp, start, end);
 
 	cc_array_sort_quick_recur(self, cmp, start, m);
 	cc_array_sort_quick_recur(self, cmp, m, end);
@@ -50,16 +46,15 @@ int cc_array_sort_quick(struct cc_array *self, cc_cmp_fn_t cmp) {
 /// Bubble sort (https://en.wikipedia.org/wiki/Bubble_sort)
 ////////////////////////////////////////////////////////////////////////////////
 int cc_array_sort_bubble(struct cc_array *self, cc_cmp_fn_t cmp) {
-	size_t i, j, k;
-
 	if (cmp == NULL)
 		return 1;
 
-	for (i = 0; i < self->elem_nums - 1; i++) {
-		for (j = 0, k = 1; j < self->elem_nums - 1 - i; j++, k++) {
+	for (size_t i = 0; i < self->elem_nums - 1; i++) {
+		for (size_t j = 0, k = 1; j < self->elem_nums - 1 - i; j++, k++) {
 			if (cc_array_cmp(self, cmp, j, k) > 0)
 				cc_array_swap(self, j, k);
 		}
 	}
+
 	return 0;
 }
